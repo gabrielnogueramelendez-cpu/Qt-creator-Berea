@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DevWindow</class>
+ <widget class="QWidget" name="DevWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>950</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Consola de Desarrollador &amp; Diagnóstico BDD - El Buffet de Alejandro</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <property name="leftMargin">
+    <number>18</number>
+   </property>
+   <property name="topMargin">
+    <number>18</number>
+   </property>
+   <property name="rightMargin">
+    <number>18</number>
+   </property>
+   <property name="bottomMargin">
+    <number>18</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="frameHeaderDev">
+     <property name="styleSheet">
+      <string>background-color: #1A1A24; border-radius: 8px; padding: 10px;</string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutHeaderDev">
+      <item>
+       <widget class="QLabel" name="lblTitleDev">
+        <property name="text">
+         <string>💻 CONSOLA DE DESARROLLADOR — Entorno de Testing y BDD</string>
+        </property>
+        <property name="styleSheet">
+         <string>color: #58D68D; font-size: 16px; font-weight: bold; font-family: monospace;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="spacerDevHeader">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLogoutDev">
+        <property name="text">
+         <string>🚪 Salir del Modo Dev</string>
+        </property>
+        <property name="styleSheet">
+         <string>background-color: #C0392B; color: white;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidgetDev">
+     <widget class="QWidget" name="tabMySQL">
+      <attribute name="title">
+       <string>🔌 Diagnóstico y Conexión MySQL</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutTabMySQL">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <item>
+        <widget class="QGroupBox" name="groupParamsMySQL">
+         <property name="title">
+          <string>Parámetros de Conexión del Gestor (Laboratorio 4to Año)</string>
+         </property>
+         <layout class="QHBoxLayout" name="layoutParams">
+          <item>
+           <widget class="QLabel" name="lblHost">
+            <property name="text">
+             <string>Host: localhost</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblPort">
+            <property name="text">
+             <string>Puerto: 3306</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblDB">
+            <property name="text">
+             <string>BDD: ElBuffetDeAlejandro</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblUser">
+            <property name="text">
+             <string>Usuario: root</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnTestConexion">
+            <property name="text">
+             <string>🔍 Probar Conexión con Gestor</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="txtSalidaMySQL">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabSPs">
+      <attribute name="title">
+       <string>🧪 Consola de Stored Procedures (SPs)</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutTabSPs">
+       <item>
+        <layout class="QHBoxLayout" name="layoutSelectorSP">
+         <item>
+          <widget class="QLabel" name="lblSPLabel">
+           <property name="text">
+            <string>Seleccionar Stored Procedure:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboSP">
+           <item>
+            <property name="text">
+             <string>sp_reporte_ventas_por_fecha</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>sp_reporte_auditoria</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>sp_productos_mas_vendidos</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>sp_stock_critico</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>sp_reporte_metricas_tuneado</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="txtParam1">
+           <property name="placeholderText">
+            <string>Parámetro 1 (ej. 2026-10-01)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="txtParam2">
+           <property name="placeholderText">
+            <string>Parámetro 2 (ej. 2026-10-25)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnEjecutarSP">
+           <property name="text">
+            <string>▶️ Ejecutar Prueba</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTextEdit" name="txtSalidaSP">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabCoddModel">
+      <attribute name="title">
+       <string>📚 Modelo Relacional Codd 3FN (20 Tablas)</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutTabCodd">
+       <item>
+        <widget class="QTextEdit" name="txtModeloCodd">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
+         <property name="font">
+          <font>
+           <family>Consolas</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutAccesoDirecto">
+     <item>
+      <widget class="QLabel" name="lblAtajosDev">
+       <property name="text">
+        <string>⚡ Acceso Rápido de Testing:</string>
+       </property>
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAbrirVistaAlumno">
+       <property name="text">
+        <string>🎓 Probar Vista Alumno</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAbrirVistaCaja">
+       <property name="text">
+        <string>🧑‍🍳 Probar Vista Caja</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnAbrirVistaAdmin">
+       <property name="text">
+        <string>🛠️ Probar Vista Admin</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacerAtajos">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

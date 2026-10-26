@@ -1,0 +1,5 @@
+C:/Users/gabri/OneDrive/Escritorio/Mi Agente Personal/ProyectoBerea_Buffet_UI-v11/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/CMakeFiles/ElBuffetDeAlejandro.dir
+C:/Users/gabri/OneDrive/Escritorio/Mi Agente Personal/ProyectoBerea_Buffet_UI-v11/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/CMakeFiles/edit_cache.dir
+C:/Users/gabri/OneDrive/Escritorio/Mi Agente Personal/ProyectoBerea_Buffet_UI-v11/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/gabri/OneDrive/Escritorio/Mi Agente Personal/ProyectoBerea_Buffet_UI-v11/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/CMakeFiles/ElBuffetDeAlejandro_autogen_timestamp_deps.dir
+C:/Users/gabri/OneDrive/Escritorio/Mi Agente Personal/ProyectoBerea_Buffet_UI-v11/build/Desktop_Qt_6_12_0_MinGW_64_bit_Debug/CMakeFiles/ElBuffetDeAlejandro_autogen.dir

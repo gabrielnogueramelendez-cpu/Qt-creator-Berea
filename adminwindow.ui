@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AdminWindow</class>
+ <widget class="QWidget" name="AdminWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>700</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Panel de Administración - Gestor del Buffet</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayoutMain">
+   <item>
+    <widget class="QFrame" name="headerFrame">
+     <layout class="QHBoxLayout" name="layoutHeader">
+      <item>
+       <widget class="QLabel" name="lblAdminTitle">
+        <property name="text">
+         <string>🛠️ PANEL DE ADMINISTRACIÓN - GESTOR DEL BUFFET</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLogout">
+        <property name="text">
+         <string>🚪 Cerrar Sesión</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidgetAdmin">
+     <widget class="QWidget" name="tabAbm">
+      <attribute name="title">
+       <string>📦 Gestión de Inventario &amp; Precios (ABM)</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutAbm">
+       <item>
+        <widget class="QTableWidget" name="tableProductosAdmin"/>
+       </item>
+       <item>
+        <widget class="QFrame" name="cardFormAbm">
+         <layout class="QHBoxLayout" name="layoutForm">
+          <item>
+           <widget class="QLineEdit" name="txtNombreProd">
+            <property name="placeholderText">
+             <string>Nombre de Producto</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboCategoria">
+            <item>
+             <property name="text">
+              <string>Salados</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Dulces</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Bebidas</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Menú del Día</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="txtPrecioProd">
+            <property name="placeholderText">
+             <string>Precio (ej: 2800)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="txtStockProd">
+            <property name="placeholderText">
+             <string>Stock BDD</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnAgregarProd">
+            <property name="text">
+             <string>➕ Agregar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnGuardarEdit">
+            <property name="text">
+             <string>💾 Guardar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnEliminarProd">
+            <property name="text">
+             <string>🗑️ Eliminar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabLogs">
+      <attribute name="title">
+       <string>📊 Reportes &amp; Logs de Auditoría</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="layoutLogs">
+       <item>
+        <widget class="QTableWidget" name="tableLogsAdmin"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

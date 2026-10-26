@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>CajeroWindow</class>
+ <widget class="QWidget" name="CajeroWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>950</width>
+    <height>650</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Panel del Personal de Buffet - Caja &amp; Retiros</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayoutMain">
+   <item>
+    <widget class="QFrame" name="headerFrame">
+     <layout class="QHBoxLayout" name="layoutHeader">
+      <item>
+       <widget class="QLabel" name="lblCajeroTitle">
+        <property name="text">
+         <string>🧑‍🍳 PANEL DE MOSTRADOR - CAJA Y RETIROS EXPRESS</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLogout">
+        <property name="text">
+         <string>🚪 Cerrar Sesión</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="cardSearch">
+     <layout class="QHBoxLayout" name="layoutSearch">
+      <item>
+       <widget class="QLabel" name="lblSearchPrompt">
+        <property name="text">
+         <string>Código de Retiro (5 dígitos):</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtCodigoRetiro">
+        <property name="placeholderText">
+         <string>Ej: 3C6MB</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnBuscarCodigo">
+        <property name="text">
+         <string>🔍 Buscar Pedido</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="cardDetail">
+     <layout class="QVBoxLayout" name="layoutDetail">
+      <item>
+       <widget class="QLabel" name="lblStatusPedido">
+        <property name="text">
+         <string>Esperando ingreso de código...</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblDetalleAlumno">
+        <property name="text">
+         <string>Alumno: -</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblDetalleRecreo">
+        <property name="text">
+         <string>Horario de Retiro: -</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="tableDetalleItems"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="layoutActions">
+        <item>
+         <widget class="QLabel" name="lblTotalMonto">
+          <property name="text">
+           <string>Total a Cobrar: $0</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnEntregarPedido">
+          <property name="text">
+           <string>✅ Confirmar Entrega y Cobro</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCancelarPedido">
+          <property name="text">
+           <string>❌ Cancelar Pedido</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableColasPedidos"/>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

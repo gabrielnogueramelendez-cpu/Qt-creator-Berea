@@ -1,0 +1,818 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1050</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>El Buffet de Alejandro - Menú Gourmet Escolar</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayoutMain">
+    <property name="spacing"><number>12</number></property>
+    <property name="leftMargin"><number>15</number></property>
+    <property name="topMargin"><number>15</number></property>
+    <property name="rightMargin"><number>15</number></property>
+    <property name="bottomMargin"><number>15</number></property>
+    
+    <!-- HEADER BAR -->
+    <item>
+     <widget class="QFrame" name="headerFrame">
+      <property name="styleSheet">
+       <string>background-color: #3D1A24; border-radius: 10px; padding: 10px 15px;</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutHeader">
+       <item>
+        <widget class="QLabel" name="lblHeaderTitle">
+         <property name="text">
+          <string>🍎 EL BUFFET DE ALEJANDRO — Carta Gourmet Escolar</string>
+         </property>
+         <property name="styleSheet">
+          <string>color: #FFFFFF; font-size: 18px; font-weight: bold;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="layoutUserBox">
+         <item>
+          <widget class="QLabel" name="lblUserGreeting">
+           <property name="text">
+            <string>🎓 Estudiante: Jorge Dahan (4° Año B)</string>
+           </property>
+           <property name="styleSheet">
+            <string>color: #D4AF37; font-weight: bold; font-size: 13px;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnLogout">
+           <property name="text">
+            <string>🚪 Cerrar Sesión</string>
+           </property>
+           <property name="styleSheet">
+            <string>background-color: #522431; color: #FFFFFF; border-radius: 6px; padding: 6px 12px;</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+
+    <!-- TAB WIDGET CATALOG -->
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex"><number>0</number></property>
+
+      <!-- TAB 0: MENU DEL DIA -->
+      <widget class="QWidget" name="tabMenuDia">
+       <attribute name="title"><string>🌟 Menú del Día</string></attribute>
+       <layout class="QVBoxLayout" name="layoutTabMenuDiaContainer">
+        <item>
+         <widget class="QScrollArea" name="scrollMenuDia">
+          <property name="widgetResizable"><bool>true</bool></property>
+          <widget class="QWidget" name="scrollMenuDiaContents">
+           <layout class="QVBoxLayout" name="layoutTabMenuDia">
+            <property name="spacing"><number>12</number></property>
+            
+<item>
+ <widget class="QFrame" name="cardMenuDia1">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardMenuDia1">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardMenuDia1">
+     <item>
+      <widget class="QLabel" name="lblTitleMenuDia1">
+       <property name="text"><string>🌟 Combo N° 1: Almuerzo Gourmet Completo</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceMenuDia1">
+       <property name="text"><string>$8.500</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescMenuDia1">
+     <property name="text"><string>Milanesa a la Napolitana con papas rústicas al horno + Bebida 500ml a elección + Postre o Fruta. (Encargar antes de las 09:00 hs).</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleMenuDia1">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardMenuDia2">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardMenuDia2">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardMenuDia2">
+     <item>
+      <widget class="QLabel" name="lblTitleMenuDia2">
+       <property name="text"><string>🥗 Combo N° 2: Almuerzo Express Saludable</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceMenuDia2">
+       <property name="text"><string>$5.200</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescMenuDia2">
+     <property name="text"><string>Tarta Rústica de Verdura y Queso + Ensalada fresca de estación + Agua Mineral Villavicencio 500ml.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleMenuDia2">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+      <!-- TAB 1: SALADOS GOURMET -->
+      <widget class="QWidget" name="tabSalados">
+       <attribute name="title"><string>🥐 Salados Gourmet</string></attribute>
+       <layout class="QVBoxLayout" name="layoutTabSaladosContainer">
+        <item>
+         <widget class="QScrollArea" name="scrollSalados">
+          <property name="widgetResizable"><bool>true</bool></property>
+          <widget class="QWidget" name="scrollSaladosContents">
+           <layout class="QVBoxLayout" name="layoutTabSalados">
+            <property name="spacing"><number>12</number></property>
+            
+<item>
+ <widget class="QFrame" name="cardMilanesa">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardMilanesa">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardMilanesa">
+     <item>
+      <widget class="QLabel" name="lblTitleMilanesa">
+       <property name="text"><string>🥪 Sándwich de Milanesa Ciabatta Completo</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceMilanesa">
+       <property name="text"><string>$2.800</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescMilanesa">
+     <property name="text"><string>Milanesa tierna de ternera, lechuga fresca, tomate, queso tybo y aderezo artesanal en pan ciabatta crocante.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleMilanesa">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardEmpanada">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardEmpanada">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardEmpanada">
+     <item>
+      <widget class="QLabel" name="lblTitleEmpanada">
+       <property name="text"><string>🥟 Empanada de Carne Cortada a Cuchillo</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceEmpanada">
+       <property name="text"><string>$1.200</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescEmpanada">
+     <property name="text"><string>Empanada tradicional horneada, rellena de ternera seleccionada cortada a cuchillo y especias criollas.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleEmpanada">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardTarta">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardTarta">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardTarta">
+     <item>
+      <widget class="QLabel" name="lblTitleTarta">
+       <property name="text"><string>🥧 Tarta Rústica de Jamón y Queso</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceTarta">
+       <property name="text"><string>$2.400</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescTarta">
+     <property name="text"><string>Porción abundante de tarta casera con doble capa de queso mozzarella fundido y jamón cocido de primera.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleTarta">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardPebete">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardPebete">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardPebete">
+     <item>
+      <widget class="QLabel" name="lblTitlePebete">
+       <property name="text"><string>🥖 Pebete Tradicional de Jamón y Queso</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPricePebete">
+       <property name="text"><string>$1.800</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescPebete">
+     <property name="text"><string>Pan pebete suave artesanal, abundante jamón cocido, queso tybo en fetas y manteca de primera calidad.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetallePebete">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+      <!-- TAB 2: DULCES & REPOSTERIA -->
+      <widget class="QWidget" name="tabDulces">
+       <attribute name="title"><string>🍪 Dulces &amp; Repostería</string></attribute>
+       <layout class="QVBoxLayout" name="layoutTabDulcesContainer">
+        <item>
+         <widget class="QScrollArea" name="scrollDulces">
+          <property name="widgetResizable"><bool>true</bool></property>
+          <widget class="QWidget" name="scrollDulcesContents">
+           <layout class="QVBoxLayout" name="layoutTabDulces">
+            <property name="spacing"><number>12</number></property>
+            
+<item>
+ <widget class="QFrame" name="cardAlfajor">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardAlfajor">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardAlfajor">
+     <item>
+      <widget class="QLabel" name="lblTitleAlfajor">
+       <property name="text"><string>🍫 Alfajor Artesanal de Dulce de Leche</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceAlfajor">
+       <property name="text"><string>$1.100</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescAlfajor">
+     <property name="text"><string>Dos tapas suavemente horneadas con relleno abundante de dulce de leche repostero, bañado en fino chocolate.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleAlfajor">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardPastafrola">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardPastafrola">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardPastafrola">
+     <item>
+      <widget class="QLabel" name="lblTitlePastafrola">
+       <property name="text"><string>🥮 Porción de Pasta Frola Artesanal</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPricePastafrola">
+       <property name="text"><string>$1.500</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescPastafrola">
+     <property name="text"><string>Receta tradicional casera con dulce de membrillo especial y enrejado de masa sablée de manteca.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetallePastafrola">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardFactura">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardFactura">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardFactura">
+     <item>
+      <widget class="QLabel" name="lblTitleFactura">
+       <property name="text"><string>🥐 Factura de Manteca Seleccionada</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceFactura">
+       <property name="text"><string>$600</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescFactura">
+     <property name="text"><string>Medialuna u opción hojaldrada artesanal horneada cada mañana en el buffet del colegio.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleFactura">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardMuffin">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardMuffin">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardMuffin">
+     <item>
+      <widget class="QLabel" name="lblTitleMuffin">
+       <property name="text"><string>🧁 Muffin de Chocolate con Corazón Dulce</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceMuffin">
+       <property name="text"><string>$1.400</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescMuffin">
+     <property name="text"><string>Esponjoso muffin de cacao intenso con chispas de chocolate y corazón de dulce de leche.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleMuffin">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+      <!-- TAB 3: BEBIDAS & REFRESHERS -->
+      <widget class="QWidget" name="tabBebidas">
+       <attribute name="title"><string>🥤 Bebidas &amp; Refreshers</string></attribute>
+       <layout class="QVBoxLayout" name="layoutTabBebidasContainer">
+        <item>
+         <widget class="QScrollArea" name="scrollBebidas">
+          <property name="widgetResizable"><bool>true</bool></property>
+          <widget class="QWidget" name="scrollBebidasContents">
+           <layout class="QVBoxLayout" name="layoutTabBebidas">
+            <property name="spacing"><number>12</number></property>
+            
+<item>
+ <widget class="QFrame" name="cardGaseosa">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardGaseosa">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardGaseosa">
+     <item>
+      <widget class="QLabel" name="lblTitleGaseosa">
+       <property name="text"><string>🥤 Gaseosa Línea Coca-Cola 500ml</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceGaseosa">
+       <property name="text"><string>$1.300</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescGaseosa">
+     <property name="text"><string>Botella de 500ml helada (Coca-Cola, Sprite o Fanta a elección al retirar en mostrador).</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleGaseosa">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardAgua">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardAgua">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardAgua">
+     <item>
+      <widget class="QLabel" name="lblTitleAgua">
+       <property name="text"><string>💧 Agua Mineral Villavicencio 500ml</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceAgua">
+       <property name="text"><string>$900</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescAgua">
+     <property name="text"><string>Agua mineral de manantial sin gas de 500ml bien fría.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleAgua">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardJugo">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardJugo">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardJugo">
+     <item>
+      <widget class="QLabel" name="lblTitleJugo">
+       <property name="text"><string>🍊 Jugo Natural Exprimido de Naranja 350ml</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceJugo">
+       <property name="text"><string>$1.600</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescJugo">
+     <property name="text"><string>Jugo 100% natural de naranjas seleccionadas exprimidas en el día, sin conservantes.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleJugo">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+<item>
+ <widget class="QFrame" name="cardLicuado">
+  <property name="styleSheet">
+   <string>background-color: #FFFFFF; border: 1px solid #EAE3D2; border-radius: 10px;</string>
+  </property>
+  <layout class="QVBoxLayout" name="layout_cardLicuado">
+   <property name="spacing"><number>8</number></property>
+   <property name="leftMargin"><number>15</number></property>
+   <property name="topMargin"><number>15</number></property>
+   <property name="rightMargin"><number>15</number></property>
+   <property name="bottomMargin"><number>15</number></property>
+   <item>
+    <layout class="QHBoxLayout" name="header_cardLicuado">
+     <item>
+      <widget class="QLabel" name="lblTitleLicuado">
+       <property name="text"><string>🍓 Licuado Frutal de Frutilla y Banana 400ml</string></property>
+       <property name="styleSheet"><string>font-size: 16px; font-weight: bold; color: #3D1A24;</string></property>
+      </widget>
+     </item>
+     <item alignment="Qt::AlignRight">
+      <widget class="QLabel" name="lblPriceLicuado">
+       <property name="text"><string>$2.200</string></property>
+       <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #B8860B;</string></property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="lblDescLicuado">
+     <property name="text"><string>Licuado con leche o agua y fruta fresca de estación preparado al momento.</string></property>
+     <property name="styleSheet"><string>font-size: 12px; color: #666666;</string></property>
+     <property name="wordWrap"><bool>true</bool></property>
+    </widget>
+   </item>
+   <item alignment="Qt::AlignRight">
+    <widget class="QPushButton" name="btnVerDetalleLicuado">
+     <property name="text"><string>👁️ Ver Detalle Completo ➔</string></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+</item>
+
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+      <!-- TAB 4: MI CARRITO EXPRESS -->
+      <widget class="QWidget" name="tabCarrito">
+       <attribute name="title"><string>🛒 Mi Carrito Express</string></attribute>
+       <layout class="QVBoxLayout" name="layoutTabCarrito">
+        <property name="spacing"><number>12</number></property>
+        <item>
+         <widget class="QFrame" name="cardNotice">
+          <property name="styleSheet">
+           <string>background-color: #F8F4EF; border: 1px solid #E6DEC3; border-radius: 8px; padding: 10px;</string>
+          </property>
+          <layout class="QVBoxLayout" name="layoutNoticeCart">
+           <item>
+            <widget class="QLabel" name="lblRuleNoticeCart">
+             <property name="text">
+              <string>📱 Cumplimiento de Norma Escolar: Los pedidos se realizan y retiran únicamente durante los recreos o fuera del horario de clases. Muestra tu código de 5 dígitos en mostrador.</string>
+             </property>
+             <property name="wordWrap"><bool>true</bool></property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="tableCart">
+          <property name="columnCount"><number>4</number></property>
+          <column><property name="text"><string>Producto Seleccionado</string></property></column>
+          <column><property name="text"><string>Cant.</string></property></column>
+          <column><property name="text"><string>Precio Unit.</string></property></column>
+          <column><property name="text"><string>Subtotal</string></property></column>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="layoutCartBottom">
+          <item>
+           <widget class="QLabel" name="lblSelectRecreo">
+            <property name="text"><string>Seleccionar Horario de Retiro:</string></property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboRecreo">
+            <item><property name="text"><string>Primer Recreo (09:50 hs)</string></property></item>
+            <item><property name="text"><string>Segundo Recreo (12:00 hs - Almuerzo)</string></property></item>
+            <item><property name="text"><string>Tercer Recreo (14:30 hs)</string></property></item>
+            <item><property name="text"><string>Salida (16:15 hs)</string></property></item>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignRight">
+           <widget class="QLabel" name="lblCartTotal">
+            <property name="text"><string>Total a Abonar: $2.800</string></property>
+            <property name="styleSheet"><string>font-size: 18px; font-weight: bold; color: #3D1A24;</string></property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnCheckout">
+          <property name="text"><string>✅ CONFIRMAR Y GENERAR CÓDIGO DE RETIRO EXPRESS ➔</string></property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+
+     </widget>
+    </item>
+
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

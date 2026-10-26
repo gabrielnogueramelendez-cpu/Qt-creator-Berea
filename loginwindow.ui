@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoginWindow</class>
+ <widget class="QWidget" name="LoginWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>920</width>
+    <height>660</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>El Buffet de Alejandro - Iniciar Sesión</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayoutMain">
+   <item alignment="Qt::AlignCenter">
+    <widget class="QFrame" name="cardLogin">
+     <property name="minimumSize">
+      <size>
+       <width>440</width>
+       <height>520</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>480</width>
+       <height>580</height>
+      </size>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutCard">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>28</number>
+      </property>
+      <property name="topMargin">
+       <number>25</number>
+      </property>
+      <property name="rightMargin">
+       <number>28</number>
+      </property>
+      <property name="bottomMargin">
+       <number>25</number>
+      </property>
+      <item alignment="Qt::AlignCenter">
+       <widget class="QLabel" name="lblLogoTitle">
+        <property name="text">
+         <string>🍎 EL BUFFET DE ALEJANDRO</string>
+        </property>
+       </widget>
+      </item>
+      <item alignment="Qt::AlignCenter">
+       <widget class="QLabel" name="lblSubtitle">
+        <property name="text">
+         <string>Portal de Acceso Escolar &amp; Gestión</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblRole">
+        <property name="text">
+         <string>Tipo de Usuario / Rol:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboRole">
+        <item>
+         <property name="text">
+          <string>🎓 Estudiante / Alumno</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>🧑‍🍳 Personal de Buffet (Caja &amp; Mostrador)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>🛠️ Administrador del Sistema</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>💻 Desarrollador / Soporte Técnico (Modo Dev)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblUser">
+        <property name="text">
+         <string>DNI o Correo Institucional:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtUser">
+        <property name="placeholderText">
+         <string>Ej. 44123456 o alumno@bue.edu.ar</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPass">
+        <property name="text">
+         <string>Contraseña de Acceso:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPass">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>••••••••</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPinCajero">
+        <property name="text">
+         <string>PIN de Seguridad de Turno (4 dígitos):</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPinCajero">
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>Ej. 1234</string>
+        </property>
+        <property name="maxLength">
+         <number>4</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblTokenDev">
+        <property name="text">
+         <string>Token de Autorización de Desarrollador (Key):</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtTokenDev">
+        <property name="placeholderText">
+         <string>DEV-BEREA-2026</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblNoticeRol">
+        <property name="text">
+         <string>ℹ️ Los estudiantes deben registrarse con su correo @bue.edu.ar.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string>color: #666; font-size: 11px;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLogin">
+        <property name="text">
+         <string>INGRESAR AL SISTEMA ➔</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="layoutRegisterPrompt">
+        <item>
+         <widget class="QLabel" name="lblNoAccount">
+          <property name="text">
+           <string>¿Eres alumno y no tienes cuenta?</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnGoRegister">
+          <property name="text">
+           <string>¡Regístrate aquí!</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

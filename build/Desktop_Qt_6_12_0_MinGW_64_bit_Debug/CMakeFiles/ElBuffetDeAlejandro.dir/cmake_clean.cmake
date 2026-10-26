@@ -1,0 +1,42 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/ElBuffetDeAlejandro_autogen.dir/AutogenUsed.txt"
+  "CMakeFiles/ElBuffetDeAlejandro_autogen.dir/ParseCache.txt"
+  "ElBuffetDeAlejandro_autogen"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/ElBuffetDeAlejandro_autogen/mocs_compilation.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/ElBuffetDeAlejandro_autogen/mocs_compilation.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/adminwindow.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/adminwindow.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/cajerowindow.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/cajerowindow.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/carritodialog.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/carritodialog.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/comprobantedialog.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/comprobantedialog.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/devwindow.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/devwindow.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/loginwindow.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/loginwindow.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/main.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/main.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/mainwindow.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/mainwindow.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/pagodialog.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/pagodialog.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/productdetaildialog.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/productdetaildialog.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/registerdialog.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/registerdialog.cpp.obj.d"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/sistemabuffet.cpp.obj"
+  "CMakeFiles/ElBuffetDeAlejandro.dir/sistemabuffet.cpp.obj.d"
+  "ElBuffetDeAlejandro.exe"
+  "ElBuffetDeAlejandro.exe.manifest"
+  "ElBuffetDeAlejandro.pdb"
+  "ElBuffetDeAlejandro_autogen/mocs_compilation.cpp"
+  "ElBuffetDeAlejandro_autogen/timestamp"
+  "libElBuffetDeAlejandro.dll.a"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/ElBuffetDeAlejandro.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()

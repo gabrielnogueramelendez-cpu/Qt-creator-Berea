@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PagoDialog</class>
+ <widget class="QDialog" name="PagoDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>620</width>
+    <height>660</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Verificación de Datos y Pago - El Buffet de Alejandro</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayoutMain">
+   <property name="spacing">
+    <number>12</number>
+   </property>
+   <property name="leftMargin">
+    <number>24</number>
+   </property>
+   <property name="topMargin">
+    <number>20</number>
+   </property>
+   <property name="rightMargin">
+    <number>24</number>
+   </property>
+   <property name="bottomMargin">
+    <number>20</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="lblTituloPago">
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>💳 Confirmación de Pedido y Método de Pago</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupDatosAlumno">
+     <property name="title">
+      <string>📋 1. Verificación de Datos del Estudiante</string>
+     </property>
+     <layout class="QFormLayout" name="formLayoutAlumno">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lblEtiquetaDni">
+        <property name="text">
+         <string>DNI del Alumno:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="txtPagoDni">
+        <property name="readOnly">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lblEtiquetaNombre">
+        <property name="text">
+         <string>Nombre y Apellido:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="txtPagoNombre"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lblEtiquetaCurso">
+        <property name="text">
+         <string>Curso y División:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="txtPagoCurso"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupHorario">
+     <property name="title">
+      <string>⏰ 2. Horario / Recreo de Retiro en el Buffet</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutHorario">
+      <item>
+       <widget class="QComboBox" name="comboRecreo">
+        <item>
+         <property name="text">
+          <string>🔔 1er Recreo Turno Mañana (10:35 hs)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>🔔 2do Recreo Turno Mañana (12:00 hs)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>🍽️ Almuerzo Buffet Escolar (12:45 hs - 13:30 hs)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>🔔 1er Recreo Turno Tarde (15:35 hs)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>🎒 Salida de Talleres Técnicos (17:45 hs)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupMetodoPago">
+     <property name="title">
+      <string>💰 3. Selección y Validación del Método de Pago</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayoutMetodo">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="layoutTotalPedido">
+        <item>
+         <widget class="QLabel" name="lblResumenTotal">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Total a Pagar: $0</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboMetodoPago">
+        <item>
+         <property name="text">
+          <string>💵 Efectivo en Mostrador (Caja Buffet)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>💳 Saldo de Cuenta Escolar Buffet</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>📱 Mercado Pago / Transferencia Institucional</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QStackedWidget" name="stackedDetallePago">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="pageEfectivo">
+         <layout class="QVBoxLayout" name="layoutPageEfectivo">
+          <item>
+           <widget class="QLabel" name="lblIndicacionEfectivo">
+            <property name="text">
+             <string>Indica el billete o monto con el que vas a abonar en caja:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="txtMontoAbonado">
+            <property name="placeholderText">
+             <string>Ej. 5000 o 10000</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblVueltoCalculado">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Vuelto a recibir en caja: $0</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageSaldoCuenta">
+         <layout class="QVBoxLayout" name="layoutPageSaldo">
+          <item>
+           <widget class="QLabel" name="lblSaldoDisponible">
+            <property name="text">
+             <string>Saldo disponible en tu cuenta escolar: $15.000</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblEstadoSaldo">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>✅ Saldo suficiente para cubrir esta compra.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="pageMercadoPago">
+         <layout class="QVBoxLayout" name="layoutPageMP">
+          <item>
+           <widget class="QLabel" name="lblDatosMP">
+            <property name="text">
+             <string>&lt;b&gt;Alias:&lt;/b&gt; BUFFET.ESCUELA.MP &lt;br&gt;&lt;b&gt;CVU:&lt;/b&gt; 00000031000987654321</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="txtComprobanteMP">
+            <property name="placeholderText">
+             <string>Ingresa los 4 dígitos finales del comprobante de transferencia</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="chkConfirmarTerminos">
+     <property name="text">
+      <string>Declaro que los datos son correctos y me comprometo a retirar el pedido en el horario seleccionado.</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="layoutBotones">
+     <item>
+      <widget class="QPushButton" name="btnCancelarPago">
+       <property name="text">
+        <string>Volver al Carrito</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="spacerBotones">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnConfirmarPedido">
+       <property name="font">
+        <font>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>🎉 CONFIRMAR PEDIDO Y OBTENER CÓDIGO ➔</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
