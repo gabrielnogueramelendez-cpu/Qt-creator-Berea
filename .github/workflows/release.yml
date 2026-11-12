@@ -1,0 +1,50 @@
+name: Release
+
+# Al subir un tag v*, genera la presentación y publica el Release con el material de cátedra.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: presentacion/package-lock.json
+
+      - name: Generar la presentación
+        working-directory: presentacion
+        run: |
+          npm ci
+          npm run build
+
+      - name: Armar los adjuntos
+        run: |
+          mkdir -p release
+          cp presentacion/dist/index.html release/presentacion-el-buffet-de-alejandro.html
+          cp database/ElBuffetDeAlejandroBDD.sql release/
+          zip -r release/material-de-catedra.zip docs database README.md
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: v1.0 · Material de cátedra
+          body: |
+            Material de cátedra de **El Buffet de Alejandro**, sistema Click & Collect para el buffet escolar.
+
+            **Adjuntos**
+            - `presentacion-el-buffet-de-alejandro.html`: la presentación (21 diapositivas). Se abre con doble clic y funciona sin internet. Flechas para avanzar, `S` para notas del orador, `F` pantalla completa.
+            - `material-de-catedra.zip`: documentos del proyecto (investigación, requerimientos, métricas y riesgos, marco lógico, informe de mercado, validaciones) y la base de datos.
+            - `ElBuffetDeAlejandroBDD.sql`: script MySQL (3 schemas, 22 tablas).
+
+            **Código**: app de escritorio en C++ con Qt 6. Abrir `CMakeLists.txt` en Qt Creator.
+
+            Equipo: Noguera y San Martín.
+          files: release/*
