@@ -16,40 +16,40 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 
 # Lista de fuentes, encabezados e interfaces gráficas
 set(PROJECT_SOURCES
-    main.cpp
-    sistemabuffet.cpp
-    sistemabuffet.h
-    loginwindow.cpp
-    loginwindow.h
-    loginwindow.ui
-    registerdialog.cpp
-    registerdialog.h
-    registerdialog.ui
-    mainwindow.cpp
-    mainwindow.h
-    mainwindow.ui
-    carritodialog.cpp
-    carritodialog.h
-    carritodialog.ui
-    pagodialog.cpp
-    pagodialog.h
-    pagodialog.ui
-    productdetaildialog.cpp
-    productdetaildialog.h
-    productdetaildialog.ui
-    comprobantedialog.cpp
-    comprobantedialog.h
-    comprobantedialog.ui
-    cajerowindow.cpp
-    cajerowindow.h
-    cajerowindow.ui
-    adminwindow.cpp
-    adminwindow.h
-    adminwindow.ui
-    devwindow.cpp
-    devwindow.h
-    devwindow.ui
-    styles.qss
+    app/main.cpp
+    app/sistemabuffet.cpp
+    app/sistemabuffet.h
+    app/loginwindow.cpp
+    app/loginwindow.h
+    app/loginwindow.ui
+    app/registerdialog.cpp
+    app/registerdialog.h
+    app/registerdialog.ui
+    app/mainwindow.cpp
+    app/mainwindow.h
+    app/mainwindow.ui
+    app/carritodialog.cpp
+    app/carritodialog.h
+    app/carritodialog.ui
+    app/pagodialog.cpp
+    app/pagodialog.h
+    app/pagodialog.ui
+    app/productdetaildialog.cpp
+    app/productdetaildialog.h
+    app/productdetaildialog.ui
+    app/comprobantedialog.cpp
+    app/comprobantedialog.h
+    app/comprobantedialog.ui
+    app/cajerowindow.cpp
+    app/cajerowindow.h
+    app/cajerowindow.ui
+    app/adminwindow.cpp
+    app/adminwindow.h
+    app/adminwindow.ui
+    app/devwindow.cpp
+    app/devwindow.h
+    app/devwindow.ui
+    app/resources/styles.qss
 )
 
 # Definición del ejecutable
@@ -73,7 +73,7 @@ target_link_libraries(ElBuffetDeAlejandro PRIVATE
 # Copiar el archivo de estilos styles.qss a la carpeta de compilación para su ejecución
 add_custom_command(TARGET ElBuffetDeAlejandro POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/styles.qss"
+        "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/styles.qss"
         $<TARGET_FILE_DIR:ElBuffetDeAlejandro>
     COMMENT "Copiando styles.qss al directorio del ejecutable..."
 )
