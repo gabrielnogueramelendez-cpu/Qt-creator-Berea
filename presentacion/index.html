@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fbf8f3">
+<title>El Buffet de Alejandro</title>
+<meta name="description" content="Click &amp; Collect para el buffet escolar: pedí antes, retirá con un código de 5 caracteres.">
+</head>
+<body>
+
+<div id="recreo" aria-hidden="true">
+  <span id="recreo-seccion">Portada</span>
+  <div class="recreo-pista"><i id="recreo-avance"></i></div>
+  <span id="recreo-hora">10:35</span>
+</div>
+
+<div class="reveal"><div class="slides">
+
+<!-- 1 · PORTADA -->
+<section data-seccion="Portada" data-tono="oscuro" data-entrada="portada" id="portada">
+  <canvas class="fila-generativa" aria-hidden="true"></canvas>
+  <div class="portada">
+    <div class="portada-texto">
+      <p class="sobre">Proyecto Informático I y Bases de Datos</p>
+      <h1>El Buffet<br>de Alejandro</h1>
+      <p class="bajada">Pedí antes del recreo. Retirá en segundos con tu código.</p>
+      <p class="equipo"><b>Noguera</b> y <b>San Martín</b></p>
+    </div>
+    <div class="portada-codigo">
+      <div class="flap grande" data-codigo="3C6MB" aria-label="Código de retiro 3C6MB"></div>
+      <p class="flap-pie">Código único de retiro</p>
+    </div>
+  </div>
+  <aside class="notes">Noguera abre, 20 segundos. Presentarse en una frase y pasar directo al problema. El código 3C6MB es el ejemplo que genera la aplicación real al confirmar un pedido: es el elemento que se va a repetir en toda la presentación.</aside>
+</section>
+
+<!-- 2 · GANCHO -->
+<section data-seccion="Problema" data-entrada="fila" id="gancho">
+  <div class="marco">
+    <h2>El recreo dura <span class="cifra" data-contar="10">10</span> minutos.<br>La fila para comprar, entre 4 y 7.</h2>
+    <figure class="dibujo-fila">
+      <svg viewBox="0 0 1620 250" role="img" aria-label="Fila de alumnos frente a una sola caja: se atiende de a uno, entre 30 y 60 segundos por alumno">
+        <defs>
+          <marker id="flecha-fila" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+        </defs>
+        <line x1="40" y1="212" x2="1580" y2="212" stroke="currentColor" stroke-opacity=".18" stroke-width="3"/>
+        <g class="fila-alumnos">
+          <g class="alumno" transform="translate(120 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(230 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(340 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(450 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(560 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(670 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(780 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(890 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(1000 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+          <g class="alumno" transform="translate(1110 0)"><circle cx="0" cy="96" r="22"/><rect x="-26" y="124" width="52" height="86" rx="20"/></g>
+        </g>
+        <line x1="1170" y1="160" x2="1290" y2="160" stroke="currentColor" stroke-width="3" marker-end="url(#flecha-fila)"/>
+        <text x="1230" y="140" text-anchor="middle" class="svg-chico">de a uno</text>
+        <rect x="1310" y="110" width="270" height="102" rx="12" class="mostrador"/>
+        <text x="1445" y="158" text-anchor="middle" class="svg-titulo">Una caja</text>
+        <text x="1445" y="190" text-anchor="middle" class="svg-chico">30 a 60 s por alumno</text>
+        <g class="reloj" transform="translate(1445 56)">
+          <circle r="34" class="reloj-cara"/>
+          <path class="reloj-sector" d="M0,0 L0,-30 A30,30 0 0 1 0,-30 Z"/>
+          <line x1="0" y1="0" x2="0" y2="-26" stroke="currentColor" stroke-width="4" stroke-linecap="round" class="reloj-aguja"/>
+        </g>
+      </svg>
+    </figure>
+    <div class="linea-recreo" aria-label="De 10 minutos de recreo, hasta 7 se van en la fila">
+      <div class="lr-fila" style="--ancho:70%"><span>Hasta 7 min en la fila</span></div>
+      <div class="lr-resto"><span>3 min para comer</span></div>
+    </div>
+    <p class="nota">Tiempo de compra medido en una compra normal, según la Matriz de Marco Lógico del proyecto.</p>
+  </div>
+  <aside class="notes">Noguera, 30 segundos. Dato propio del proyecto (MML, Propósito): una compra normal lleva de 4 a 7 minutos. En un recreo de 10, eso deja 3 minutos para comer, o ninguno si la fila es larga.</aside>
+</section>
+
+<!-- 3 · ABANDONO -->
+<section data-seccion="Problema" data-entrada="contar" id="abandono">
+  <div class="marco dos-col">
+    <div>
+      <h2>La gente no espera</h2>
+      <p class="lead">Fuera del colegio pasa lo mismo: una fila larga hace que la compra no ocurra.</p>
+    </div>
+    <div class="datos">
+      <div class="dato"><b><span data-contar="82">82</span>%</b><span>evita los locales con filas visibles o desordenadas</span></div>
+      <div class="dato"><b><span data-contar="73">73</span>%</b><span>abandona la compra si tiene que esperar más de 5 minutos</span></div>
+      <div class="dato"><b>+<span data-contar="61">61</span>%</b><span>crecieron los tiempos de espera en comercios desde 2022</span></div>
+    </div>
+  </div>
+  <p class="fuente">WaitWhile, encuesta 2023 · Chain Store Age, 2024</p>
+  <aside class="notes">Noguera, 30 segundos. Los dos primeros datos son de WaitWhile (2023), el tercero de Chain Store Age (2024). En un buffet escolar, abandonar la fila significa que el buffet pierde la venta y el alumno se queda sin comer.</aside>
+</section>
+
+<!-- 4 · NO ES SOLO ESPERA -->
+<section data-seccion="Problema" id="convivencia">
+  <div class="marco dos-col">
+    <blockquote class="cita">
+      <p>Un alumno le rompió la nariz a un compañero tras una pelea que empezó en la cola de la cantina, durante el recreo.</p>
+      <cite>La Capital, Colegio San José de Rosario</cite>
+    </blockquote>
+    <div class="norma">
+      <h3>La provincia ya lo reconoce</h3>
+      <p>La Resolución Conjunta 1490/2021 de Buenos Aires regula los buffets escolares para <em>“evitar de esta manera la aglomeración”</em> en los recreos.</p>
+      <p class="chico">Dirección General de Cultura y Educación y Ministerio de Salud de la Provincia de Buenos Aires.</p>
+    </div>
+  </div>
+  <aside class="notes">Noguera, 30 segundos. La fila no es solo un problema de tiempo: genera empujones y conflictos. La propia normativa provincial pide evitar la aglomeración. Esto le da al proyecto un respaldo institucional.</aside>
+</section>
+
+<!-- 5 · ÁRBOL DE PROBLEMAS -->
+<section data-seccion="Problema" data-entrada="arbol" id="arbol-problemas">
+  <div class="marco">
+    <h2 class="titulo-chico">Árbol de problemas</h2>
+    <div class="arbol">
+      <div class="fila-efectos">
+        <div class="efecto"><b>Pérdidas en el buffet</b><span>Ventas entre 20 % y 35 % menores</span><span>Comida preparada que se desperdicia</span></div>
+        <div class="efecto"><b>Frustración de los alumnos</b><span>Más del 50 % abandona la fila después de 5 min</span><span>Empujones por un lugar en el mostrador</span></div>
+        <div class="efecto"><b>Salud e institución</b><span>Comer apurado camino al aula</span><span>Llegadas tarde a la clase siguiente</span></div>
+      </div>
+      <div class="nucleo">Amontonamiento y filas largas en el buffet durante recreos de 10 minutos</div>
+      <div class="fila-causas" role="tablist" aria-label="Causas principales">
+        <button class="causa activa" role="tab" aria-selected="true" data-causa="0">Cuello de botella en la caja</button>
+        <button class="causa" role="tab" aria-selected="false" data-causa="1">Toda la demanda junta</button>
+        <button class="causa" role="tab" aria-selected="false" data-causa="2">Sin canales digitales</button>
+      </div>
+      <div class="raices" aria-live="polite">
+        <div class="raiz-grupo activa"><span>Cobro manual en efectivo: 30 a 60 s por alumno</span><span>Falta de cambio, que demora cada cobro</span></div>
+        <div class="raiz-grupo"><span>Todos los cursos salen al recreo al mismo tiempo</span><span>Se decide qué comprar frente al mostrador</span></div>
+        <div class="raiz-grupo"><span>No existe reserva previa ni Click &amp; Collect</span><span>No hay validación rápida por código en caja</span></div>
+      </div>
+    </div>
+    <div class="control"><button class="btn-play" data-play aria-label="Recorrer las causas">Recorrer causas</button></div>
+  </div>
+  <aside class="notes">Noguera, 45 segundos. Un único problema central. Tres causas: el cobro manual (30 a 60 s por alumno), la demanda concentrada en el mismo recreo y la falta de canales digitales. Tocar cada causa muestra sus raíces. Efectos: económicos, de convivencia y de salud.</aside>
+</section>
+
+<!-- 6 · ÁRBOL DE OBJETIVOS -->
+<section data-seccion="Problema" id="arbol-objetivos">
+  <div class="marco">
+    <h2 class="titulo-chico">Árbol de objetivos</h2>
+    <p class="objetivo-central">Fluidez y atención rápida en el buffet durante los recreos</p>
+    <div class="giros">
+      <div class="giro"><s>Cobro manual en efectivo</s><b>Pago elegido de antemano, con el vuelto calculado</b></div>
+      <div class="giro"><s>Se decide frente al mostrador</s><b>Menú del buffet disponible en el sistema</b></div>
+      <div class="giro"><s>Sin reserva previa</s><b>Click &amp; Collect con validación por código</b></div>
+    </div>
+    <div class="fines">
+      <span>Ventas recuperadas y menos desperdicio</span>
+      <span>Mostrador ordenado y sin conflictos</span>
+      <span>Comer tranquilo y llegar a horario</span>
+    </div>
+  </div>
+  <aside class="notes">Noguera, 30 segundos. Cada causa se da vuelta y se convierte en un medio: pago previo, menú digital y retiro por código. Los fines responden a los tres efectos del árbol de problemas.</aside>
+</section>
+
+<!-- 7 · ANTECEDENTES -->
+<section data-seccion="Problema" id="antecedentes">
+  <div class="marco">
+    <h2>Otros ya probaron que funciona</h2>
+    <div class="casos">
+      <article class="caso">
+        <h3>OrderEAT, Argentina</h3>
+        <p>Una app creada por estudiantes por el caos de los recreos de su colegio. Pedido previo y retiro directo, sin pagar en el mostrador.</p>
+        <p class="caso-dato">Más de US$ 2 millones procesados y decenas de colegios clientes.</p>
+        <p class="fuente-inline">Forbes Argentina</p>
+      </article>
+      <article class="caso">
+        <h3>Cafetería PUCV, Chile, 2025</h3>
+        <p>Estudiantes de ingeniería crearon pedidos agendados con retiro en casilleros inteligentes, porque muchos no llegaban a comprar entre clases.</p>
+        <p class="caso-dato">Nació de las largas filas en los locales de la universidad.</p>
+        <p class="fuente-inline">Escuela de Ingeniería PUCV</p>
+      </article>
+    </div>
+  </div>
+  <aside class="notes">Noguera, 30 segundos. Dos antecedentes reales validan la idea: la reserva previa resuelve la fila. La diferencia de nuestro proyecto (se ve en competencia): sin comisiones y sin depender de la nube.</aside>
+</section>
+
+<!-- 8 · SOLUCIÓN -->
+<section data-seccion="Solución" id="solucion">
+  <div class="marco">
+    <h2>Tres pasos y el recreo queda libre</h2>
+    <ol class="pasos">
+      <li><span class="paso-n">1</span><div><b>Elegís del menú</b><p>Catálogo con stock real: si no hay, no se puede pedir.</p></div></li>
+      <li><span class="paso-n">2</span><div><b>Pagás y elegís el recreo</b><p>Efectivo, saldo de cuenta escolar o Mercado Pago.</p></div></li>
+      <li><span class="paso-n">3</span><div><b>Retirás con tu código</b><p>Lo dictás en caja y te entregan el pedido.</p></div></li>
+    </ol>
+    <div class="ticket-mini"><span>Tu código</span><div class="flap chico" data-codigo="8A2KP" aria-label="Código de ejemplo 8A2KP"></div></div>
+  </div>
+  <aside class="notes">San Martín toma la palabra, 30 segundos. Click &amp; Collect: pedir y pagar antes, retirar con un código. El código de ejemplo 8A2KP es otro pedido de los datos de prueba de la app.</aside>
+</section>
+
+<!-- 9 · CÓMO VIAJA UN PEDIDO -->
+<section data-seccion="Solución" data-entrada="flujo" id="flujo">
+  <div class="marco">
+    <h2 class="titulo-chico">Cómo viaja un pedido</h2>
+    <figure class="dibujo-flujo">
+      <svg viewBox="0 0 1620 600" role="img" aria-label="El alumno crea el pedido en la base, que descuenta stock y devuelve un código; el cajero busca ese código en la misma base y lo marca entregado">
+        <defs>
+          <marker id="flecha-flujo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>
+        </defs>
+        <!-- nodos -->
+        <g class="nodo"><rect x="20" y="170" width="300" height="230" rx="18"/><text x="170" y="270" text-anchor="middle" class="svg-titulo">App del alumno</text><text x="170" y="306" text-anchor="middle" class="svg-chico">Qt, en la PC del colegio</text></g>
+        <g class="nodo base"><rect x="620" y="60" width="380" height="460" rx="18"/><text x="810" y="112" text-anchor="middle" class="svg-titulo">Base MySQL</text>
+          <rect x="660" y="150" width="300" height="84" rx="10" class="tabla" data-tabla="0"/><text x="680" y="186" class="svg-mono">Producto</text><text x="680" y="216" class="svg-chico">stock − cantidad</text>
+          <rect x="660" y="254" width="300" height="84" rx="10" class="tabla" data-tabla="1"/><text x="680" y="290" class="svg-mono">Venta</text><text x="680" y="320" class="svg-chico">total, método, recreo</text>
+          <rect x="660" y="358" width="300" height="120" rx="10" class="tabla" data-tabla="2"/><text x="680" y="394" class="svg-mono">Retiro</text><text x="680" y="424" class="svg-chico">código 3C6MB</text><text x="680" y="456" class="svg-chico estado-retiro">PENDIENTE</text>
+        </g>
+        <g class="nodo"><rect x="1300" y="170" width="300" height="230" rx="18"/><text x="1450" y="270" text-anchor="middle" class="svg-titulo">Caja del buffet</text><text x="1450" y="306" text-anchor="middle" class="svg-chico">cajero con PIN de turno</text></g>
+        <!-- aristas con etiqueta -->
+        <path id="r1" d="M320,220 C460,220 500,190 660,190" class="arista" marker-end="url(#flecha-flujo)"/>
+        <text x="470" y="186" text-anchor="middle" class="svg-chico">1 · confirma pedido</text>
+        <path id="r2" d="M660,420 C500,420 460,350 320,350" class="arista" marker-end="url(#flecha-flujo)"/>
+        <text x="470" y="440" text-anchor="middle" class="svg-chico">2 · devuelve el código</text>
+        <path id="r3" d="M1300,220 C1140,220 1100,400 960,400" class="arista" marker-end="url(#flecha-flujo)"/>
+        <text x="1140" y="196" text-anchor="middle" class="svg-chico">3 · busca 3C6MB</text>
+        <path id="r4" d="M960,440 C1110,440 1150,350 1300,350" class="arista" marker-end="url(#flecha-flujo)"/>
+        <text x="1140" y="470" text-anchor="middle" class="svg-chico">4 · marca ENTREGADO</text>
+        <circle r="13" class="paquete" cx="320" cy="220"/>
+      </svg>
+      <figcaption id="flujo-texto">El alumno y el cajero nunca hablan entre sí: los dos leen y escriben la misma base.</figcaption>
+    </figure>
+  </div>
+  <aside class="notes">San Martín, 40 segundos. El punto amarillo recorre los 4 pasos. 1: al confirmar, se crea la Venta y se descuenta el stock del Producto. 2: la base devuelve el código del Retiro. 3: en el recreo, el cajero busca ese código. 4: lo marca entregado, y no se puede volver a entregar.</aside>
+</section>
+
+<!-- 10 · ROLES -->
+<section data-seccion="Solución" id="roles">
+  <div class="marco">
+    <h2>Una aplicación, cuatro puertas de entrada</h2>
+    <div class="roles">
+      <div class="rol"><h3>Alumno</h3><p>Se registra con DNI y correo @bue.edu.ar. Arma el carrito, paga y recibe su código.</p></div>
+      <div class="rol"><h3>Cajero</h3><p>Entra con legajo y un PIN de turno de 4 dígitos. Busca el código, entrega o anula con motivo.</p></div>
+      <div class="rol"><h3>Administración</h3><p>Carga productos, cambia precios y stock, y revisa la auditoría de todo lo que pasó.</p></div>
+      <div class="rol"><h3>Desarrollo</h3><p>Consola técnica: prueba la conexión con MySQL y los procedimientos de la base.</p></div>
+    </div>
+    <p class="nota">Cada rol tiene su propia validación de ingreso: un alumno no puede entrar como cajero, ni al revés (SEG-07).</p>
+  </div>
+  <aside class="notes">San Martín, 30 segundos. Aplicación de escritorio en C++ con Qt. El PIN de 4 dígitos es del cajero para abrir la caja; el código de retiro del alumno es otro, de 5 caracteres. Los códigos entre paréntesis (SEG-07) vienen de docs/validaciones_sistema.md.</aside>
+</section>
+
+<!-- 10 · RECORRIDO -->
+<section data-seccion="Demo" data-entrada="recorrido" id="recorrido">
+  <div class="marco recorrido">
+    <div class="rec-pasos" role="tablist" aria-label="Recorrido del alumno">
+      <button class="rec-paso activa" role="tab" aria-selected="true" data-i="0"><span>1</span>Ingreso</button>
+      <button class="rec-paso" role="tab" aria-selected="false" data-i="1"><span>2</span>Menú</button>
+      <button class="rec-paso" role="tab" aria-selected="false" data-i="2"><span>3</span>Carrito</button>
+      <button class="rec-paso" role="tab" aria-selected="false" data-i="3"><span>4</span>Pago y recreo</button>
+      <button class="rec-paso" role="tab" aria-selected="false" data-i="4"><span>5</span>Código</button>
+      <button class="btn-play" data-play aria-label="Reproducir recorrido">Reproducir</button>
+    </div>
+    <div class="rec-pantalla">
+      <figure class="rec-fig activa"><img src="./src/img/login.webp" width="1840" height="1320" alt="Pantalla de ingreso de la aplicación con selector de rol"><figcaption>Elige su rol y entra con DNI o correo @bue.edu.ar.</figcaption></figure>
+      <figure class="rec-fig"><img src="./src/img/catalogo.webp" width="2560" height="1600" alt="Menú del día con combos y precios"><figcaption>Menú del día, salados, dulces y bebidas, con precio y stock.</figcaption></figure>
+      <figure class="rec-fig"><img src="./src/img/carrito.webp" width="1506" height="1000" alt="Carrito con productos, cantidades y subtotal"><figcaption>Hasta 10 unidades por producto y nunca más de lo que hay en stock.</figcaption></figure>
+      <figure class="rec-fig"><img src="./src/img/pago.webp" width="1288" height="1334" alt="Pantalla de pago con datos del alumno, recreo de retiro y método de pago"><figcaption>Elige el recreo de retiro y el método de pago; el vuelto se calcula solo.</figcaption></figure>
+      <figure class="rec-fig"><img src="./src/img/comprobante.webp" width="1000" height="1244" alt="Pedido confirmado con el código de retiro 3C6MB"><figcaption>Recibe su código único. Solo tiene que dictarlo en caja.</figcaption></figure>
+    </div>
+  </div>
+  <aside class="notes">San Martín, 1 minuto. Son capturas reales de la aplicación compilada, con los datos de ejemplo que trae. Si hay tiempo, hacer el mismo recorrido en vivo desde Qt Creator. Horarios de retiro reales: 10:35, 12:00, almuerzo de 12:45 a 13:30, 15:35 y 17:45.</aside>
+</section>
+
+<!-- 11 · MOSTRADOR -->
+<section data-seccion="Demo" data-tono="oscuro" data-entrada="carrera" id="mostrador">
+  <div class="marco">
+    <h2>En el mostrador, el pedido sale en menos de 30 segundos</h2>
+    <div class="carrera">
+      <div class="carril">
+        <span class="carril-nombre">Fila tradicional</span>
+        <div class="carril-pista"><i class="carril-barra lenta" style="--fin:100%"></i></div>
+        <span class="carril-tiempo">4 a 7 min</span>
+      </div>
+      <div class="carril">
+        <span class="carril-nombre">Con código</span>
+        <div class="carril-pista"><i class="carril-barra rapida" style="--fin:7.1%"></i></div>
+        <span class="carril-tiempo">&lt; 30 s</span>
+      </div>
+      <p class="carrera-escala">Barras a escala: 30 segundos frente a 7 minutos.</p>
+    </div>
+    <div class="caja">
+      <div class="caja-entrada">
+        <span>El cajero escribe</span>
+        <div class="flap mediano" data-codigo="3C6MB" aria-label="Código 3C6MB"></div>
+      </div>
+      <div class="caja-estado">
+        <span class="chip pendiente" id="chip-estado">Pendiente</span>
+        <p>Validar el código lleva menos de 5 segundos. Un pedido entregado no se puede volver a entregar (CAJ-03).</p>
+      </div>
+    </div>
+  </div>
+  <aside class="notes">San Martín, 45 segundos. La barra corta mide 30 segundos y la larga 7 minutos, a la misma escala. El código se convierte a mayúsculas y solo acepta 5 letras o números (CAJ-01). Al entregar, el estado pasa de Pendiente a Entregado y queda firmado con el nombre del cajero.</aside>
+</section>
+
+<!-- 12 · REGLAS -->
+<section data-seccion="Solución" id="reglas">
+  <div class="marco">
+    <h2>Las reglas del buffet, dentro del sistema</h2>
+    <div class="reglas">
+      <div class="regla"><code>NEG-02</code><p>Máximo 10 unidades por producto en un pedido.</p></div>
+      <div class="regla"><code>NEG-03</code><p>No se puede pedir más de lo que hay en stock.</p></div>
+      <div class="regla"><code>PAG-03</code><p>En efectivo, el monto tiene que cubrir el total y el vuelto se calcula solo.</p></div>
+      <div class="regla"><code>PAG-04</code><p>Con saldo de cuenta escolar, se bloquea si no alcanza.</p></div>
+      <div class="regla"><code>REG-03</code><p>Solo se registran correos institucionales @bue.edu.ar.</p></div>
+      <div class="regla"><code>CAJ-05</code><p>Anular un pedido exige un motivo y devuelve el stock.</p></div>
+    </div>
+    <p class="nota">Son 6 de las más de 50 validaciones del sistema, todas listadas en docs/validaciones_sistema.md.</p>
+  </div>
+  <aside class="notes">San Martín, 30 segundos. Elegir dos para contar en voz alta: el tope de 10 unidades (evita compras excesivas en el recreo) y la anulación con motivo que devuelve el stock.</aside>
+</section>
+
+<!-- 13 · BASE DE DATOS -->
+<section data-seccion="Base de datos" id="base">
+  <div class="marco dos-col base">
+    <div>
+      <h2>Una base de datos de 22 tablas</h2>
+      <div class="schemas">
+        <div class="schema"><h3>Comercial <small>9 tablas</small></h3><p>Producto, Categoria, Menu_Del_Dia, Carrito, Venta, Retiro, Metodo_Pago, Estado_Retiro, Detalle_Menu_Dia</p></div>
+        <div class="schema"><h3>Usuarios <small>7 tablas</small></h3><p>Estudiante, Empleado, Usuario, Email, Telefono, Tipo_Evento, Log_Auditoria</p></div>
+        <div class="schema"><h3>Geografía <small>6 tablas</small></h3><p>Pais, Provincia, Ciudad, Region, Distrito_Escolar, Colegio</p></div>
+      </div>
+      <p class="nota">MySQL, en tercera forma normal. Si el servidor no responde, la app sigue funcionando con los mismos datos en memoria.</p>
+    </div>
+    <figure class="der"><img src="./src/img/der.webp" width="1800" height="1122" alt="Diagrama entidad relación del sistema"><figcaption>Modelo conceptual (DER)</figcaption></figure>
+  </div>
+  <aside class="notes">Noguera vuelve, 40 segundos. Tres schemas: comercial, usuarios y geografía. Venta se relaciona 1 a 1 con Retiro, que guarda el código. El script está en database/ElBuffetDeAlejandroBDD.sql. Ojo: validaciones_sistema menciona 20 tablas; el script final tiene 22.</aside>
+</section>
+
+<!-- 14 · COMPETENCIA -->
+<section data-seccion="Competencia" id="competencia">
+  <div class="marco">
+    <h2>Frente a lo que ya existe</h2>
+    <div class="tabla-scroll">
+    <table class="matriz">
+      <thead><tr><th></th><th class="nuestro">El Buffet de Alejandro</th><th>App SaaS (OrderEAT)</th><th>Sistema POS</th><th>Manual y efectivo</th></tr></thead>
+      <tbody>
+        <tr><th>Retiro</th><td class="nuestro">Código de 5 caracteres</td><td>QR o notificación</td><td>Ticket impreso</td><td>Fila por llegada</td></tr>
+        <tr><th>Tiempo en caja</th><td class="nuestro">&lt; 5 s de validación</td><td>Según la red</td><td>15 a 30 s</td><td>30 a 60 s</td></tr>
+        <tr><th>Stock</th><td class="nuestro">Descuento automático</td><td>Depende de la nube</td><td>Inventario general</td><td>A ojo</td></tr>
+        <tr><th>Auditoría</th><td class="nuestro">Log_Auditoria propio</td><td>En servidores ajenos</td><td>Cierre de caja</td><td>Ninguna</td></tr>
+        <tr><th>Costo</th><td class="nuestro">$0 en licencias</td><td>Comisión + abono</td><td>Licencia + hardware</td><td>Pierde 20–30 % de ventas</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <aside class="notes">Noguera, 40 segundos. Datos del Informe de Mercado (docs/informe-mercado.md). El punto fuerte frente a OrderEAT: no cobra comisión y no depende de que los alumnos tengan datos móviles dentro del colegio.</aside>
+</section>
+
+<!-- 15 · PROPUESTA DE VALOR -->
+<section data-seccion="Competencia" id="puv">
+  <div class="marco">
+    <p class="puv">Un sistema propio que saca la fila del recreo: <b>menos de 30 segundos por alumno</b>, sin licencias ni comisiones, y con cada operación registrada.</p>
+    <div class="ventajas">
+      <div><h3>Despacho express</h3><p>Código único de 5 caracteres por pedido.</p></div>
+      <div><h3>$0 en licencias</h3><p>Qt y MySQL Community: sin abono ni comisión por venta.</p></div>
+      <div><h3>Todo queda registrado</h3><p>Ingresos, cobros y anulaciones, con fecha y hora.</p></div>
+      <div><h3>Stock al día</h3><p>Se actualiza en menos de 2 segundos después de cada venta.</p></div>
+    </div>
+  </div>
+  <aside class="notes">Noguera, 30 segundos. Leer la propuesta de valor tal cual. Las cuatro ventajas son las del informe de mercado.</aside>
+</section>
+
+<!-- 16 · MARCO LÓGICO -->
+<section data-seccion="Planificación" id="mml">
+  <div class="marco">
+    <h2 class="titulo-chico">Matriz de Marco Lógico</h2>
+    <div class="tabla-scroll">
+    <table class="mml">
+      <thead><tr><th></th><th>Qué buscamos</th><th>Cómo lo medimos</th><th>Cómo lo verificamos</th></tr></thead>
+      <tbody>
+        <tr><th>Fin</th><td>Mejorar la compra y venta en el buffet</td><td>Ventas +20–30 %, 5 min menos de espera, retención +50 %</td><td>Estadísticas de la base de datos</td></tr>
+        <tr><th>Propósito</th><td>Menos espera y menos amontonamiento</td><td>De 4–7 min a menos de 30 s por compra</td><td>Cronometraje en el recreo, en planilla</td></tr>
+        <tr><th>Componentes</th><td>App de reservas, cobro y base de stock</td><td>App, cobro y base funcionando</td><td>Prototipo en Figma, capturas y esquema</td></tr>
+        <tr><th>Actividades</th><td>Código, interfaz y base de datos</td><td>20 h + 6 h + 12 h, costo $0</td><td>Bitácora técnica del equipo</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <aside class="notes">San Martín, 40 segundos. Supuestos importantes: que los alumnos sigan comprando en el buffet y que la red del colegio funcione. La matriz original dice "PIN de 4 dígitos" en el Propósito: corregir en voz alta, el código del alumno es de 5 caracteres.</aside>
+</section>
+
+<!-- 17 · MÉTRICAS -->
+<section data-seccion="Planificación" data-entrada="barras" id="metricas">
+  <div class="marco">
+    <h2>Cómo sabremos que funcionó</h2>
+    <div class="kpis">
+      <div class="kpi"><h3>Compra completa</h3><div class="kpi-par"><div class="kpi-barra antes" style="--v:100%"><span>7 min</span></div><div class="kpi-barra despues" style="--v:7.1%"><span>&lt; 30 s</span></div></div></div>
+      <div class="kpi"><h3>Validación en caja</h3><div class="kpi-par"><div class="kpi-barra antes" style="--v:100%"><span>60 s</span></div><div class="kpi-barra despues" style="--v:8.3%"><span>&lt; 5 s</span></div></div></div>
+      <div class="kpi"><h3>Ventas del buffet</h3><p class="kpi-meta">+20 a 30 %</p></div>
+      <div class="kpi"><h3>Errores en códigos</h3><p class="kpi-meta">menos del 1 %</p></div>
+    </div>
+    <p class="nota">Barras grises: hoy, en el peor caso. Barras mostaza: la meta. Cada par está dibujado a su propia escala.</p>
+  </div>
+  <aside class="notes">San Martín, 30 segundos. KPIs de docs/metricas-y-riesgos.md. Se miden con las estadísticas de la base y con cronometraje en el recreo, antes y después de usar el sistema.</aside>
+</section>
+
+<!-- 18 · RIESGOS -->
+<section data-seccion="Planificación" id="riesgos">
+  <div class="marco">
+    <h2>Lo que puede salir mal, y qué hacemos</h2>
+    <div class="riesgos">
+      <div class="riesgo"><h3>El alumno no tiene señal</h3><p>El código queda guardado en el dispositivo y se puede bajar como imagen.</p></div>
+      <div class="riesgo"><h3>Falla el cobro</h3><p>Reintento automático, aviso inmediato y cobro manual de contingencia.</p></div>
+      <div class="riesgo"><h3>Se satura en el recreo</h3><p>Catálogo en caché y más recursos en las horas pico.</p></div>
+      <div class="riesgo"><h3>El stock no coincide</h3><p>La caja física usa la misma base de datos que los pedidos.</p></div>
+      <div class="riesgo"><h3>Los alumnos no lo usan</h3><p>Afiches, enlace en las mesas y una promoción para el primer pedido.</p></div>
+      <div class="riesgo"><h3>El personal no lo conoce</h3><p>Capacitación corta y una pantalla de caja de un solo paso.</p></div>
+    </div>
+  </div>
+  <aside class="notes">San Martín, 30 segundos. Seis riesgos: dos técnicos, dos de infraestructura y dos de adopción. El riesgo más importante es el de adopción: si nadie lo usa, ningún indicador mejora.</aside>
+</section>
+
+<!-- 19 · OBJECIONES -->
+<section data-seccion="Preguntas" id="objeciones">
+  <div class="marco">
+    <h2>Preguntas que nos pueden hacer</h2>
+    <div class="flips">
+      <button class="flip" aria-pressed="false"><span class="cara frente">¿Por qué no usar OrderEAT?</span><span class="cara dorso">Cobra comisión por venta y abono mensual, y depende de los datos móviles de los alumnos. El nuestro cuesta $0 en licencias y funciona con la red del colegio.</span></button>
+      <button class="flip" aria-pressed="false"><span class="cara frente">¿Y si se cae MySQL?</span><span class="cara dorso">La aplicación sigue respondiendo con los mismos datos en memoria, sin cerrarse (BDD-02).</span></button>
+      <button class="flip" aria-pressed="false"><span class="cara frente">¿El pago es real?</span><span class="cara dorso">Hoy se registra: efectivo con vuelto, saldo de cuenta o comprobante de Mercado Pago. Conectar una pasarela real es el paso siguiente.</span></button>
+      <button class="flip" aria-pressed="false"><span class="cara frente">¿Qué tan firmes son los números?</span><span class="cara dorso">Los de abandono y filas son de estudios externos. Los tiempos del buffet son estimaciones del equipo: falta cronometrarlos en el recreo.</span></button>
+    </div>
+  </div>
+  <aside class="notes">Los dos tienen que conocer estas respuestas. Tocar cada tarjeta la da vuelta. Ser honestos con la última: todavía no hay mediciones reales en el colegio. Si preguntan por stored procedures: el informe los menciona, pero el script de la base todavía no los define; la consola de desarrollador los simula.</aside>
+</section>
+
+<!-- 20 · CIERRE Y FUENTES -->
+<section data-seccion="Cierre" data-tono="oscuro" data-entrada="portada" id="cierre">
+  <div class="marco cierre">
+    <div>
+      <div class="flap grande" data-codigo="3C6MB" aria-label="Código 3C6MB"></div>
+      <span class="chip entregado">Entregado</span>
+      <h2>Gracias. ¿Preguntas?</h2>
+      <p class="equipo"><b>Noguera</b> y <b>San Martín</b></p>
+    </div>
+    <div class="fuentes">
+      <h3>Fuentes</h3>
+      <ul>
+        <li><a href="https://waitwhile.com/blog/consumer-survey-waiting-in-line-2023/" target="_blank" rel="noopener">WaitWhile, encuesta 2023</a></li>
+        <li><a href="https://chainstoreage.com/store-wait-times-have-surged-61-2022" target="_blank" rel="noopener">Chain Store Age, 2024</a></li>
+        <li><a href="https://www.lacapital.com.ar/edicion-impresa/un-chico-le-rompio-la-nariz-un-companero-el-colegio-n526453.html" target="_blank" rel="noopener">La Capital, Colegio San José</a></li>
+        <li><a href="https://normas.gba.gob.ar/documentos/BK3vL4to.html" target="_blank" rel="noopener">Resolución Conjunta 1490/2021, PBA</a></li>
+        <li><a href="https://www.forbesargentina.com/innovacion/crearon-una-app-17-mejorar-cantina-su-colegio-hoy-tienen-22-ya-procesaron-mas-us-2-millones-pagos-n30144" target="_blank" rel="noopener">Forbes Argentina, OrderEAT</a></li>
+        <li><a href="https://www.ingenieria.pucv.cl/nuevo-sistema-de-compras-en-cafeteria-pucv-permite-agendar-pedidos-y-retirarlos-en-casilleros-inteligentes/" target="_blank" rel="noopener">Ingeniería PUCV</a></li>
+      </ul>
+      <p class="chico">Código, base de datos y documentos en github.com/gabrielnogueramelendez-cpu/Qt-creator-Berea</p>
+    </div>
+  </div>
+  <aside class="notes">Los dos, 15 segundos. Agradecer y abrir preguntas. El mismo código de la portada, ahora entregado: el pedido se completó.</aside>
+</section>
+
+</div></div>
+
+<script type="module" src="./src/main.js"></script>
+</body>
+</html>
