@@ -1,0 +1,18 @@
+# Compilación de Qt Creator / CMake
+build/
+build-*/
+CMakeLists.txt.user*
+*.pro.user*
+.qtcreator/
+*.exe
+*.obj
+*.o
+
+# Presentación (Node / Vite)
+node_modules/
+presentacion/dist/
+
+# Archivos comprimidos y del sistema
+*.zip
+.DS_Store
+Thumbs.db
