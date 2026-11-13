@@ -10,7 +10,7 @@ Los scripts se ejecutan **en este orden** y se pueden volver a ejecutar las vece
 |---|---|---|
 | `03_ModeloSQL_Grupo1.sql` | 3 | Borra y crea los 3 schemas, las 25 tablas, las restricciones (PK, FK, UNIQUE, CHECK) y 2 índices |
 | `04_DatosSQL_Grupo1.sql` | 4 | Vacía las tablas con `TRUNCATE` y las vuelve a cargar: 50 ventas y 20 o más registros en el resto (salvo `Franja_Retiro`, que tiene las 7 franjas reales del colegio). `Log_Auditoria` queda vacía porque la llenan los SPs |
-| `05_Backend_Grupo1.sql` | 5 | 24 Stored Procedures (13 funcionalidades, 8 reportes, auditoría y 2 tuneados) y el auxiliar `sp_registrar_log` |
+| `05_Backend_Grupo1.sql` | 5 | 24 Stored Procedures: 13 funcionalidades, 8 reportes, auditoría y 2 tuneados |
 | `06_PruebasSQL_Grupo1.sql` | 6 | Script de pruebas: 4 casos por SP (éxito, sin coincidencias, NULL/límite y consistencia) |
 | `06_PruebasSQL.xlsx` | 6 | Las 96 pruebas cargadas en la plantilla de la cátedra, con el resultado real obtenido en MySQL 8.0 |
 
@@ -41,11 +41,17 @@ En MySQL Workbench: abrir cada archivo y ejecutarlo completo (rayo), en el mismo
 | Ventas y retiros | `sp_registrar_venta`, `sp_agregar_producto_carrito`, `sp_agregar_menu_carrito`, `sp_generar_retiro`, `sp_actualizar_estado_retiro` |
 | Reportes (8) | `sp_reporte_ventas_por_categoria`, `sp_reporte_top_productos`, `sp_reporte_metodos_pago`, `sp_reporte_ventas_diarias`, `sp_reporte_top_estudiantes`, `sp_reporte_rendimiento_empleados`, `sp_reporte_retiros_por_franja`, `sp_reporte_demanda_menu_dia` |
 | Auditoría | `sp_reporte_auditoria(fechaInicio, fechaFin, UserID, Tipo_Evento_ID)`: usuario y tipo de evento son opcionales (NULL = todos) |
-| Tuning | `sp_reporte_top_productos_tuneado`, `sp_reporte_top_estudiantes_tuneado` (agrupan primero por ID y después hacen los JOIN) |
+| Tuning | `sp_reporte_top_productos_tuneado`, `sp_reporte_top_estudiantes_tuneado`: primero filtran las ventas del período en una tabla temporal y después hacen los JOIN (selección conmutativa) |
 
-Flujo de una compra: `sp_registrar_venta` → `sp_agregar_producto_carrito` / `sp_agregar_menu_carrito` (controlan stock y suman el total) → `sp_generar_retiro` (cierra la venta y da el código de 5 caracteres) → `sp_actualizar_estado_retiro` (el cajero entrega o cancela; si cancela, devuelve el stock).
+Flujo de una compra: `sp_registrar_venta` → `sp_agregar_producto_carrito` / `sp_agregar_menu_carrito` (agregan solo si hay stock, descuentan el stock y recalculan el total) → `sp_generar_retiro` (cierra la venta con el código de 5 caracteres que genera la app) → `sp_actualizar_estado_retiro` (el cajero entrega o cancela; si cancela, se devuelve el stock).
 
-Todos los SPs devuelven una columna `estado` con `OK` o `ERROR`, y cada funcionalidad deja su evento en `Log_Auditoria`.
+Cómo trabajan los SPs (sin IF ni estructuras de control, solo consultas):
+
+- Los datos inválidos los rechaza la base (FK, UNIQUE, NOT NULL, CHECK) y el `EXIT HANDLER` devuelve `estado = ERROR` con el código y el mensaje.
+- Las condiciones del negocio van en el `WHERE`; si no se cumplen, no se modifica ninguna fila.
+- Las funcionalidades devuelven cuántas filas afectaron (`ROW_COUNT()`, el equivalente de `@@ROWCOUNT`).
+- Los reportes usan `BETWEEN`; con una fecha NULL devuelven 0 filas, sin error.
+- Cada funcionalidad deja su evento en `Log_Auditoria`.
 
 ## Usuarios de prueba
 
