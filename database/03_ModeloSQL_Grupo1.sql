@@ -111,12 +111,11 @@ CREATE TABLE IF NOT EXISTS Estudiante (
 
 -- Cuenta para entrar al sistema.
 -- La usa un estudiante (DNI cargado) o un empleado (Empleado.UserID apunta acá).
--- La contraseña se guarda cifrada con SHA2 (64 caracteres), nunca en texto plano.
 CREATE TABLE IF NOT EXISTS Usuario (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     DNI VARCHAR(20) NULL UNIQUE,
     Apodo VARCHAR(50) NOT NULL UNIQUE,
-    Contrasena CHAR(64) NOT NULL,
+    Contrasena VARCHAR(50) NOT NULL,
     CONSTRAINT fk_usuario_estudiante FOREIGN KEY (DNI)
         REFERENCES Estudiante(DNI) ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -239,7 +238,8 @@ CREATE TABLE IF NOT EXISTS Venta (
     EmpleadoID INT NULL,
     UserID INT NOT NULL,
     Metodo_PagoID INT NOT NULL,
-    Fecha_Hora DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    Fecha DATE NOT NULL,
+    Hora TIME NOT NULL,
     Monto_Total DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (Monto_Total >= 0),
     CONSTRAINT fk_venta_empleado FOREIGN KEY (EmpleadoID)
         REFERENCES schema_usuarios.Empleado(EmpleadoID) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -249,8 +249,8 @@ CREATE TABLE IF NOT EXISTS Venta (
         REFERENCES Metodo_Pago(Metodo_PagoID) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
--- Índice usado por los reportes "_tuneado" (filtran por rango de Fecha_Hora)
-CREATE INDEX idx_venta_fecha ON Venta(Fecha_Hora);
+-- Índice para los reportes (todos filtran Venta por rango de Fecha)
+CREATE INDEX idx_venta_fecha ON Venta(Fecha);
 
 -- Renglones de la venta. Cada renglón es un producto O un menú del día (nunca los dos);
 -- eso lo controlan los SPs sp_agregar_producto_carrito y sp_agregar_menu_carrito.

@@ -29,8 +29,8 @@ CALL sp_registrar_usuario('50111222', 'tomaspru10', 'Tomas#2026', 'tomas.prueba@
 CALL sp_registrar_usuario('99999999', 'nadie', 'Clave#1', 'nadie@bue.edu.ar');
 -- iii. Parámetros NULL / vacíos: ERROR 'Faltan datos obligatorios'
 CALL sp_registrar_usuario(NULL, '', NULL, '');
--- iv. Consistencia: el usuario y su email existen y la contraseña quedó cifrada (64 caracteres)
-SELECT u.UserID, u.Apodo, LENGTH(u.Contrasena) AS Largo_Clave, e.Email
+-- iv. Consistencia: el usuario, su contraseña y su email quedaron guardados
+SELECT u.UserID, u.Apodo, u.Contrasena, e.Email
 FROM Usuario u INNER JOIN Email e ON u.UserID = e.UserID WHERE u.DNI = '50111222';
 
 -- ---------------- P02 sp_iniciar_sesion ----------------
@@ -64,7 +64,7 @@ CALL sp_cambiar_contrasena(2, 'otra', 'algo');
 -- iii. Nueva vacía: ERROR 'La contraseña nueva no puede estar vacía'
 CALL sp_cambiar_contrasena(2, 'NuevaLucia#2026', '');
 -- iv. Consistencia: con la nueva clave puede entrar
-SELECT COUNT(*) AS Coincide FROM Usuario WHERE UserID = 2 AND Contrasena = SHA2('NuevaLucia#2026', 256);
+SELECT COUNT(*) AS Coincide FROM Usuario WHERE UserID = 2 AND Contrasena = 'NuevaLucia#2026';
 
 
 -- ############################################################################
@@ -154,12 +154,12 @@ FROM Venta v INNER JOIN Carrito c ON v.VentaID = c.VentaID WHERE v.VentaID = 51 
 -- ---------------- P12 sp_generar_retiro ----------------
 -- iii. Franja NULL: ERROR 'La franja de retiro no existe' (se prueba antes de generar el retiro)
 CALL sp_generar_retiro(51, NULL);
--- i. Éxito: retiro en el almuerzo (franja 8). Devuelve un código de 5 caracteres
-CALL sp_generar_retiro(51, 8);
+-- i. Éxito: retiro en el receso del almuerzo (franja 4). Devuelve un código de 5 caracteres
+CALL sp_generar_retiro(51, 4);
 -- ii. Venta inexistente: ERROR
-CALL sp_generar_retiro(9999, 8);
+CALL sp_generar_retiro(9999, 4);
 -- iii-bis. Límite: generar el retiro dos veces: ERROR 'La venta ya tiene código de retiro'
-CALL sp_generar_retiro(51, 8);
+CALL sp_generar_retiro(51, 4);
 -- iv. Consistencia: hay un solo retiro PENDIENTE para la venta 51, y ya no se le pueden agregar productos
 SELECT RetiroID, Estado_Retiro_ID, ID_Franja, LENGTH(Codigo_Retiro) AS Largo_Codigo FROM Retiro WHERE VentaID = 51;
 CALL sp_agregar_producto_carrito(51, 5, 1);
@@ -195,7 +195,7 @@ CALL sp_reporte_ventas_por_categoria(NULL, '2026-11-10');           -- iii
 -- iv. SELECT directo: la recaudación total tiene que ser igual a la suma del reporte
 SELECT SUM(c.Cantidad * c.Precio_Unitario) AS Total_Directo
 FROM Carrito c INNER JOIN Venta v ON c.VentaID = v.VentaID INNER JOIN Retiro r ON v.VentaID = r.VentaID
-WHERE DATE(v.Fecha_Hora) BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3;
+WHERE v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3;
 
 -- ---------------- P15 sp_reporte_top_productos ----------------
 CALL sp_reporte_top_productos('2026-10-14', '2026-11-10');          -- i
@@ -204,7 +204,7 @@ CALL sp_reporte_top_productos('2026-11-10', '2026-10-14');          -- iii: ERRO
 -- iv
 SELECT c.ProductoID, SUM(c.Cantidad) AS Unidades
 FROM Carrito c INNER JOIN Venta v ON c.VentaID = v.VentaID INNER JOIN Retiro r ON v.VentaID = r.VentaID
-WHERE c.ProductoID IS NOT NULL AND DATE(v.Fecha_Hora) BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
+WHERE c.ProductoID IS NOT NULL AND v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
 GROUP BY c.ProductoID ORDER BY Unidades DESC, c.ProductoID;
 
 -- ---------------- P16 sp_reporte_metodos_pago ----------------
@@ -214,7 +214,7 @@ CALL sp_reporte_metodos_pago(NULL, NULL);                           -- iii
 -- iv
 SELECT v.Metodo_PagoID, COUNT(*) AS Transacciones, SUM(v.Monto_Total) AS Total
 FROM Venta v INNER JOIN Retiro r ON v.VentaID = r.VentaID
-WHERE DATE(v.Fecha_Hora) BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
+WHERE v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
 GROUP BY v.Metodo_PagoID ORDER BY Total DESC;
 
 -- ---------------- P17 sp_reporte_ventas_diarias ----------------
@@ -222,9 +222,9 @@ CALL sp_reporte_ventas_diarias('2026-10-14', '2026-11-10');         -- i
 CALL sp_reporte_ventas_diarias('2020-01-01', '2020-12-31');         -- ii
 CALL sp_reporte_ventas_diarias('2026-10-14', NULL);                 -- iii
 -- iv
-SELECT COUNT(DISTINCT DATE(v.Fecha_Hora)) AS Dias, COUNT(*) AS Ventas, SUM(v.Monto_Total) AS Total
+SELECT COUNT(DISTINCT v.Fecha) AS Dias, COUNT(*) AS Ventas, SUM(v.Monto_Total) AS Total
 FROM Venta v INNER JOIN Retiro r ON v.VentaID = r.VentaID
-WHERE DATE(v.Fecha_Hora) BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3;
+WHERE v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3;
 
 -- ---------------- P18 sp_reporte_top_estudiantes ----------------
 CALL sp_reporte_top_estudiantes('2026-10-14', '2026-11-10');        -- i
@@ -233,8 +233,8 @@ CALL sp_reporte_top_estudiantes(NULL, NULL);                        -- iii
 -- iv
 SELECT v.UserID, COUNT(*) AS Compras, SUM(v.Monto_Total) AS Total
 FROM Venta v INNER JOIN Retiro r ON v.VentaID = r.VentaID
-WHERE DATE(v.Fecha_Hora) BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
-GROUP BY v.UserID ORDER BY Total DESC;
+WHERE v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
+GROUP BY v.UserID ORDER BY Total DESC, v.UserID;
 
 -- ---------------- P19 sp_reporte_rendimiento_empleados ----------------
 CALL sp_reporte_rendimiento_empleados('2026-10-14', '2026-11-10');  -- i
@@ -243,7 +243,7 @@ CALL sp_reporte_rendimiento_empleados('2026-11-10', '2026-10-14');  -- iii
 -- iv
 SELECT v.EmpleadoID, COUNT(*) AS Ventas, SUM(v.Monto_Total) AS Total
 FROM Venta v INNER JOIN Retiro r ON v.VentaID = r.VentaID
-WHERE v.EmpleadoID IS NOT NULL AND DATE(v.Fecha_Hora) BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
+WHERE v.EmpleadoID IS NOT NULL AND v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
 GROUP BY v.EmpleadoID ORDER BY Total DESC;
 
 -- ---------------- P20 sp_reporte_retiros_por_franja ----------------
@@ -252,7 +252,7 @@ CALL sp_reporte_retiros_por_franja('2020-01-01', '2020-12-31');     -- ii
 CALL sp_reporte_retiros_por_franja(NULL, '2026-11-10');             -- iii
 -- iv: el total de pedidos del reporte tiene que dar 50
 SELECT COUNT(*) AS Total_Retiros FROM Retiro r INNER JOIN Venta v ON r.VentaID = v.VentaID
-WHERE DATE(v.Fecha_Hora) BETWEEN '2026-10-14' AND '2026-11-10';
+WHERE v.Fecha BETWEEN '2026-10-14' AND '2026-11-10';
 
 -- ---------------- P21 sp_reporte_demanda_menu_dia ----------------
 CALL sp_reporte_demanda_menu_dia('2026-10-14', '2026-11-10');       -- i
@@ -291,18 +291,21 @@ SELECT COUNT(*) AS Eventos_Hoy FROM Log_Auditoria WHERE Fecha = CURDATE();
 USE schema_comercial;
 
 -- ---------------- P23 sp_reporte_top_productos_tuneado ----------------
-CALL sp_reporte_top_productos_tuneado('2026-10-14', '2026-11-10');  -- i (comparar con P15-i)
+CALL sp_reporte_top_productos_tuneado('2026-10-14', '2026-11-10');  -- i: mismas filas que P15-i
 CALL sp_reporte_top_productos_tuneado('2020-01-01', '2020-12-31');  -- ii
 CALL sp_reporte_top_productos_tuneado(NULL, NULL);                  -- iii
--- iv. EXPLAIN: el original recorre todas las filas de Venta (type index, rows 51);
---     el tuneado lee solo el rango pedido usando idx_venta_fecha (type range, rows 6)
-EXPLAIN SELECT v.VentaID FROM Venta v WHERE DATE(v.Fecha_Hora) BETWEEN '2026-10-20' AND '2026-10-23';
-EXPLAIN SELECT v.VentaID FROM Venta v WHERE v.Fecha_Hora >= '2026-10-20' AND v.Fecha_Hora < '2026-10-24';
+-- iv. Equivalencia: se compara con el SELECT directo (mismas filas y valores que el SP)
+SELECT c.ProductoID, SUM(c.Cantidad) AS Total_Unidades, SUM(c.Cantidad * c.Precio_Unitario) AS Total_Recaudado
+FROM Carrito c INNER JOIN Venta v ON c.VentaID = v.VentaID INNER JOIN Retiro r ON v.VentaID = r.VentaID
+WHERE c.ProductoID IS NOT NULL AND v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
+GROUP BY c.ProductoID ORDER BY Total_Unidades DESC, c.ProductoID;
 
--- ---------------- P24 sp_reporte_ventas_diarias_tuneado ----------------
-CALL sp_reporte_ventas_diarias_tuneado('2026-10-14', '2026-11-10'); -- i (comparar con P17-i)
-CALL sp_reporte_ventas_diarias_tuneado('2020-01-01', '2020-12-31'); -- ii
-CALL sp_reporte_ventas_diarias_tuneado('2026-10-14', NULL);         -- iii
--- iv. Límite del último día: la venta del 2026-11-10 16:22 tiene que aparecer en los dos
-CALL sp_reporte_ventas_diarias('2026-11-10', '2026-11-10');
-CALL sp_reporte_ventas_diarias_tuneado('2026-11-10', '2026-11-10');
+-- ---------------- P24 sp_reporte_top_estudiantes_tuneado ----------------
+CALL sp_reporte_top_estudiantes_tuneado('2026-10-14', '2026-11-10'); -- i: mismas filas que P18-i
+CALL sp_reporte_top_estudiantes_tuneado('2020-01-01', '2020-12-31'); -- ii
+CALL sp_reporte_top_estudiantes_tuneado('2026-10-14', NULL);         -- iii
+-- iv. Equivalencia: se compara con el SELECT directo (mismas filas y valores que el SP)
+SELECT v.UserID, COUNT(*) AS Compras_Realizadas, SUM(v.Monto_Total) AS Total_Gastado, MAX(v.Fecha) AS Ultima_Compra
+FROM Venta v INNER JOIN Retiro r ON v.VentaID = r.VentaID
+WHERE v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
+GROUP BY v.UserID ORDER BY Total_Gastado DESC, v.UserID;
