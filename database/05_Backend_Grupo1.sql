@@ -81,7 +81,7 @@ BEGIN
         SELECT 'ERROR' AS estado, 'El email ya está registrado' AS mensaje;
     ELSE
         INSERT INTO Usuario (DNI, Apodo, Contrasena)
-        VALUES (p_DNI, p_Apodo, SHA2(p_Contrasena, 256));
+        VALUES (p_DNI, p_Apodo, p_Contrasena);
         SET v_UserID = LAST_INSERT_ID();
 
         INSERT INTO Email (UserID, Email) VALUES (v_UserID, p_Email);
@@ -116,7 +116,7 @@ BEGIN
 
     SELECT UserID INTO v_UserID
     FROM Usuario
-    WHERE Apodo = p_Apodo AND Contrasena = SHA2(p_Contrasena, 256);
+    WHERE Apodo = p_Apodo AND Contrasena = p_Contrasena;
 
     IF v_UserID IS NULL THEN
         -- Se busca el usuario solo por apodo, para saber a quién intentaron entrar
@@ -185,10 +185,10 @@ BEGIN
     IF p_Nueva IS NULL OR p_Nueva = '' THEN
         SELECT 'ERROR' AS estado, 'La contraseña nueva no puede estar vacía' AS mensaje;
     ELSEIF NOT EXISTS (SELECT 1 FROM Usuario
-                       WHERE UserID = p_UserID AND Contrasena = SHA2(p_Actual, 256)) THEN
+                       WHERE UserID = p_UserID AND Contrasena = p_Actual) THEN
         SELECT 'ERROR' AS estado, 'Usuario o contraseña actual incorrectos' AS mensaje;
     ELSE
-        UPDATE Usuario SET Contrasena = SHA2(p_Nueva, 256) WHERE UserID = p_UserID;
+        UPDATE Usuario SET Contrasena = p_Nueva WHERE UserID = p_UserID;
         CALL sp_registrar_log(p_UserID, 5, 'Cambio de contraseña');
         SELECT 'OK' AS estado, 'Contraseña actualizada' AS mensaje;
     END IF;
@@ -374,8 +374,8 @@ BEGIN
            AND NOT EXISTS (SELECT 1 FROM schema_usuarios.Empleado WHERE EmpleadoID = p_EmpleadoID) THEN
         SELECT 'ERROR' AS estado, 'El empleado no existe' AS mensaje;
     ELSE
-        INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total)
-        VALUES (p_EmpleadoID, p_UserID, p_Metodo_PagoID, NOW(), 0);
+        INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total)
+        VALUES (p_EmpleadoID, p_UserID, p_Metodo_PagoID, CURDATE(), CURTIME(), 0);
         SET v_VentaID = LAST_INSERT_ID();   -- se guarda ANTES de insertar el log
 
         CALL schema_usuarios.sp_registrar_log(p_UserID, 6, CONCAT('Venta ', v_VentaID));
@@ -465,7 +465,7 @@ BEGIN
     SELECT Precio_menu, Stock_menu, Fecha_menu INTO v_Precio, v_Stock, v_FechaMenu
     FROM Menu_Del_Dia WHERE Menu_Del_DiaID = p_Menu_Del_DiaID;
 
-    SELECT UserID, DATE(Fecha_Hora) INTO v_UserID, v_FechaVenta
+    SELECT UserID, Fecha INTO v_UserID, v_FechaVenta
     FROM Venta WHERE VentaID = p_VentaID;
 
     IF v_UserID IS NULL THEN
@@ -639,7 +639,7 @@ BEGIN
         LEFT JOIN Producto p ON c.ProductoID = p.ProductoID
         LEFT JOIN Menu_Del_Dia m ON c.Menu_Del_DiaID = m.Menu_Del_DiaID
         INNER JOIN Categoria cat ON cat.ID_Categoria = IFNULL(p.ID_Categoria, m.ID_Categoria)
-        WHERE DATE(v.Fecha_Hora) BETWEEN fechaInicio AND fechaFin
+        WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
           AND r.Estado_Retiro_ID <> 3
         GROUP BY cat.ID_Categoria, cat.Categoria
         ORDER BY Recaudacion_Total DESC;
@@ -679,7 +679,7 @@ BEGIN
         INNER JOIN Carrito c ON p.ProductoID = c.ProductoID
         INNER JOIN Venta v ON c.VentaID = v.VentaID
         INNER JOIN Retiro r ON v.VentaID = r.VentaID
-        WHERE DATE(v.Fecha_Hora) BETWEEN fechaInicio AND fechaFin
+        WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
           AND r.Estado_Retiro_ID <> 3
         GROUP BY p.ProductoID, p.Nombre_Producto, cat.Categoria
         ORDER BY Total_Unidades DESC, p.ProductoID;
@@ -716,7 +716,7 @@ BEGIN
         FROM Metodo_Pago mp
         INNER JOIN Venta v ON mp.Metodo_PagoID = v.Metodo_PagoID
         INNER JOIN Retiro r ON v.VentaID = r.VentaID
-        WHERE DATE(v.Fecha_Hora) BETWEEN fechaInicio AND fechaFin
+        WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
           AND r.Estado_Retiro_ID <> 3
         GROUP BY mp.Metodo_PagoID, mp.MetodoPago
         ORDER BY Total_Facturado DESC;
@@ -746,15 +746,15 @@ BEGIN
         SELECT 'ERROR' AS estado, 'Rango de fechas inválido' AS mensaje;
     ELSE
         SELECT
-            DATE(v.Fecha_Hora) AS Fecha,
+            v.Fecha,
             COUNT(v.VentaID) AS Cantidad_Ventas,
             SUM(v.Monto_Total) AS Total_Dia
         FROM Venta v
         INNER JOIN Retiro r ON v.VentaID = r.VentaID
-        WHERE DATE(v.Fecha_Hora) BETWEEN fechaInicio AND fechaFin
+        WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
           AND r.Estado_Retiro_ID <> 3
-        GROUP BY DATE(v.Fecha_Hora)
-        ORDER BY Fecha ASC;
+        GROUP BY v.Fecha
+        ORDER BY v.Fecha ASC;
     END IF;
 END //
 DELIMITER ;
@@ -788,16 +788,16 @@ BEGIN
             CONCAT(cu.Anio, '° ', cu.Division) AS Curso,
             COUNT(v.VentaID) AS Compras_Realizadas,
             SUM(v.Monto_Total) AS Total_Gastado,
-            MAX(v.Fecha_Hora) AS Ultima_Compra
+            MAX(v.Fecha) AS Ultima_Compra
         FROM schema_usuarios.Usuario u
         INNER JOIN schema_usuarios.Estudiante e ON u.DNI = e.DNI
         INNER JOIN schema_usuarios.Curso cu ON e.ID_Curso = cu.ID_Curso
         INNER JOIN Venta v ON u.UserID = v.UserID
         INNER JOIN Retiro r ON v.VentaID = r.VentaID
-        WHERE DATE(v.Fecha_Hora) BETWEEN fechaInicio AND fechaFin
+        WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
           AND r.Estado_Retiro_ID <> 3
         GROUP BY u.UserID, u.Apodo, e.Nombre_Estudiante, e.Apellido_Estudiante, cu.Anio, cu.Division
-        ORDER BY Total_Gastado DESC;
+        ORDER BY Total_Gastado DESC, u.UserID;
     END IF;
 END //
 DELIMITER ;
@@ -830,12 +830,12 @@ BEGIN
             pu.Nombre_Puesto,
             COUNT(v.VentaID) AS Ventas_Atendidas,
             SUM(v.Monto_Total) AS Total_Procesado,
-            COUNT(DISTINCT DATE(v.Fecha_Hora)) AS Dias_Trabajados
+            COUNT(DISTINCT v.Fecha) AS Dias_Trabajados
         FROM schema_usuarios.Empleado emp
         INNER JOIN schema_usuarios.Puesto pu ON emp.ID_Puesto = pu.ID_Puesto
         INNER JOIN Venta v ON emp.EmpleadoID = v.EmpleadoID
         INNER JOIN Retiro r ON v.VentaID = r.VentaID
-        WHERE DATE(v.Fecha_Hora) BETWEEN fechaInicio AND fechaFin
+        WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
           AND r.Estado_Retiro_ID <> 3
         GROUP BY emp.EmpleadoID, emp.Nombre_Empleado, emp.Apellido_Empleado, pu.Nombre_Puesto
         ORDER BY Total_Procesado DESC;
@@ -875,7 +875,7 @@ BEGIN
         INNER JOIN Franja_Retiro f ON r.ID_Franja = f.ID_Franja
         INNER JOIN Estado_Retiro er ON r.Estado_Retiro_ID = er.Estado_Retiro_ID
         INNER JOIN Venta v ON r.VentaID = v.VentaID
-        WHERE DATE(v.Fecha_Hora) BETWEEN fechaInicio AND fechaFin
+        WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
         GROUP BY f.ID_Franja, f.Nombre_Franja, f.Hora_Retiro, er.Estado_Retiro_ID, er.Estado
         ORDER BY f.Hora_Retiro, er.Estado;
     END IF;
@@ -971,18 +971,19 @@ DELIMITER ;
 
 -- ############################################################################
 -- 5.e  REPORTES CON TUNING
--- Devuelven exactamente lo mismo que el original, pero más rápido:
---  1) El WHERE compara Fecha_Hora directamente contra un rango
---     (>= inicio y < día siguiente al fin) en lugar de usar DATE(Fecha_Hora).
---     Al no aplicar una función sobre la columna, MySQL puede usar el índice
---     idx_venta_fecha (creado en 03_ModeloSQL). Se comprueba con EXPLAIN.
---  2) En top_productos, primero se agrupa Carrito (subconsulta) y recién después
---     se une con Producto y Categoria, así el JOIN se hace con menos filas.
+-- Devuelven exactamente lo mismo que el original, pero con menos trabajo:
+--  * El original une primero todas las tablas (Venta, Carrito/Retiro y las tablas
+--    de nombres) y después agrupa por varias columnas de texto.
+--  * El tuneado primero agrupa la tabla de movimientos por un solo ID numérico
+--    (subconsulta) y recién después une ese resultado, que tiene pocas filas,
+--    con las tablas de nombres. El GROUP BY es sobre un entero y el JOIN se
+--    hace con una fila por producto / estudiante, no con una fila por venta.
+--  * El filtro por fecha usa el índice idx_venta_fecha (creado en 03_ModeloSQL).
 -- ############################################################################
 USE schema_comercial;
 
 -- ----------------------------------------------------------------------------
--- Tuneado 1: Ranking de productos más vendidos
+-- Tuneado 1: Ranking de productos más vendidos (original: Reporte 2)
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_reporte_top_productos_tuneado;
 DELIMITER //
@@ -1016,8 +1017,7 @@ BEGIN
             FROM Venta v
             INNER JOIN Carrito c ON v.VentaID = c.VentaID
             INNER JOIN Retiro r ON v.VentaID = r.VentaID
-            WHERE v.Fecha_Hora >= fechaInicio
-              AND v.Fecha_Hora < DATE_ADD(fechaFin, INTERVAL 1 DAY)
+            WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
               AND r.Estado_Retiro_ID <> 3
               AND c.ProductoID IS NOT NULL
             GROUP BY c.ProductoID
@@ -1030,11 +1030,11 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
--- Tuneado 2: Ventas por día
+-- Tuneado 2: Estudiantes con mayor consumo (original: Reporte 5)
 -- ----------------------------------------------------------------------------
-DROP PROCEDURE IF EXISTS sp_reporte_ventas_diarias_tuneado;
+DROP PROCEDURE IF EXISTS sp_reporte_top_estudiantes_tuneado;
 DELIMITER //
-CREATE PROCEDURE sp_reporte_ventas_diarias_tuneado(fechaInicio DATE, fechaFin DATE)
+CREATE PROCEDURE sp_reporte_top_estudiantes_tuneado(fechaInicio DATE, fechaFin DATE)
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
@@ -1051,16 +1051,30 @@ BEGIN
         SELECT 'ERROR' AS estado, 'Rango de fechas inválido' AS mensaje;
     ELSE
         SELECT
-            DATE(v.Fecha_Hora) AS Fecha,
-            COUNT(v.VentaID) AS Cantidad_Ventas,
-            SUM(v.Monto_Total) AS Total_Dia
-        FROM Venta v
-        INNER JOIN Retiro r ON v.VentaID = r.VentaID
-        WHERE v.Fecha_Hora >= fechaInicio
-          AND v.Fecha_Hora < DATE_ADD(fechaFin, INTERVAL 1 DAY)
-          AND r.Estado_Retiro_ID <> 3
-        GROUP BY DATE(v.Fecha_Hora)
-        ORDER BY Fecha ASC;
+            u.UserID,
+            u.Apodo,
+            e.Nombre_Estudiante,
+            e.Apellido_Estudiante,
+            CONCAT(cu.Anio, '° ', cu.Division) AS Curso,
+            res.Compras_Realizadas,
+            res.Total_Gastado,
+            res.Ultima_Compra
+        FROM (
+            SELECT
+                v.UserID,
+                COUNT(v.VentaID) AS Compras_Realizadas,
+                SUM(v.Monto_Total) AS Total_Gastado,
+                MAX(v.Fecha) AS Ultima_Compra
+            FROM Venta v
+            INNER JOIN Retiro r ON v.VentaID = r.VentaID
+            WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
+              AND r.Estado_Retiro_ID <> 3
+            GROUP BY v.UserID
+        ) res
+        INNER JOIN schema_usuarios.Usuario u ON res.UserID = u.UserID
+        INNER JOIN schema_usuarios.Estudiante e ON u.DNI = e.DNI
+        INNER JOIN schema_usuarios.Curso cu ON e.ID_Curso = cu.ID_Curso
+        ORDER BY res.Total_Gastado DESC, u.UserID;
     END IF;
 END //
 DELIMITER ;

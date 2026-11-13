@@ -6,6 +6,7 @@
 -- Ejecutar DESPUÉS de 03_ModeloSQL. Se puede ejecutar varias veces:
 -- vacía cada tabla con TRUNCATE (que además reinicia los AUTO_INCREMENT) y la vuelve a cargar.
 -- Venta (tabla principal) tiene 50 registros; el resto, 20 o más.
+-- Excepción: Franja_Retiro tiene solo las 7 franjas reales del horario del colegio.
 -- Log_Auditoria NO se carga acá: la completan los Stored Procedures (consigna 4.c).
 -- ============================================================================
 
@@ -297,38 +298,36 @@ INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha
 -- ----------------------------------------------------------------------------
 -- Usuario (30) - 1 a 20: estudiantes / 21 a 30: personal del buffet
 -- ----------------------------------------------------------------------------
--- La contraseña se guarda cifrada con SHA2(texto, 256).
--- Las contraseñas en texto plano quedan solo acá, para poder hacer las pruebas.
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('12345678', 'jorgedah09', SHA2('Jorgedah#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('45987654', 'luciagom08', SHA2('Luciagom#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48499250', 'mateofer11', SHA2('Mateofer#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('51715407', 'valentinarod13', SHA2('Valentinarod#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52929091', 'santiagolop09', SHA2('Santiagolop#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49373046', 'camilamar12', SHA2('Camilamar#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52303055', 'benjamingar13', SHA2('Benjamingar#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52420093', 'martinaper13', SHA2('Martinaper#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49512712', 'thiagosan08', SHA2('Thiagosan#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52652318', 'sofiarom09', SHA2('Sofiarom#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48428925', 'joaquindia11', SHA2('Joaquindia#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48322516', 'julietaalv13', SHA2('Julietaalv#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('47596375', 'bautistator13', SHA2('Bautistator#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('53199127', 'agustinarui11', SHA2('Agustinarui#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49263492', 'lautaroaco12', SHA2('Lautaroaco#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49609844', 'micaelaben12', SHA2('Micaelaben#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('50491680', 'facundomed12', SHA2('Facundomed#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('51808284', 'florenciaher09', SHA2('Florenciaher#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('50355436', 'nicolassua09', SHA2('Nicolassua#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52176234', 'rocioagu11', SHA2('Rocioagu#2026', 256));
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'marcela.ibanez', SHA2('MarcelaBuffet#2026', 256));  -- 21: Marcela Ibáñez (MarcelaBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'diego.paz', SHA2('DiegoBuffet#2026', 256));  -- 22: Diego Paz (DiegoBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'karina.luna', SHA2('KarinaBuffet#2026', 256));  -- 23: Karina Luna (KarinaBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'sergio.ledesma', SHA2('SergioBuffet#2026', 256));  -- 24: Sergio Ledesma (SergioBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'paola.vega', SHA2('PaolaBuffet#2026', 256));  -- 25: Paola Vega (PaolaBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'hector.maldonado', SHA2('HectorBuffet#2026', 256));  -- 26: Héctor Maldonado (HectorBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'alejandro.funes', SHA2('AlejandroBuffet#2026', 256));  -- 27: Alejandro Funes (AlejandroBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'silvia.arce', SHA2('SilviaBuffet#2026', 256));  -- 28: Silvia Arce (SilviaBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'ramiro.sosa', SHA2('RamiroBuffet#2026', 256));  -- 29: Ramiro Sosa (RamiroBuffet#2026)
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'veronica.campos', SHA2('VeronicaBuffet#2026', 256));  -- 30: Verónica Campos (VeronicaBuffet#2026)
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('12345678', 'jorgedah09', 'Jorgedah#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('45987654', 'luciagom08', 'Luciagom#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48499250', 'mateofer11', 'Mateofer#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('51715407', 'valentinarod13', 'Valentinarod#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52929091', 'santiagolop09', 'Santiagolop#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49373046', 'camilamar12', 'Camilamar#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52303055', 'benjamingar13', 'Benjamingar#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52420093', 'martinaper13', 'Martinaper#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49512712', 'thiagosan08', 'Thiagosan#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52652318', 'sofiarom09', 'Sofiarom#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48428925', 'joaquindia11', 'Joaquindia#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48322516', 'julietaalv13', 'Julietaalv#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('47596375', 'bautistator13', 'Bautistator#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('53199127', 'agustinarui11', 'Agustinarui#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49263492', 'lautaroaco12', 'Lautaroaco#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49609844', 'micaelaben12', 'Micaelaben#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('50491680', 'facundomed12', 'Facundomed#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('51808284', 'florenciaher09', 'Florenciaher#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('50355436', 'nicolassua09', 'Nicolassua#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52176234', 'rocioagu11', 'Rocioagu#2026');
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'marcela.ibanez', 'MarcelaBuffet#2026');  -- 21: Marcela Ibáñez
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'diego.paz', 'DiegoBuffet#2026');  -- 22: Diego Paz
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'karina.luna', 'KarinaBuffet#2026');  -- 23: Karina Luna
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'sergio.ledesma', 'SergioBuffet#2026');  -- 24: Sergio Ledesma
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'paola.vega', 'PaolaBuffet#2026');  -- 25: Paola Vega
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'hector.maldonado', 'HectorBuffet#2026');  -- 26: Héctor Maldonado
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'alejandro.funes', 'AlejandroBuffet#2026');  -- 27: Alejandro Funes
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'silvia.arce', 'SilviaBuffet#2026');  -- 28: Silvia Arce
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'ramiro.sosa', 'RamiroBuffet#2026');  -- 29: Ramiro Sosa
+INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'veronica.campos', 'VeronicaBuffet#2026');  -- 30: Verónica Campos
 
 -- ----------------------------------------------------------------------------
 -- Empleado (20) - los que usan el sistema tienen UserID
@@ -480,28 +479,16 @@ INSERT INTO Estado_Retiro (Estado) VALUES ('EN ESPERA DE CONFIRMACION');
 INSERT INTO Estado_Retiro (Estado) VALUES ('ARCHIVADO');
 
 -- ----------------------------------------------------------------------------
--- Franja_Retiro (20) - recreos y horarios de la escuela, ordenados por hora
+-- Franja_Retiro (7) - horario real de la ET N° 3. El buffet atiende de 07:45 a 20:00 hs
 -- ----------------------------------------------------------------------------
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Horario de Entrada Turno Mañana', '07:45:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Contraturno Taller Mañana', '08:20:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo Turno Mañana', '09:00:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Salida a Educación Física', '10:00:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo Turno Mañana', '10:35:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('3er Recreo Turno Mañana', '11:40:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Salida de Clases Turno Mañana', '12:00:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Almuerzo Buffet Escolar', '12:05:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Almuerzo Buffet Escolar - 2do Turno', '12:45:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Recreo Jornada Completa', '13:00:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Horario de Entrada Turno Tarde', '13:30:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo Turno Tarde', '14:50:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Contraturno Taller Tarde', '15:30:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo Turno Tarde', '16:20:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('3er Recreo Turno Tarde', '17:10:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Salida de Clases Turno Tarde', '17:50:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Horario de Entrada Turno Vespertino', '18:30:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo Turno Vespertino', '19:40:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo Turno Vespertino', '21:00:00');
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Salida de Clases Turno Vespertino', '22:30:00');
+-- Hora_Retiro = hora en que empieza la franja. Fuera de 20:00 a 07:45 el buffet está cerrado.
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Apertura e inicio de clases TM (07:45 hs)', '07:45:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo TM (09:00 a 09:15 hs)', '09:00:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo TM (10:35 a 10:45 hs)', '10:35:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Receso Inter-Turno - Almuerzo (12:05 a 13:30 hs)', '12:05:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo TT (14:50 a 15:00 hs)', '14:50:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo TT (16:20 a 16:30 hs)', '16:20:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Atención Post-Clases (17:50 a 20:00 hs)', '17:50:00');
 
 -- ----------------------------------------------------------------------------
 -- Producto (20)
@@ -578,56 +565,56 @@ INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (20, 9);
 -- ----------------------------------------------------------------------------
 -- Venta (50 - TABLA PRINCIPAL). Monto_Total = suma de sus renglones de Carrito
 -- ----------------------------------------------------------------------------
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (1, 8, 1, '2026-10-14 09:05:00', '4200.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 5, 2, '2026-10-14 12:15:00', '2400.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (1, 15, 1, '2026-10-15 10:40:00', '7600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 12, 3, '2026-10-15 14:55:00', '2600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 5, 2, '2026-10-15 16:25:00', '3800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-10-15 18:10:00', '1600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-10-16 09:10:00', '3900.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 2, 1, '2026-10-20 12:20:00', '3600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (6, 5, 2, '2026-10-20 16:25:00', '3900.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 9, 1, '2026-10-21 09:08:00', '4100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (4, 13, 1, '2026-10-21 14:55:00', '5600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (1, 16, 1, '2026-10-22 10:40:00', '1100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 1, 3, '2026-10-23 09:12:00', '2800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 18, 1, '2026-10-26 12:30:00', '1400.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 6, 3, '2026-10-26 14:55:00', '1100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (3, 1, 1, '2026-10-27 09:05:00', '4200.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 10, 2, '2026-10-27 10:42:00', '800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (3, 3, 1, '2026-10-27 12:15:00', '1400.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (1, 20, 1, '2026-10-27 14:52:00', '3600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 17, 1, '2026-10-27 16:22:00', '2800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (5, 6, 1, '2026-10-27 18:20:00', '4200.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (4, 4, 2, '2026-10-28 16:25:00', '1400.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 14, 2, '2026-10-29 10:38:00', '3800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 4, 1, '2026-10-29 12:25:00', '3800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (4, 4, 1, '2026-10-29 17:55:00', '2600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 14, 2, '2026-10-30 09:14:00', '2200.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 10, 1, '2026-10-30 10:40:00', '1800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (1, 18, 1, '2026-11-02 09:05:00', '3900.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (4, 18, 2, '2026-11-02 14:53:00', '700.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (3, 9, 1, '2026-11-03 09:12:00', '4600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 5, 3, '2026-11-03 12:10:00', '2100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 6, 2, '2026-11-03 14:55:00', '1100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 11, 1, '2026-11-03 16:22:00', '1800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 6, 1, '2026-11-04 09:05:00', '700.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 1, 2, '2026-11-04 10:38:00', '2400.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 16, 2, '2026-11-04 12:20:00', '3300.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (3, 16, 2, '2026-11-04 14:54:00', '1200.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-11-05 10:40:00', '1100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (3, 18, 1, '2026-11-06 09:08:00', '8600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (1, 20, 2, '2026-11-06 12:15:00', '1800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 11, 2, '2026-11-06 14:55:00', '4300.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 20, 1, '2026-11-09 09:05:00', '3900.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (3, 6, 1, '2026-11-09 10:38:00', '3900.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 1, 2, '2026-11-09 12:22:00', '3900.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (6, 3, 1, '2026-11-09 16:25:00', '800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-11-10 09:10:00', '2100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-11-10 10:40:00', '7800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (3, 18, 2, '2026-11-10 12:15:00', '3200.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 1, 1, '2026-11-10 14:55:00', '4100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha_Hora, Monto_Total) VALUES (2, 2, 2, '2026-11-10 16:22:00', '2800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 8, 1, '2026-10-14', '09:05:00', '4200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 5, 2, '2026-10-14', '12:15:00', '2400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 15, 1, '2026-10-15', '10:40:00', '7600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 12, 3, '2026-10-15', '14:55:00', '2600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 5, 2, '2026-10-15', '16:25:00', '3800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-10-15', '18:10:00', '1600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-10-16', '09:10:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 2, 1, '2026-10-20', '12:20:00', '3600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (6, 5, 2, '2026-10-20', '16:25:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 9, 1, '2026-10-21', '09:08:00', '4100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 13, 1, '2026-10-21', '14:55:00', '5600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 16, 1, '2026-10-22', '10:40:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 1, 3, '2026-10-23', '09:12:00', '2800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 18, 1, '2026-10-26', '12:30:00', '1400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 6, 3, '2026-10-26', '14:55:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 1, 1, '2026-10-27', '09:05:00', '4200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 10, 2, '2026-10-27', '10:42:00', '800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 3, 1, '2026-10-27', '12:15:00', '1400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 20, 1, '2026-10-27', '14:52:00', '3600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 17, 1, '2026-10-27', '16:22:00', '2800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (5, 6, 1, '2026-10-27', '18:20:00', '4200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 2, '2026-10-28', '16:25:00', '1400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 14, 2, '2026-10-29', '10:38:00', '3800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 4, 1, '2026-10-29', '12:25:00', '3800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 1, '2026-10-29', '17:55:00', '2600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 14, 2, '2026-10-30', '09:14:00', '2200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 10, 1, '2026-10-30', '10:40:00', '1800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 18, 1, '2026-11-02', '09:05:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 18, 2, '2026-11-02', '14:53:00', '700.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 9, 1, '2026-11-03', '09:12:00', '4600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 5, 3, '2026-11-03', '12:10:00', '2100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 6, 2, '2026-11-03', '14:55:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 11, 1, '2026-11-03', '16:22:00', '1800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 6, 1, '2026-11-04', '09:05:00', '700.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 1, 2, '2026-11-04', '10:38:00', '2400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 16, 2, '2026-11-04', '12:20:00', '3300.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 16, 2, '2026-11-04', '14:54:00', '1200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-11-05', '10:40:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 18, 1, '2026-11-06', '09:08:00', '8600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 20, 2, '2026-11-06', '12:15:00', '1800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 11, 2, '2026-11-06', '14:55:00', '4300.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 20, 1, '2026-11-09', '09:05:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 6, 1, '2026-11-09', '10:38:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 1, 2, '2026-11-09', '12:22:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (6, 3, 1, '2026-11-09', '16:25:00', '800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-11-10', '09:10:00', '2100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-11-10', '10:40:00', '7800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 18, 2, '2026-11-10', '12:15:00', '3200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 1, 1, '2026-11-10', '14:55:00', '4100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 2, 2, '2026-11-10', '16:22:00', '2800.00');
 
 -- ----------------------------------------------------------------------------
 -- Carrito (50 - renglones de las ventas: producto O menú del día)
@@ -686,55 +673,55 @@ INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (50,
 -- ----------------------------------------------------------------------------
 -- Retiro (50 - uno por venta). La franja de retiro nunca termina antes de la hora de compra
 -- ----------------------------------------------------------------------------
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (1, 3, 3, 'SJX48');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (2, 2, 8, '8XACQ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (3, 2, 8, 'HTWBP');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (4, 2, 12, '7TZFN');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (5, 2, 14, 'AGKXQ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (6, 2, 16, '7PLVF');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (7, 2, 3, '4JGBT');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (8, 2, 8, '4CMQ8');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (9, 2, 14, 'XXYW8');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (10, 2, 5, 'S9WSC');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (11, 2, 14, '9JB8Z');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (12, 3, 5, 'S7NZT');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (13, 2, 3, '3VPD4');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (14, 2, 9, 'EV8FW');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (15, 2, 12, '9WXZM');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (16, 2, 3, 'EMS2G');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (17, 2, 5, 'PB7RP');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (18, 3, 7, '5JPT9');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (19, 2, 12, 'JWZ3N');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (20, 2, 14, 'KKKJD');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (21, 2, 17, 'CTVMJ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (22, 2, 16, 'TYJ7L');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (23, 2, 5, 'MDMK4');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (24, 2, 8, '9BVQZ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (25, 2, 16, 'F74KW');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (26, 2, 3, 'KC8AD');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (27, 2, 5, 'GYSXB');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (28, 2, 3, 'LNF55');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (29, 2, 12, 'NLRQ9');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (30, 2, 3, 'PZL55');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (31, 2, 8, '7ZPV6');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (32, 2, 12, '8FPNH');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (33, 2, 14, 'FYLHM');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (34, 2, 3, 'P5N5B');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (35, 2, 5, 'KTUZ3');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (36, 3, 7, 'A87TY');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (37, 2, 12, '9JGKQ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (38, 2, 5, 'Y72DW');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (39, 2, 3, 'SF77Y');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (40, 2, 8, 'GTUCF');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (41, 2, 12, 'CE6G2');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (42, 2, 3, '78BKW');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (43, 2, 5, 'JBG3F');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (44, 2, 8, 'LSBCE');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (45, 2, 14, 'HXKV8');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (46, 1, 3, 'RW7R3');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (47, 1, 5, 'RW4C9');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (48, 1, 7, 'RM6NH');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (49, 1, 12, '3C6MB');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (50, 1, 14, '8A2KP');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (1, 3, 2, 'SJX48');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (2, 2, 4, '8XACQ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (3, 2, 4, 'HTWBP');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (4, 2, 5, '7TZFN');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (5, 2, 6, 'AGKXQ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (6, 2, 7, '7PLVF');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (7, 2, 2, '4JGBT');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (8, 2, 4, '4CMQ8');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (9, 2, 6, 'XXYW8');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (10, 2, 3, 'S9WSC');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (11, 2, 6, '9JB8Z');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (12, 3, 3, 'S7NZT');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (13, 2, 2, '3VPD4');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (14, 2, 4, 'EV8FW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (15, 2, 5, '9WXZM');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (16, 2, 2, 'EMS2G');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (17, 2, 3, 'PB7RP');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (18, 3, 4, '5JPT9');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (19, 2, 5, 'JWZ3N');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (20, 2, 6, 'KKKJD');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (21, 2, 7, 'CTVMJ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (22, 2, 7, 'TYJ7L');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (23, 2, 3, 'MDMK4');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (24, 2, 4, '9BVQZ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (25, 2, 7, 'F74KW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (26, 2, 2, 'KC8AD');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (27, 2, 3, 'GYSXB');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (28, 2, 2, 'LNF55');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (29, 2, 5, 'NLRQ9');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (30, 2, 2, 'PZL55');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (31, 2, 4, '7ZPV6');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (32, 2, 5, '8FPNH');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (33, 2, 6, 'FYLHM');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (34, 2, 2, 'P5N5B');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (35, 2, 3, 'KTUZ3');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (36, 3, 4, 'A87TY');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (37, 2, 5, '9JGKQ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (38, 2, 3, 'Y72DW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (39, 2, 2, 'SF77Y');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (40, 2, 4, 'GTUCF');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (41, 2, 5, 'CE6G2');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (42, 2, 2, '78BKW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (43, 2, 3, 'JBG3F');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (44, 2, 4, 'LSBCE');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (45, 2, 6, 'HXKV8');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (46, 1, 2, 'RW7R3');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (47, 1, 3, 'RW4C9');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (48, 1, 4, 'RM6NH');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (49, 1, 5, '3C6MB');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (50, 1, 6, '8A2KP');
 
 SET FOREIGN_KEY_CHECKS = 1;
