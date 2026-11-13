@@ -54,8 +54,8 @@ void PagoDialog::cargarDatosAlumno()
             ui->lblEstadoSaldo->setStyleSheet("color: #c62828; font-weight: bold;");
         }
     } else {
-        ui->txtPagoDni->setText("44123456");
-        ui->txtPagoNombre->setText("Jorge Dahán");
+        ui->txtPagoDni->setText("95671088");
+        ui->txtPagoNombre->setText("Gabriel Noguera");
         ui->txtPagoCurso->setText("4° Año B");
     }
 }
