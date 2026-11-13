@@ -316,17 +316,17 @@
 <section data-seccion="Base de datos" id="base">
   <div class="marco dos-col base">
     <div>
-      <h2>Una base de datos de 22 tablas</h2>
+      <h2>Una base de datos de 25 tablas</h2>
       <div class="schemas">
-        <div class="schema"><h3>Comercial <small>9 tablas</small></h3><p>Producto, Categoria, Menu_Del_Dia, Carrito, Venta, Retiro, Metodo_Pago, Estado_Retiro, Detalle_Menu_Dia</p></div>
-        <div class="schema"><h3>Usuarios <small>7 tablas</small></h3><p>Estudiante, Empleado, Usuario, Email, Telefono, Tipo_Evento, Log_Auditoria</p></div>
+        <div class="schema"><h3>Comercial <small>10 tablas</small></h3><p>Producto, Categoria, Menu_Del_Dia, Carrito, Venta, Retiro, Metodo_Pago, Estado_Retiro, Franja_Retiro, Detalle_Menu_Dia</p></div>
+        <div class="schema"><h3>Usuarios <small>9 tablas</small></h3><p>Estudiante, Curso, Empleado, Puesto, Usuario, Email, Telefono, Tipo_Evento, Log_Auditoria</p></div>
         <div class="schema"><h3>Geografía <small>6 tablas</small></h3><p>Pais, Provincia, Ciudad, Region, Distrito_Escolar, Colegio</p></div>
       </div>
       <p class="nota">MySQL, en tercera forma normal. Si el servidor no responde, la app sigue funcionando con los mismos datos en memoria.</p>
     </div>
     <figure class="der"><img src="./src/img/der.webp" width="1800" height="1122" alt="Diagrama entidad relación del sistema"><figcaption>Modelo conceptual (DER)</figcaption></figure>
   </div>
-  <aside class="notes">Noguera vuelve, 40 segundos. Tres schemas: comercial, usuarios y geografía. Venta se relaciona 1 a 1 con Retiro, que guarda el código. El script está en database/ElBuffetDeAlejandroBDD.sql. Ojo: validaciones_sistema menciona 20 tablas; el script final tiene 22.</aside>
+  <aside class="notes">Noguera vuelve, 40 segundos. Tres schemas: comercial, usuarios y geografía. Venta se relaciona 1 a 1 con Retiro, que guarda el código. Los scripts están en database/ (03 modelo, 04 datos, 05 stored procedures, 06 pruebas).</aside>
 </section>
 
 <!-- 14 · COMPETENCIA -->

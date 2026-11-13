@@ -30,7 +30,7 @@ Lista maestra de validaciones de la aplicación Qt. Cada código (por ejemplo `C
 1.3. Autenticación Especializada de Desarrollador / Soporte Técnico:
      [DEV-01] Usuario de Ingeniería de Software: Requiere usuario del equipo técnico (ej. dev_berea, dev_root).
      [DEV-02] Token de Autorización Técnica (Dev Secret Key): Validación obligatoria de Token de Acceso (ej. DEV-BEREA-2026). Si el token no coincide, se deniega el acceso y se audita el intento.
-     [DEV-03] Consola de Diagnóstico BDD: Acceso exclusivo a pruebas de Stored Procedures, verificación de conexión con MySQL (localhost:3306) y explorador del modelo de 20 tablas de Codd.
+     [DEV-03] Consola de Diagnóstico BDD: Acceso exclusivo a pruebas de Stored Procedures, verificación de conexión con MySQL (localhost:3306) y explorador del modelo de 25 tablas de Codd.
 
 1.4. Registro de Alumnos:
      [REG-01] Validación de DNI: Exclusivamente numérico, longitud exacta de 7 a 8 dígitos (sin puntos ni letras).

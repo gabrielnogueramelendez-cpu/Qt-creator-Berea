@@ -9,7 +9,7 @@ Proyecto Informático I y Bases de Datos. Aplicación de escritorio en **C++ con
 ```
 app/               código de la aplicación Qt (.cpp, .h y .ui de cada ventana)
 app/resources/     styles.qss, la hoja de estilos de la app
-database/          script MySQL, DER y modelo lógico
+database/          scripts MySQL (03 a 06), pruebas, DER y modelo lógico
 docs/              material de cátedra: investigación, requerimientos, métricas y riesgos,
                    marco lógico, informe de mercado y lista de validaciones
 presentacion/      presentación HTML (reveal.js)
@@ -31,7 +31,7 @@ cmake --build build
 
 ## Base de datos
 
-Ver [`database/README.md`](database/README.md): son 3 schemas y 22 tablas. Si MySQL no está corriendo, la app funciona igual con los mismos datos en memoria.
+Ver [`database/README.md`](database/README.md): son 3 schemas y 25 tablas. Si MySQL no está corriendo, la app funciona igual con los mismos datos en memoria.
 
 ## Roles
 
