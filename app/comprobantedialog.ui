@@ -76,7 +76,7 @@
        <widget class="QLabel" name="lblDetails">
         <property name="text">
          <string>📋 RESUMEN DE COMPRA:
-- Estudiante: Jorge Dahan (4° Año B)
+- Estudiante: Gabriel Noguera (4° Año B)
 - Horario de Retiro: Primer Recreo (09:50 hs)
 - Estado: PENDIENTE DE RETIRO EN MOSTRADOR
 - Total Abonado: $2.800</string>

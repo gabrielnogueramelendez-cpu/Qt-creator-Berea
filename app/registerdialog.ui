@@ -49,7 +49,7 @@
       <item>
        <widget class="QLineEdit" name="txtRegNombre">
         <property name="placeholderText">
-         <string>Ej. Jorge</string>
+         <string>Ej. Gabriel</string>
         </property>
        </widget>
       </item>
@@ -63,7 +63,7 @@
       <item>
        <widget class="QLineEdit" name="txtRegApellido">
         <property name="placeholderText">
-         <string>Ej. Dahan</string>
+         <string>Ej. Noguera</string>
         </property>
        </widget>
       </item>

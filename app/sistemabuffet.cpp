@@ -19,8 +19,8 @@ void SistemaBuffet::inicializarDatosPorDefecto()
 {
     // 1. Estudiantes registrados en el sistema escolar
     m_usuarios = {
-        {"44123456", "Jorge", "Dahán", "4° Año B", "jdahan@bue.edu.ar", "Alumno123", "Estudiante", 15000.0},
-        {"45987654", "Lucía", "Gómez", "5° Año A", "lgomez@bue.edu.ar", "Lucia123", "Estudiante", 8500.0},
+        {"95671088", "Gabriel", "Noguera", "4° Año B", "gnoguera@bue.edu.ar", "Alumno123", "Estudiante", 15000.0},
+        {"46555222", "Martina", "López", "5° Año A", "mlopez@bue.edu.ar", "Martina123", "Estudiante", 8500.0},
         {"admin", "Alejandro", "Berea", "Administración", "admin@buffet.escuela.edu.ar", "Admin1234", "Admin", 0.0}
     };
 
@@ -65,8 +65,8 @@ void SistemaBuffet::inicializarDatosPorDefecto()
     // 6. Pedidos iniciales para pruebas en mostrador
     PedidoBuffet p1;
     p1.codigoRetiro = "3C6MB";
-    p1.dniAlumno = "44123456";
-    p1.nombreAlumno = "Jorge Dahán";
+    p1.dniAlumno = "95671088";
+    p1.nombreAlumno = "Gabriel Noguera";
     p1.cursoAlumno = "4° Año B";
     p1.recreoRetiro = "1er Recreo TM (10:35 hs)";
     p1.metodoPago = "Efectivo en Mostrador";
@@ -83,8 +83,8 @@ void SistemaBuffet::inicializarDatosPorDefecto()
 
     PedidoBuffet p2;
     p2.codigoRetiro = "8A2KP";
-    p2.dniAlumno = "45987654";
-    p2.nombreAlumno = "Lucía Gómez";
+    p2.dniAlumno = "46555222";
+    p2.nombreAlumno = "Martina López";
     p2.cursoAlumno = "5° Año A";
     p2.recreoRetiro = "1er Recreo TM (10:35 hs)";
     p2.metodoPago = "Saldo Cuenta Escolar";
@@ -538,7 +538,7 @@ QString SistemaBuffet::crearPedido(const QString &recreoRetiro, const QString &m
 
     PedidoBuffet pedido;
     pedido.codigoRetiro = generarCodigoRetiroUnico();
-    pedido.dniAlumno = m_usuarioActual.dni.isEmpty() ? "44123456" : m_usuarioActual.dni;
+    pedido.dniAlumno = m_usuarioActual.dni.isEmpty() ? "95671088" : m_usuarioActual.dni;
     pedido.nombreAlumno = m_usuarioActual.nombre.isEmpty() ? "Alumno Invitado" : (m_usuarioActual.nombre + " " + m_usuarioActual.apellido);
     pedido.cursoAlumno = m_usuarioActual.curso.isEmpty() ? "4° B" : m_usuarioActual.curso;
     pedido.recreoRetiro = recreoRetiro;

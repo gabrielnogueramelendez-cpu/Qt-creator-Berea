@@ -99,7 +99,7 @@
       <item>
        <widget class="QLineEdit" name="txtUser">
         <property name="placeholderText">
-         <string>Ej. 44123456 o alumno@bue.edu.ar</string>
+         <string>Ej. 95671088 o gnoguera@bue.edu.ar</string>
         </property>
        </widget>
       </item>
