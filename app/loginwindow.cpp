@@ -68,7 +68,7 @@ void LoginWindow::actualizarCamposSegunRol(int index)
     switch (index) {
     case 0: // Estudiante
         ui->lblUser->setText("DNI o Correo Institucional (@bue.edu.ar):");
-        ui->txtUser->setPlaceholderText("Ej. 44123456 o alumno@bue.edu.ar");
+        ui->txtUser->setPlaceholderText("Ej. 95671088 o gnoguera@bue.edu.ar");
         ui->lblPinCajero->hide();
         ui->txtPinCajero->hide();
         ui->lblTokenDev->hide();
