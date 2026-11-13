@@ -43,7 +43,7 @@
          <item>
           <widget class="QLabel" name="lblUserGreeting">
            <property name="text">
-            <string>🎓 Estudiante: Jorge Dahan (4° Año B)</string>
+            <string>🎓 Estudiante: Gabriel Noguera (4° Año B)</string>
            </property>
            <property name="styleSheet">
             <string>color: #D4AF37; font-weight: bold; font-size: 13px;</string>
