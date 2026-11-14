@@ -19,6 +19,7 @@ private slots:
     void on_btnBuscarCodigo_clicked();
     void on_btnEntregarPedido_clicked();
     void on_btnCancelarPedido_clicked();
+    void on_tableColasPedidos_cellClicked(int row, int column);
     void on_btnLogout_clicked();
 
 private:

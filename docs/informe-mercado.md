@@ -36,4 +36,3 @@ Un sistema de gestión de escritorio en C++/Qt y MySQL que elimina las filas del
 3. **Auditoría automática.** La tabla `Log_Auditoria` registra inicios y cierres de sesión y cada operación comercial con fecha y hora.
 4. **Inventario en tiempo real.** El stock se descuenta en menos de 2 segundos después de cada venta, y no se pueden vender productos agotados.
 
-> Nota: el informe original habla de Stored Procedures. El script `database/ElBuffetDeAlejandroBDD.sql` todavía no los define; la consola de desarrollador de la app los simula.

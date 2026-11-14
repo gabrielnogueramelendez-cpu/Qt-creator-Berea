@@ -19,6 +19,7 @@ public:
 
 private slots:
     void on_btnModificarCantidad_clicked();
+    void on_tableCarrito_cellClicked(int row, int column);
     void on_btnEliminarItem_clicked();
     void on_btnVaciarCarrito_clicked();
     void on_btnSeguirComprando_clicked();

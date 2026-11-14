@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <ui version="4.0">
  <class>DevWindow</class>
  <widget class="QWidget" name="DevWindow">
@@ -6,65 +6,130 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>950</width>
-    <height>680</height>
+    <width>1220</width>
+    <height>760</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Consola de Desarrollador &amp; Diagnóstico BDD - El Buffet de Alejandro</string>
+   <string>Desarrollador - El Buffet de Alejandro</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <property name="styleSheet">
+   <string>QTabWidget::pane { border: none; }
+QTabWidget::tab-bar { alignment: center; }
+QTabBar::tab { background-color: #FBF6EC; color: #7A6A60; padding: 10px 18px; font-size: 12px; font-weight: bold; border: none; border-bottom: 2px solid #FBF6EC; }
+QTabBar::tab:selected { color: #6B1B2A; border-bottom: 2px solid #6B1B2A; }
+QTabBar::tab:hover { color: #6B1B2A; }</string>
+  </property>
+  <layout class="QVBoxLayout" name="layoutVentana">
    <property name="spacing">
-    <number>12</number>
+    <number>0</number>
    </property>
    <property name="leftMargin">
-    <number>18</number>
+    <number>0</number>
    </property>
    <property name="topMargin">
-    <number>18</number>
+    <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>18</number>
+    <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>18</number>
+    <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="frameHeaderDev">
+    <widget class="QFrame" name="headerFrame">
      <property name="styleSheet">
-      <string>background-color: #1A1A24; border-radius: 8px; padding: 10px;</string>
+      <string>#headerFrame { background-color: #FBF6EC; border-bottom: 1px solid #D9CBB5; }</string>
      </property>
-     <layout class="QHBoxLayout" name="layoutHeaderDev">
+     <layout class="QHBoxLayout" name="layoutHeader">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
       <item>
-       <widget class="QLabel" name="lblTitleDev">
+       <widget class="QLabel" name="lblMonograma">
         <property name="text">
-         <string>💻 CONSOLA DE DESARROLLADOR — Entorno de Testing y BDD</string>
+         <string>A</string>
         </property>
         <property name="styleSheet">
-         <string>color: #58D68D; font-size: 16px; font-weight: bold; font-family: monospace;</string>
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 20px;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
         </property>
        </widget>
       </item>
       <item>
-       <spacer name="spacerDevHeader">
+       <layout class="QVBoxLayout" name="layoutMarca">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="lblHeaderTitle">
+          <property name="text">
+           <string>El Buffet de Alejandro</string>
+          </property>
+          <property name="styleSheet">
+           <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #6B1B2A;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblHeaderSub">
+          <property name="text">
+           <string>DESARROLLADOR</string>
+          </property>
+          <property name="styleSheet">
+           <string>font-size: 9px; color: #A88A5B; font-weight: bold;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="espacioHeader">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
         </property>
        </spacer>
       </item>
       <item>
        <widget class="QPushButton" name="btnLogoutDev">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>38</height>
+         </size>
+        </property>
         <property name="text">
-         <string>🚪 Salir del Modo Dev</string>
+         <string>SALIR</string>
         </property>
         <property name="styleSheet">
-         <string>background-color: #C0392B; color: white;</string>
+         <string>QPushButton { background-color: transparent; color: #7A6A60; border-left: 1px solid #D9CBB5; border-radius: 0px; }
+QPushButton:hover { color: #6B1B2A; }</string>
         </property>
        </widget>
       </item>
@@ -73,228 +138,590 @@
    </item>
    <item>
     <widget class="QTabWidget" name="tabWidgetDev">
-     <widget class="QWidget" name="tabMySQL">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabSPs">
       <attribute name="title">
-       <string>🔌 Diagnóstico y Conexión MySQL</string>
+       <string>STORED PROCEDURES</string>
       </attribute>
-      <layout class="QVBoxLayout" name="layoutTabMySQL">
+      <property name="styleSheet">
+       <string>#tabSPs { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutSPs">
        <property name="spacing">
-        <number>10</number>
+        <number>20</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
        </property>
        <item>
-        <widget class="QGroupBox" name="groupParamsMySQL">
-         <property name="title">
-          <string>Parámetros de Conexión del Gestor (Laboratorio 4to Año)</string>
+        <widget class="QListWidget" name="listSP">
+         <property name="styleSheet">
+          <string>QListWidget { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-size: 12px; }
+QListWidget::item { padding: 8px 6px; border-bottom: 1px solid #EDE3D3; color: #2B1A1A; }
+QListWidget::item:selected { background-color: #6B1B2A; color: #FFFFFF; }</string>
          </property>
-         <layout class="QHBoxLayout" name="layoutParams">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="cardSP">
+         <property name="styleSheet">
+          <string>#cardSP { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutSPDer">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <property name="leftMargin">
+           <number>22</number>
+          </property>
+          <property name="topMargin">
+           <number>18</number>
+          </property>
+          <property name="rightMargin">
+           <number>22</number>
+          </property>
+          <property name="bottomMargin">
+           <number>18</number>
+          </property>
           <item>
-           <widget class="QLabel" name="lblHost">
+           <widget class="QLabel" name="lblSPEtiqueta">
             <property name="text">
-             <string>Host: localhost</string>
+             <string>STORED PROCEDURE</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #A88A5B;</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblPort">
+           <widget class="QLabel" name="lblFirmaSP">
             <property name="text">
-             <string>Puerto: 3306</string>
+             <string>Elegí un SP de la lista</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblDB">
-            <property name="text">
-             <string>BDD: ElBuffetDeAlejandro</string>
+           <widget class="QTextEdit" name="txtCodigoSP">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string>QTextEdit { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-family: Consolas, 'Courier New'; font-size: 12px; color: #2B1A1A; }</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="lblUser">
+           <widget class="QLabel" name="lblParametros">
             <property name="text">
-             <string>Usuario: root</string>
+             <string>VALORES DE LOS PARÁMETROS (SEPARADOS POR COMA, TEXTOS ENTRE COMILLAS)</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="btnTestConexion">
+           <layout class="QHBoxLayout" name="filaParametros">
+            <property name="spacing">
+             <number>8</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="txtParametros">
+              <property name="placeholderText">
+               <string>1, 5000</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnEjecutarSP">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>GENERAR CALL</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblSalidaSP">
             <property name="text">
-             <string>🔍 Probar Conexión con Gestor</string>
+             <string />
+            </property>
+            <property name="styleSheet">
+             <string>font-family: Consolas, 'Courier New'; font-size: 13px; color: #6B1B2A;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabPruebas">
+      <attribute name="title">
+       <string>PRUEBAS</string>
+      </attribute>
+      <property name="styleSheet">
+       <string>#tabPruebas { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutPruebas">
+       <property name="spacing">
+        <number>20</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
        <item>
-        <widget class="QTextEdit" name="txtSalidaMySQL">
-         <property name="readOnly">
-          <bool>true</bool>
+        <widget class="QListWidget" name="listPruebas">
+         <property name="styleSheet">
+          <string>QListWidget { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-size: 12px; }
+QListWidget::item { padding: 8px 6px; border-bottom: 1px solid #EDE3D3; color: #2B1A1A; }
+QListWidget::item:selected { background-color: #6B1B2A; color: #FFFFFF; }</string>
          </property>
-         <property name="font">
-          <font>
-           <family>Consolas</family>
-           <pointsize>10</pointsize>
-          </font>
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
          </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="cardPrueba">
+         <property name="styleSheet">
+          <string>#cardPrueba { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutPrDer">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <property name="leftMargin">
+           <number>22</number>
+          </property>
+          <property name="topMargin">
+           <number>18</number>
+          </property>
+          <property name="rightMargin">
+           <number>22</number>
+          </property>
+          <property name="bottomMargin">
+           <number>18</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblPruebaEtiqueta">
+            <property name="text">
+             <string>PRUEBA (06_PRUEBASSQL)</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #A88A5B;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblTituloPrueba">
+            <property name="text">
+             <string>Elegí una prueba de la lista</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="txtPrueba">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string>QTextEdit { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-family: Consolas, 'Courier New'; font-size: 12px; color: #2B1A1A; }</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabSPs">
+     <widget class="QWidget" name="tabVistas">
       <attribute name="title">
-       <string>🧪 Consola de Stored Procedures (SPs)</string>
+       <string>VISTAS</string>
       </attribute>
-      <layout class="QVBoxLayout" name="layoutTabSPs">
+      <property name="styleSheet">
+       <string>#tabVistas { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QVBoxLayout" name="layoutTabVistas">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
-        <layout class="QHBoxLayout" name="layoutSelectorSP">
+        <layout class="QHBoxLayout" name="layoutVistas">
+         <property name="spacing">
+          <number>20</number>
+         </property>
+         <property name="leftMargin">
+          <number>30</number>
+         </property>
+         <property name="topMargin">
+          <number>20</number>
+         </property>
+         <property name="rightMargin">
+          <number>30</number>
+         </property>
+         <property name="bottomMargin">
+          <number>20</number>
+         </property>
          <item>
-          <widget class="QLabel" name="lblSPLabel">
-           <property name="text">
-            <string>Seleccionar Stored Procedure:</string>
+          <widget class="QFrame" name="cardVistaAlumno">
+           <property name="styleSheet">
+            <string>#cardVistaAlumno { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
            </property>
+           <layout class="QVBoxLayout" name="layoutVistaAlumno">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="leftMargin">
+             <number>22</number>
+            </property>
+            <property name="topMargin">
+             <number>20</number>
+            </property>
+            <property name="rightMargin">
+             <number>22</number>
+            </property>
+            <property name="bottomMargin">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblVistaTituloAlumno">
+              <property name="text">
+               <string>Estudiante</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #2B1A1A;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblVistaDescAlumno">
+              <property name="text">
+               <string>Catálogo, pedido, pago, comprobante y perfil con saldo.</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 12px; color: #7A6A60;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAbrirVistaAlumno">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>ABRIR VISTA</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboSP">
-           <item>
-            <property name="text">
-             <string>sp_reporte_ventas_por_fecha</string>
+          <widget class="QFrame" name="cardVistaCaja">
+           <property name="styleSheet">
+            <string>#cardVistaCaja { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutVistaCaja">
+            <property name="spacing">
+             <number>10</number>
             </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>sp_reporte_auditoria</string>
+            <property name="leftMargin">
+             <number>22</number>
             </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>sp_productos_mas_vendidos</string>
+            <property name="topMargin">
+             <number>20</number>
             </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>sp_stock_critico</string>
+            <property name="rightMargin">
+             <number>22</number>
             </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>sp_reporte_metricas_tuneado</string>
+            <property name="bottomMargin">
+             <number>20</number>
             </property>
-           </item>
+            <item>
+             <widget class="QLabel" name="lblVistaTituloCaja">
+              <property name="text">
+               <string>Mostrador</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #2B1A1A;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblVistaDescCaja">
+              <property name="text">
+               <string>Búsqueda por código de retiro, entrega y cancelación de pedidos.</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 12px; color: #7A6A60;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAbrirVistaCaja">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>ABRIR VISTA</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="txtParam1">
-           <property name="placeholderText">
-            <string>Parámetro 1 (ej. 2026-10-01)</string>
+          <widget class="QFrame" name="cardVistaAdmin">
+           <property name="styleSheet">
+            <string>#cardVistaAdmin { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="txtParam2">
-           <property name="placeholderText">
-            <string>Parámetro 2 (ej. 2026-10-25)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnEjecutarSP">
-           <property name="text">
-            <string>▶️ Ejecutar Prueba</string>
-           </property>
+           <layout class="QVBoxLayout" name="layoutVistaAdmin">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="leftMargin">
+             <number>22</number>
+            </property>
+            <property name="topMargin">
+             <number>20</number>
+            </property>
+            <property name="rightMargin">
+             <number>22</number>
+            </property>
+            <property name="bottomMargin">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblVistaTituloAdmin">
+              <property name="text">
+               <string>Administración</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #2B1A1A;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblVistaDescAdmin">
+              <property name="text">
+               <string>Inventario de productos y registro de auditoría.</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 12px; color: #7A6A60;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAbrirVistaAdmin">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>ABRIR VISTA</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QTextEdit" name="txtSalidaSP">
-         <property name="readOnly">
-          <bool>true</bool>
+        <spacer name="espacioTabVistas">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
          </property>
-         <property name="font">
-          <font>
-           <family>Consolas</family>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tabCoddModel">
-      <attribute name="title">
-       <string>📚 Modelo Relacional Codd 3FN (20 Tablas)</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="layoutTabCodd">
-       <item>
-        <widget class="QTextEdit" name="txtModeloCodd">
-         <property name="readOnly">
-          <bool>true</bool>
-         </property>
-         <property name="font">
-          <font>
-           <family>Consolas</family>
-           <pointsize>10</pointsize>
-          </font>
-         </property>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="layoutAccesoDirecto">
-     <item>
-      <widget class="QLabel" name="lblAtajosDev">
-       <property name="text">
-        <string>⚡ Acceso Rápido de Testing:</string>
-       </property>
-       <property name="font">
-        <font>
-         <bold>true</bold>
-        </font>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnAbrirVistaAlumno">
-       <property name="text">
-        <string>🎓 Probar Vista Alumno</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnAbrirVistaCaja">
-       <property name="text">
-        <string>🧑‍🍳 Probar Vista Caja</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnAbrirVistaAdmin">
-       <property name="text">
-        <string>🛠️ Probar Vista Admin</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="spacerAtajos">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    <widget class="QFrame" name="footerFrame">
+     <property name="styleSheet">
+      <string>#footerFrame { background-color: #FBF6EC; border-top: 1px solid #D9CBB5; }</string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutFooter">
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblMonogramaPie">
+        <property name="text">
+         <string>A</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 13px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 13px;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieMarca">
+        <property name="text">
+         <string>El Buffet de Alejandro</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 16px; color: #2B1A1A;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioPie1">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieTexto">
+        <property name="text">
+         <string>SPs y pruebas leídos de 05_Backend y 06_PruebasSQL</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 11px; color: #7A6A60;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioPie2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieProyecto">
+        <property name="text">
+         <string>Proyecto 4° Año · Grupo Noguera - San Martín</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 11px; color: #7A6A60; font-weight: bold;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
- <resources/>
- <connections/>
+ <resources />
+ <connections />
 </ui>

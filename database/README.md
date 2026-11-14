@@ -1,10 +1,15 @@
 # Base de datos
 
-Script MySQL de El Buffet de Alejandro: **3 schemas y 22 tablas** en tercera forma normal (3FN), con datos de ejemplo.
+Scripts MySQL de El Buffet de Alejandro: **3 schemas y 22 tablas** en tercera forma normal (3FN), datos de ejemplo, 26 stored procedures y sus pruebas.
 
 | Archivo | Contenido |
 |---|---|
-| `ElBuffetDeAlejandroBDD.sql` | Crea los schemas, las tablas y los datos de ejemplo |
+| `03_ModeloSQL_GrupoNoguera_SanMartin.sql` | Crea los schemas y las tablas |
+| `04_DatosSQL_GrupoNogueraSanMartin.sql` | Datos de ejemplo |
+| `05_Backend_GrupoNoguera_SanMartin.sql` | Stored procedures y reportes |
+| `06_PruebasSQL_GrupoNoguera_SanMartin.sql` | Pruebas de cada SP (casos i a iv) |
+| `06_PruebasSQL.xlsx` | Planilla de pruebas con el resultado de cada caso |
+| `AVISO_CAMBIOS_DESDE_QT.md` | Cambios hechos en la BDD para que coincida con la app Qt |
 | `modelo-conceptual-DER.png` | Diagrama Entidad-Relación (modelo conceptual) |
 | `modelo-logico-codd.png` | Esquema relacional de Codd (modelo lógico) |
 
@@ -20,10 +25,15 @@ Script MySQL de El Buffet de Alejandro: **3 schemas y 22 tablas** en tercera for
 
 Con MySQL Community Server corriendo en `localhost:3306`:
 
+Ejecutar los scripts en orden: 03, 04, 05 y después 06.
+
 ```bash
-mysql -u root -p < database/ElBuffetDeAlejandroBDD.sql
+mysql -u root -p < database/03_ModeloSQL_GrupoNoguera_SanMartin.sql
+mysql -u root -p < database/04_DatosSQL_GrupoNogueraSanMartin.sql
+mysql -u root -p < database/05_Backend_GrupoNoguera_SanMartin.sql
+mysql -u root -p --force < database/06_PruebasSQL_GrupoNoguera_SanMartin.sql
 ```
 
-También se puede abrir el script en MySQL Workbench y ejecutarlo completo.
+El 06 lleva `--force` porque algunos casos esperan un error a propósito. También se pueden abrir en MySQL Workbench y ejecutarlos completos, en el mismo orden.
 
 Si el servidor MySQL no está disponible, la aplicación sigue funcionando con los mismos datos en memoria (ver `docs/validaciones_sistema.md`, sección 6).

@@ -7,9 +7,6 @@
 #include "devwindow.h"
 #include "sistemabuffet.h"
 #include <QMessageBox>
-#include <QRegularExpression>
-#include <QRegularExpressionValidator>
-#include <QAction>
 
 LoginWindow::LoginWindow(QWidget *parent) :
     QWidget(parent),
@@ -19,32 +16,28 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle("El Buffet de Alejandro - Iniciar Sesión");
 
-    // Validador de entrada para usuario (letras, números, guiones, puntos y @)
-    QRegularExpression regexUser("^[a-zA-Z0-9._%+-@]{3,50}$");
-    ui->txtUser->setValidator(new QRegularExpressionValidator(regexUser, this));
+    // Inicializar datos del sistema
+    SistemaBuffet::inicializarDatos();
 
-    // Límite de caracteres de contraseña
-    ui->txtPass->setMaxLength(12);
-
-    // Validador para PIN de Personal (4 dígitos exactos)
-    QRegularExpression regexPin("^[0-9]{4}$");
-    ui->txtPinCajero->setValidator(new QRegularExpressionValidator(regexPin, this));
+    // Límites de longitud básicos (sin validadores bloqueantes)
+    // Mismos largos que la BDD: Usuario.Contrasena, Empleado.PIN y Empleado.Token_Acceso
+    ui->txtPass->setMaxLength(50);
     ui->txtPinCajero->setMaxLength(4);
+    ui->txtTokenDev->setMaxLength(30);
 
-    // Ojito 👁️ para revelar / ocultar contraseña
-    QAction *eyeAction = ui->txtPass->addAction(QString("👁️"), QLineEdit::TrailingPosition);
-    eyeAction->setToolTip("Presiona para revelar u ocultar la contraseña");
-    connect(eyeAction, &QAction::triggered, this, [this, eyeAction]() {
-        if (ui->txtPass->echoMode() == QLineEdit::Password) {
-            ui->txtPass->setEchoMode(QLineEdit::Normal);
-            eyeAction->setText("🙈");
-        } else {
-            ui->txtPass->setEchoMode(QLineEdit::Password);
-            eyeAction->setText("👁️");
-        }
-    });
+    // Conectar tecla Enter (returnPressed) de los campos al botón Iniciar Sesión
+    connect(ui->txtUser, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
+    connect(ui->txtPass, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
+    connect(ui->txtPinCajero, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
+    connect(ui->txtTokenDev, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
 
-    // Iniciar en modo Alumno
+    // Foto del panel derecho (login.jpg en el .qrc); sin foto queda el fondo bordó con la frase
+    QPixmap foto(":/imagenes/imagenes/login.jpg");
+    if (!foto.isNull()) {
+        foto = foto.scaled(ui->lblFotoLogin->size(), Qt::KeepAspectRatio);
+        ui->lblFotoLogin->setPixmap(foto);
+    }
+
     actualizarCamposSegunRol(0);
 }
 
@@ -60,62 +53,53 @@ void LoginWindow::on_comboRole_currentIndexChanged(int index)
 
 void LoginWindow::actualizarCamposSegunRol(int index)
 {
-    ui->txtUser->clear();
-    ui->txtPass->clear();
-    ui->txtPinCajero->clear();
-    ui->txtTokenDev->clear();
-
     switch (index) {
     case 0: // Estudiante
-        ui->lblUser->setText("DNI o Correo Institucional (@bue.edu.ar):");
-        ui->txtUser->setPlaceholderText("Ej. 95671088 o gnoguera@bue.edu.ar");
+        ui->lblUser->setText("APODO");
+        ui->txtUser->setPlaceholderText("jorgedah09");
         ui->lblPinCajero->hide();
         ui->txtPinCajero->hide();
         ui->lblTokenDev->hide();
         ui->txtTokenDev->hide();
         ui->lblNoAccount->show();
         ui->btnGoRegister->show();
-        ui->lblNoticeRol->setText("ℹ️ Los alumnos deben iniciar sesión con su DNI o correo oficial @bue.edu.ar.");
-        ui->lblNoticeRol->setStyleSheet("color: #5C4A3E; font-size: 11px;");
+        ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: jorgedah09 · Clave: Jorgedah#2026");
         break;
 
     case 1: // Personal de Buffet / Cajero
-        ui->lblUser->setText("Legajo de Empleado (ID) o Usuario:");
-        ui->txtUser->setPlaceholderText("Ej. EMP-101 o cajero1");
+        ui->lblUser->setText("APODO DE EMPLEADO");
+        ui->txtUser->setPlaceholderText("marcela.ibanez");
         ui->lblPinCajero->show();
         ui->txtPinCajero->show();
         ui->lblTokenDev->hide();
         ui->txtTokenDev->hide();
         ui->lblNoAccount->hide();
         ui->btnGoRegister->hide();
-        ui->lblNoticeRol->setText("🔒 Personal de Buffet: Requiere Legajo/Usuario oficial, contraseña y PIN de turno de 4 dígitos.");
-        ui->lblNoticeRol->setStyleSheet("color: #8C6D1F; font-size: 11px; font-weight: bold;");
+        ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: marcela.ibanez · Clave: MarcelaBuffet#2026 · PIN: 1234");
         break;
 
     case 2: // Administrador
-        ui->lblUser->setText("Usuario Administrador:");
-        ui->txtUser->setPlaceholderText("Ej. admin");
+        ui->lblUser->setText("APODO DEL ENCARGADO");
+        ui->txtUser->setPlaceholderText("alejandro.funes");
         ui->lblPinCajero->hide();
         ui->txtPinCajero->hide();
         ui->lblTokenDev->hide();
         ui->txtTokenDev->hide();
         ui->lblNoAccount->hide();
         ui->btnGoRegister->hide();
-        ui->lblNoticeRol->setText("🛡️ Administración General: Acceso a gestión de catálogo, inventario y auditoría.");
-        ui->lblNoticeRol->setStyleSheet("color: #3D1A24; font-size: 11px; font-weight: bold;");
+        ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: alejandro.funes · Clave: AlejandroBuffet#2026");
         break;
 
     case 3: // Desarrollador / Soporte Técnico
-        ui->lblUser->setText("Usuario Desarrollador / Ing. de Software:");
-        ui->txtUser->setPlaceholderText("Ej. dev_berea o dev_root");
+        ui->lblUser->setText("APODO DE DESARROLLADOR");
+        ui->txtUser->setPlaceholderText("soporte.dev");
         ui->lblPinCajero->hide();
         ui->txtPinCajero->hide();
         ui->lblTokenDev->show();
         ui->txtTokenDev->show();
         ui->lblNoAccount->hide();
         ui->btnGoRegister->hide();
-        ui->lblNoticeRol->setText("⚡ Consola de Desarrollador: Requiere contraseña técnica y Token de Autorización (Dev Secret Key).");
-        ui->lblNoticeRol->setStyleSheet("color: #1E8449; font-size: 11px; font-weight: bold;");
+        ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: soporte.dev · Clave: SoporteDev#2026 · Token: DEV-BEREA-2026");
         break;
     }
 }
@@ -126,104 +110,103 @@ void LoginWindow::on_btnLogin_clicked()
     QString password = ui->txtPass->text();
     int indexRol = ui->comboRole->currentIndex();
 
-    // 1. Control de intentos fallidos
     if (m_intentosFallidos >= 3) {
-        QMessageBox::critical(this, "Acceso Bloqueado Temporalmente",
-            "Has superado el límite de 3 intentos fallidos por seguridad.\nPor favor espera unos instantes.");
+        QMessageBox::critical(this, "Bloqueado", "Superó el límite de 3 intentos fallidos.");
         return;
     }
 
-    // 2. Validación de campos básicos
     if (usuario.isEmpty() || password.isEmpty()) {
         m_intentosFallidos++;
-        QMessageBox::warning(this, "Datos Incompletos",
-            QString("Por favor completa los campos de usuario y contraseña obligatorios.\n(Intentos fallidos: %1/3)").arg(m_intentosFallidos));
+        QMessageBox::warning(this, "Datos Incompletos", "Por favor completa usuario y contraseña.");
         return;
     }
 
-    // 3. Longitud de contraseña
-    if (password.length() < 6 || password.length() > 12) {
+    if (password.length() < 4) {
         m_intentosFallidos++;
-        QMessageBox::warning(this, "Contraseña Inválida",
-            QString("La contraseña debe tener entre 6 y 12 caracteres.\n(Intentos fallidos: %1/3)").arg(m_intentosFallidos));
+        QMessageBox::warning(this, "Contraseña Corta", "La contraseña debe tener al menos 4 caracteres.");
         return;
     }
 
-    // 4. Autenticación especializada por Rol
-    QString errorMsg;
+    // Igual que sp_iniciar_sesion: el apodo y la contraseña tienen que coincidir
+    int indiceUsuario = SistemaBuffet::usuariosApodos.indexOf(usuario);
+    bool claveCorrecta = indiceUsuario != -1 && SistemaBuffet::usuariosContrasenas[indiceUsuario] == password;
+    int indicePersonal = SistemaBuffet::personalApodos.indexOf(usuario);
 
-    if (indexRol == 0) { // Estudiante
-        UsuarioSistema alumno;
-        if (!SistemaBuffet::instancia().autenticarEstudiante(usuario, password, alumno, errorMsg)) {
+    if (indexRol == 0) { // Estudiante (Con BDD: CALL sp_iniciar_sesion)
+        if (claveCorrecta && SistemaBuffet::usuariosDnis[indiceUsuario] != "") {
+            m_intentosFallidos = 0;
+            SistemaBuffet::cargarUsuarioActivo(indiceUsuario);
+            MainWindow *mainWin = new MainWindow();
+            mainWin->show();
+            this->close();
+        } else {
             m_intentosFallidos++;
-            QMessageBox::StandardButton btn = QMessageBox::warning(this, "Acceso Denegado",
-                QString("%1\n\n¿Deseas registrarte como nuevo alumno ahora?").arg(errorMsg),
+            int res = QMessageBox::warning(this, "Acceso Denegado",
+                "Apodo o contraseña incorrectos.\n¿Deseas registrarte?",
                 QMessageBox::Yes | QMessageBox::No);
-
-            if (btn == QMessageBox::Yes) {
+            if (res == QMessageBox::Yes) {
                 RegisterDialog regDlg(this);
                 regDlg.exec();
             }
-            return;
         }
-
-        m_intentosFallidos = 0;
-        MainWindow *mainWin = new MainWindow();
-        mainWin->show();
-        this->close();
     }
-    else if (indexRol == 1) { // Personal de Buffet
+    else if (indexRol == 1) { // Personal de Buffet (Con BDD: CALL sp_acceso_personal con el PIN)
         QString pin = ui->txtPinCajero->text().trimmed();
         if (pin.length() != 4) {
-            m_intentosFallidos++;
-            QMessageBox::warning(this, "PIN Inválido", "El PIN de seguridad de turno del personal debe contener exactamente 4 dígitos.");
+            QMessageBox::warning(this, "PIN Inválido", "El PIN debe tener exactamente 4 dígitos.");
             return;
         }
 
-        EmpleadoBuffet empleado;
-        if (!SistemaBuffet::instancia().autenticarPersonal(usuario, password, pin, empleado, errorMsg)) {
+        if (claveCorrecta && indicePersonal != -1 && SistemaBuffet::personalPines[indicePersonal] == pin) {
+            m_intentosFallidos = 0;
+            CajeroWindow *cajeroWin = new CajeroWindow();
+            cajeroWin->show();
+            this->close();
+        } else {
             m_intentosFallidos++;
-            QMessageBox::critical(this, "Acceso Denegado - Personal", errorMsg);
-            return;
+            QMessageBox::warning(this, "Acceso Denegado", "Apodo, contraseña o PIN incorrectos.");
         }
-
-        m_intentosFallidos = 0;
-        CajeroWindow *cajeroWin = new CajeroWindow();
-        cajeroWin->show();
-        this->close();
     }
-    else if (indexRol == 2) { // Administrador
-        UsuarioSistema admin;
-        if (!SistemaBuffet::instancia().autenticarAdmin(usuario, password, admin, errorMsg)) {
+    else if (indexRol == 2) { // Encargado (Con BDD: sp_iniciar_sesion devuelve el puesto)
+        if (claveCorrecta && indicePersonal != -1 &&
+            SistemaBuffet::personalPuestos[indicePersonal] == "Encargado General de Buffet") {
+            m_intentosFallidos = 0;
+            AdminWindow *adminWin = new AdminWindow();
+            adminWin->show();
+            this->close();
+        } else {
             m_intentosFallidos++;
-            QMessageBox::critical(this, "Acceso Denegado - Administración", errorMsg);
-            return;
+            QMessageBox::warning(this, "Acceso Denegado", "Apodo o contraseña incorrectos, o el usuario no es el encargado.");
         }
-
-        m_intentosFallidos = 0;
-        AdminWindow *adminWin = new AdminWindow();
-        adminWin->show();
-        this->close();
     }
-    else if (indexRol == 3) { // Desarrollador
+    else if (indexRol == 3) { // Desarrollador (Con BDD: CALL sp_acceso_personal con el token)
         QString token = ui->txtTokenDev->text().trimmed();
         if (token.isEmpty()) {
-            m_intentosFallidos++;
-            QMessageBox::warning(this, "Token Requerido", "Debes ingresar el Token de Autorización Técnica (Dev Secret Key).");
+            QMessageBox::warning(this, "Token Inválido", "Ingresá el token de desarrollador.");
             return;
         }
 
-        DesarrolladorSistema dev;
-        if (!SistemaBuffet::instancia().autenticarDesarrollador(usuario, password, token, dev, errorMsg)) {
+        if (claveCorrecta && indicePersonal != -1 && SistemaBuffet::personalTokens[indicePersonal] == token) {
+            m_intentosFallidos = 0;
+            DevWindow *devWin = new DevWindow();
+            devWin->show();
+            this->close();
+        } else {
             m_intentosFallidos++;
-            QMessageBox::critical(this, "Acceso Denegado - Modo Desarrollador", errorMsg);
-            return;
+            QMessageBox::warning(this, "Acceso Denegado", "Apodo, contraseña o token incorrectos.");
         }
+    }
+}
 
-        m_intentosFallidos = 0;
-        DevWindow *devWin = new DevWindow();
-        devWin->show();
-        this->close();
+void LoginWindow::on_btnMostrar_clicked()
+{
+    // Muestra u oculta la contraseña
+    if (ui->txtPass->echoMode() == QLineEdit::Password) {
+        ui->txtPass->setEchoMode(QLineEdit::Normal);
+        ui->btnMostrar->setText("OCULTAR");
+    } else {
+        ui->txtPass->setEchoMode(QLineEdit::Password);
+        ui->btnMostrar->setText("MOSTRAR");
     }
 }
 

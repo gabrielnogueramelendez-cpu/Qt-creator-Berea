@@ -23,8 +23,9 @@ private slots:
 
 private:
     Ui::AdminWindow *ui;
-    void cargarInventarioSimulado();
-    void cargarLogsSimulados();
+    void cargarInventario();
+    void cargarLogs();
+    void registrarLog(QString evento, QString detalle);
 };
 
 #endif // ADMINWINDOW_H

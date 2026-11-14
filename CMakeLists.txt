@@ -10,7 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Buscar paquetes Qt (Widgets y Sql para conexión BDD MySQL)
+# Buscar paquetes Qt (Widgets y Sql)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 
@@ -40,6 +40,9 @@ set(PROJECT_SOURCES
     app/comprobantedialog.cpp
     app/comprobantedialog.h
     app/comprobantedialog.ui
+    app/perfildialog.cpp
+    app/perfildialog.h
+    app/perfildialog.ui
     app/cajerowindow.cpp
     app/cajerowindow.h
     app/cajerowindow.ui
@@ -49,7 +52,7 @@ set(PROJECT_SOURCES
     app/devwindow.cpp
     app/devwindow.h
     app/devwindow.ui
-    app/resources/styles.qss
+    app/recursos.qrc
 )
 
 # Definición del ejecutable
@@ -68,14 +71,6 @@ endif()
 target_link_libraries(ElBuffetDeAlejandro PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Sql
-)
-
-# Copiar el archivo de estilos styles.qss a la carpeta de compilación para su ejecución
-add_custom_command(TARGET ElBuffetDeAlejandro POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/app/resources/styles.qss"
-        $<TARGET_FILE_DIR:ElBuffetDeAlejandro>
-    COMMENT "Copiando styles.qss al directorio del ejecutable..."
 )
 
 # Finalización para Qt6

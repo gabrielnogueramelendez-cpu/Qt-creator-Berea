@@ -4,18 +4,18 @@
 #include "cajerowindow.h"
 #include "adminwindow.h"
 #include "loginwindow.h"
-#include "sistemabuffet.h"
 #include <QMessageBox>
+#include <QFile>
 
 DevWindow::DevWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DevWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("💻 Modo Desarrollador & BDD - El Buffet de Alejandro");
+    setWindowTitle("Desarrollador - El Buffet de Alejandro");
 
-    cargarEsquemaCodd();
-    on_btnTestConexion_clicked();
+    cargarSPs();
+    cargarPruebas();
 }
 
 DevWindow::~DevWindow()
@@ -23,54 +23,122 @@ DevWindow::~DevWindow()
     delete ui;
 }
 
-void DevWindow::cargarEsquemaCodd()
+QString DevWindow::leerArchivo(QString ruta)
 {
-    QString esquema =
-        "===============================================================================\n"
-        " ESQUEMA RELACIONAL EN TERCERA FORMA NORMAL (3FN) — 20 ENTIDADES (EDGAR CODD)  \n"
-        " Proyecto Berea - El Buffet de Alejandro (Arquitectura Backend MySQL)          \n"
-        "===============================================================================\n\n"
-        "[1]  Pais (PK: ID_Pais, Nombre_Pais)\n"
-        "[2]  Provincia (PK: ID_Provincia, FK: ID_Pais, Nombre_Provincia)\n"
-        "[3]  Ciudad (PK: ID_Ciudad, FK: ID_Provincia, Nombre_Ciudad)\n"
-        "[4]  Region (PK: ID_Region, FK: ID_Ciudad, Nombre_Region)\n"
-        "[5]  Distrito_Escolar (PK: ID_DE, FK: ID_Region, Jurisdiccion)\n"
-        "[6]  Colegio (PK: ID_Colegio, FK: ID_DE, Nombre_Colegio, Direccion)\n"
-        "[7]  Estudiante (PK: DNI, FK: ID_Colegio, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento)\n"
-        "[8]  Usuario (PK: UserID, FK: DNI, Apodo)\n"
-        "[9]  Email (PK: Email_ID, FK: UserID, Email)\n"
-        "[10] Telefono (PK: Telefono_ID, FK: UserID, Telefono)\n"
-        "[11] Empleado (PK: EmpleadoID, Nombre_Empleado, Apellido_Empleado, Puesto_Empleado)\n"
-        "[12] Metodo_Pago (PK: Metodo_PagoID, MetodoPago)\n"
-        "[13] Venta (PK: VentaID, FK: EmpleadoID, FK: UserID, FK: Metodo_PagoID, Fecha_Hora, Monto_Total)\n"
-        "[14] Estado_Retiro (PK: Estado_Retiro_ID, Estado)\n"
-        "[15] Retiro (PK: RetiroID, FK: VentaID, FK: EstadoID, Tiempo_Retiro, Codigo_Retiro)\n"
-        "[16] Categoria (PK: ID_Categoria, Categoria)\n"
-        "[17] Producto (PK: ProductID, FK: ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto)\n"
-        "[18] Menu_Del_Dia (PK: Menu_Del_DiaID, FK: ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu)\n"
-        "[19] Detalle_Menu_Dia (PK: Detalle_Menu_Dia, FK: Menu_Del_DiaID, FK: ProductID)\n"
-        "[20] Carrito (PK: CarritoID, FK: VentaID, FK: ProductID, FK: Menu_Del_DiaID, Cantidad, precio_Unitario)\n\n"
-        "[ANEXO AUDITORÍA]\n"
-        "• Tipo_Evento (PK: Tipo_Evento_ID, Nombre_Evento)\n"
-        "• Log_Auditoria (PK: Log_ID, FK: UserID, FK: Tipo_Evento_ID, Fecha, Hora)\n";
-
-    ui->txtModeloCodd->setText(esquema);
+    // Los .sql de la carpeta BDD están en recursos.qrc (prefijo /bdd)
+    QFile archivo(ruta);
+    if (!archivo.open(QIODevice::ReadOnly)) {
+        QMessageBox::warning(this, "Error", "No se pudo abrir " + ruta);
+        return "";
+    }
+    QString texto = QString::fromUtf8(archivo.readAll());
+    archivo.close();
+    return texto.remove('\r');
 }
 
-void DevWindow::on_btnTestConexion_clicked()
+void DevWindow::cargarSPs()
 {
-    QString diag = SistemaBuffet::instancia().probarConexionMySQL();
-    ui->txtSalidaMySQL->setText(diag);
+    QStringList lineas = leerArchivo(":/bdd/05_Backend.sql").split('\n');
+    QString schema = "";
+    QString codigo = "";
+    bool dentroDeUnSP = false;
+
+    for (int i = 0; i < lineas.size(); ++i) {
+        QString linea = lineas[i];
+
+        if (linea.startsWith("USE ")) {
+            schema = linea.mid(4).remove(';').trimmed();
+        }
+        if (linea.startsWith("CREATE PROCEDURE ")) {
+            dentroDeUnSP = true;
+            codigo = "";
+            spNombres.append(linea.mid(17, linea.indexOf('(') - 17));
+            spSchemas.append(schema);
+        }
+        if (dentroDeUnSP) {
+            codigo += linea + "\n";
+            if (linea.startsWith("END //")) {
+                spCodigos.append(codigo);
+                dentroDeUnSP = false;
+            }
+        }
+    }
+
+    for (int i = 0; i < spNombres.size(); ++i) {
+        ui->listSP->addItem(spNombres[i]);
+    }
+}
+
+void DevWindow::cargarPruebas()
+{
+    QStringList lineas = leerArchivo(":/bdd/06_Pruebas.sql").split('\n');
+    QString codigo = "";
+    bool dentroDeUnaPrueba = false;
+
+    for (int i = 0; i < lineas.size(); ++i) {
+        QString linea = lineas[i];
+
+        // Cada prueba empieza con "-- ---------------- Pxx ..." y termina en la próxima o en un "-- ####"
+        bool empiezaPrueba = linea.startsWith("-- ---------------- P");
+        bool terminaSeccion = linea.startsWith("-- ####");
+
+        if ((empiezaPrueba || terminaSeccion) && dentroDeUnaPrueba) {
+            pruebasCodigos.append(codigo.trimmed());
+            dentroDeUnaPrueba = false;
+        }
+        if (empiezaPrueba) {
+            QString titulo = linea;
+            pruebasTitulos.append(titulo.remove('-').trimmed());
+            codigo = "";
+            dentroDeUnaPrueba = true;
+        } else if (dentroDeUnaPrueba) {
+            codigo += linea + "\n";
+        }
+    }
+    if (dentroDeUnaPrueba) {
+        pruebasCodigos.append(codigo.trimmed());
+    }
+
+    for (int i = 0; i < pruebasTitulos.size(); ++i) {
+        ui->listPruebas->addItem(pruebasTitulos[i]);
+    }
+}
+
+void DevWindow::on_listSP_currentRowChanged(int fila)
+{
+    if (fila < 0) return;
+
+    // La firma es lo que está antes de BEGIN: nombre y parámetros
+    QString codigo = spCodigos[fila];
+    QString firma = codigo.left(codigo.indexOf("BEGIN")).mid(17).simplified();
+
+    ui->lblFirmaSP->setText(spSchemas[fila] + "." + firma);
+    ui->txtCodigoSP->setPlainText(codigo);
+    ui->txtParametros->clear();
+    ui->lblSalidaSP->setText("");
 }
 
 void DevWindow::on_btnEjecutarSP_clicked()
 {
-    QString sp = ui->comboSP->currentText();
-    QString p1 = ui->txtParam1->text().trimmed();
-    QString p2 = ui->txtParam2->text().trimmed();
+    int fila = ui->listSP->currentRow();
+    if (fila == -1) {
+        QMessageBox::warning(this, "Error", "Debe seleccionar un SP de la lista.");
+        return;
+    }
 
-    QString res = SistemaBuffet::instancia().ejecutarSimulacionSP(sp, p1, p2);
-    ui->txtSalidaSP->setText(res);
+    // shortcut: todavía no hay conexión con MySQL; con la conexión, esta línea se manda a la BDD
+    QString llamada = QString("CALL %1.%2(%3);")
+        .arg(spSchemas[fila])
+        .arg(spNombres[fila])
+        .arg(ui->txtParametros->text().trimmed());
+    ui->lblSalidaSP->setText(llamada);
+}
+
+void DevWindow::on_listPruebas_currentRowChanged(int fila)
+{
+    if (fila < 0) return;
+    ui->lblTituloPrueba->setText(pruebasTitulos[fila]);
+    ui->txtPrueba->setPlainText(pruebasCodigos[fila]);
 }
 
 void DevWindow::on_btnAbrirVistaAlumno_clicked()
@@ -93,7 +161,6 @@ void DevWindow::on_btnAbrirVistaAdmin_clicked()
 
 void DevWindow::on_btnLogoutDev_clicked()
 {
-    SistemaBuffet::instancia().cerrarSesion();
     LoginWindow *loginWin = new LoginWindow();
     loginWin->show();
     this->close();

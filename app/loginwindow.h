@@ -18,6 +18,7 @@ public:
 private slots:
     void on_btnLogin_clicked();
     void on_btnGoRegister_clicked();
+    void on_btnMostrar_clicked();
     void on_comboRole_currentIndexChanged(int index);
 
 private:

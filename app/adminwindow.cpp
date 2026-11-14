@@ -4,25 +4,25 @@
 #include "sistemabuffet.h"
 #include <QMessageBox>
 #include <QTableWidgetItem>
-#include <QRegularExpression>
-#include <QRegularExpressionValidator>
+#include <QIntValidator>
 
 AdminWindow::AdminWindow(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AdminWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("Panel de Administración - Gestor del Buffet");
+    setWindowTitle("Administración - El Buffet de Alejandro");
 
-    // [ADM-02 y ADM-03] Validadores para precio y stock
-    QRegularExpression regexPrecio("^[0-9]+(\\.[0-9]{1,2})?$");
-    ui->txtPrecioProd->setValidator(new QRegularExpressionValidator(regexPrecio, this));
+    // Solo números (guía Gestor de Inventario)
+    ui->txtPrecioProd->setValidator(new QIntValidator(1, 999999, this));
+    ui->txtStockProd->setValidator(new QIntValidator(0, 9999, this));
+    ui->txtNombreProd->setMaxLength(100); // Nombre_Producto VARCHAR(100)
 
-    QRegularExpression regexStock("^[0-9]{1,5}$");
-    ui->txtStockProd->setValidator(new QRegularExpressionValidator(regexStock, this));
+    ui->tableProductosAdmin->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableProductosAdmin->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    cargarInventarioSimulado();
-    cargarLogsSimulados();
+    cargarInventario();
+    cargarLogs();
 }
 
 AdminWindow::~AdminWindow()
@@ -30,170 +30,153 @@ AdminWindow::~AdminWindow()
     delete ui;
 }
 
-void AdminWindow::cargarInventarioSimulado()
+void AdminWindow::cargarInventario()
 {
-    const auto prods = SistemaBuffet::instancia().getProductos();
+    // Con BDD: SELECT de Producto + Categoria
     ui->tableProductosAdmin->setRowCount(0);
-    ui->tableProductosAdmin->setColumnCount(5);
+    ui->tableProductosAdmin->setColumnCount(6);
     QStringList headers;
-    headers << "ID" << "Producto" << "Categoría" << "Precio" << "Stock";
+    headers << "ID" << "Producto" << "Categoría" << "Precio" << "Stock" << "Estado";
     ui->tableProductosAdmin->setHorizontalHeaderLabels(headers);
     ui->tableProductosAdmin->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
-    for (int i = 0; i < prods.size(); ++i) {
+    // Mismos datos que la tabla Producto de la BDD (04_DatosSQL)
+    QStringList nombres = {"Sándwich de Milanesa", "Empanada de Carne", "Porción de Pizza Muzzarella", "Pebete de Queso",
+                           "Medialuna de Manteca", "Ensalada Mixta", "Manzana", "Chocolatada 250 ml", "Yogur Bebible de Frutilla",
+                           "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Gaseosa 500ml", "Café con Leche", "Barra de Cereal",
+                           "Galletitas de Agua", "Alfajor de Maicena", "Turrón de Maní", "Mix de Frutos Secos",
+                           "Milanesa de Pollo con Puré", "Combo Sándwich + Gaseosa"};
+    QStringList precios = {"2800", "1100", "1800", "1600", "800", "2200", "700", "1100", "1200", "1000",
+                           "900", "1300", "1400", "900", "700", "800", "600", "1500", "4200", "4100"};
+
+    for (int i = 0; i < nombres.size(); ++i) {
         ui->tableProductosAdmin->insertRow(i);
-        ui->tableProductosAdmin->setItem(i, 0, new QTableWidgetItem(QString::number(prods[i].id)));
-        ui->tableProductosAdmin->setItem(i, 1, new QTableWidgetItem(prods[i].nombre));
-        ui->tableProductosAdmin->setItem(i, 2, new QTableWidgetItem(prods[i].categoria));
-        ui->tableProductosAdmin->setItem(i, 3, new QTableWidgetItem(QString::number(prods[i].precio, 'f', 0)));
-        ui->tableProductosAdmin->setItem(i, 4, new QTableWidgetItem(QString::number(prods[i].stock)));
+        ui->tableProductosAdmin->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));
+        ui->tableProductosAdmin->setItem(i, 1, new QTableWidgetItem(nombres[i]));
+        // La categoría i+1 de la BDD es la del producto i+1 (item 0 del combo es "Seleccioná...")
+        ui->tableProductosAdmin->setItem(i, 2, new QTableWidgetItem(ui->comboCategoria->itemText(i + 1)));
+        ui->tableProductosAdmin->setItem(i, 3, new QTableWidgetItem(precios[i]));
+        ui->tableProductosAdmin->setItem(i, 4, new QTableWidgetItem(QString::number(SistemaBuffet::productosStock[i + 1])));
+        ui->tableProductosAdmin->setItem(i, 5, new QTableWidgetItem("Activo"));
     }
 }
 
-void AdminWindow::cargarLogsSimulados()
+void AdminWindow::cargarLogs()
 {
-    const auto logs = SistemaBuffet::instancia().getLogs();
+    // Columnas de Log_Auditoria (la Fecha y la Hora las pone la BDD con CURDATE() y CURTIME())
     ui->tableLogsAdmin->setRowCount(0);
-    ui->tableLogsAdmin->setColumnCount(4);
+    ui->tableLogsAdmin->setColumnCount(3);
     QStringList headers;
-    headers << "Fecha / Hora" << "Usuario / Rol" << "Acción" << "Detalle Evento";
+    headers << "Usuario" << "Evento" << "Detalle";
     ui->tableLogsAdmin->setHorizontalHeaderLabels(headers);
-    ui->tableLogsAdmin->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+    ui->tableLogsAdmin->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 
-    for (int i = 0; i < logs.size(); ++i) {
-        ui->tableLogsAdmin->insertRow(i);
-        ui->tableLogsAdmin->setItem(i, 0, new QTableWidgetItem(logs[i].fechaHora.toString("yyyy-MM-dd HH:mm:ss")));
-        ui->tableLogsAdmin->setItem(i, 1, new QTableWidgetItem(logs[i].usuario + " (" + logs[i].rol + ")"));
-        ui->tableLogsAdmin->setItem(i, 2, new QTableWidgetItem(logs[i].accion));
-        ui->tableLogsAdmin->setItem(i, 3, new QTableWidgetItem(logs[i].detalle));
-    }
+    registrarLog("Inicio de Sesión Exitoso", "Ingreso al panel de administración");
+}
+
+void AdminWindow::registrarLog(QString evento, QString detalle)
+{
+    // Los nombres de evento son los de la tabla Tipo_Evento
+    int fila = ui->tableLogsAdmin->rowCount();
+    ui->tableLogsAdmin->insertRow(fila);
+    ui->tableLogsAdmin->setItem(fila, 0, new QTableWidgetItem("alejandro.funes")); // el encargado (UserID 27)
+    ui->tableLogsAdmin->setItem(fila, 1, new QTableWidgetItem(evento));
+    ui->tableLogsAdmin->setItem(fila, 2, new QTableWidgetItem(detalle));
 }
 
 void AdminWindow::on_btnAgregarProd_clicked()
 {
     QString nombre = ui->txtNombreProd->text().trimmed();
-    QString cat = ui->comboCategoria->currentText();
-    QString precioStr = ui->txtPrecioProd->text().trimmed();
-    QString stockStr = ui->txtStockProd->text().trimmed();
+    QString precio = ui->txtPrecioProd->text();
+    QString stock = ui->txtStockProd->text();
+    QString descripcion = ui->txtDescripcionProd->text().trimmed(); // Descripcion_Producto puede quedar vacía
 
-    // [ADM-01] Validar campos incompletos
-    if (nombre.isEmpty() || precioStr.isEmpty() || stockStr.isEmpty()) {
-        QMessageBox::warning(this, "Campos Incompletos", "Por favor completa todos los campos para agregar un nuevo producto.");
+    if (nombre.isEmpty() || precio.isEmpty() || stock.isEmpty()) {
+        QMessageBox::warning(this, "Campos Incompletos", "Completá nombre, precio y stock.");
+        return;
+    }
+    if (ui->comboCategoria->currentIndex() == 0) {
+        QMessageBox::warning(this, "Error", "Debe seleccionar una categoría.");
         return;
     }
 
-    // [ADM-01] Validar longitud mínima de nombre
-    if (nombre.length() < 3) {
-        QMessageBox::warning(this, "Nombre Demasiado Corto", "El nombre del producto debe contener al menos 3 caracteres.");
-        return;
-    }
+    // Con BDD: CALL sp_alta_producto(UserID, categoría, nombre, descripcion, stock, precio); el ID lo da AUTO_INCREMENT
+    int fila = ui->tableProductosAdmin->rowCount();
+    ui->tableProductosAdmin->insertRow(fila);
+    ui->tableProductosAdmin->setItem(fila, 0, new QTableWidgetItem(QString::number(fila + 1)));
+    ui->tableProductosAdmin->setItem(fila, 1, new QTableWidgetItem(nombre));
+    ui->tableProductosAdmin->setItem(fila, 2, new QTableWidgetItem(ui->comboCategoria->currentText()));
+    ui->tableProductosAdmin->setItem(fila, 3, new QTableWidgetItem(precio));
+    ui->tableProductosAdmin->setItem(fila, 4, new QTableWidgetItem(stock));
+    ui->tableProductosAdmin->setItem(fila, 5, new QTableWidgetItem("Activo"));
 
-    // [ADM-02] Validar precio numérico estrictamente positivo
-    bool okPrecio = false;
-    double precio = precioStr.toDouble(&okPrecio);
-    if (!okPrecio || precio <= 0.0) {
-        QMessageBox::warning(this, "Precio Inválido", "El precio debe ser un valor numérico estrictamente mayor a $0.");
-        return;
-    }
-
-    // [ADM-03] Validar stock entero no negativo
-    bool okStock = false;
-    int stock = stockStr.toInt(&okStock);
-    if (!okStock || stock < 0) {
-        QMessageBox::warning(this, "Stock Inválido", "El stock debe ser un número entero mayor o igual a 0.");
-        return;
-    }
-
-    QString errorMsg;
-    bool agregado = SistemaBuffet::instancia().agregarProducto(nombre, "Producto agregado por administración escolar", cat, precio, stock, errorMsg);
-
-    if (!agregado) {
-        QMessageBox::warning(this, "No se pudo agregar", errorMsg);
-        return;
-    }
-
-    QMessageBox::information(this, "Producto Agregado",
-        QString("El producto '%1' fue registrado exitosamente con precio $%2 y stock %3.")
-            .arg(nombre).arg(QString::number(precio, 'f', 0)).arg(stock));
+    registrarLog("Alta de Producto", "Alta de producto: " + nombre);
+    ui->lblEstadoAdmin->setText("Se agregó " + nombre + ".");
 
     ui->txtNombreProd->clear();
     ui->txtPrecioProd->clear();
     ui->txtStockProd->clear();
-
-    cargarInventarioSimulado();
-    cargarLogsSimulados();
+    ui->txtDescripcionProd->clear();
+    ui->comboCategoria->setCurrentIndex(0);
 }
 
 void AdminWindow::on_btnGuardarEdit_clicked()
 {
     int fila = ui->tableProductosAdmin->currentRow();
-    if (fila < 0) {
-        QMessageBox::warning(this, "Selección Requerida", "Selecciona un producto de la tabla para guardar sus modificaciones de precio o stock.");
-        return;
-    }
-
-    int id = ui->tableProductosAdmin->item(fila, 0)->text().toInt();
-    QString precioStr = ui->tableProductosAdmin->item(fila, 3)->text().replace("$", "").trimmed();
-    QString stockStr = ui->tableProductosAdmin->item(fila, 4)->text().trimmed();
-
-    bool okP = false;
-    double precio = precioStr.toDouble(&okP);
-    if (!okP || precio <= 0) {
-        QMessageBox::warning(this, "Precio Inválido", "El precio en la celda debe ser un número mayor a 0.");
-        return;
-    }
-
-    bool okS = false;
-    int stock = stockStr.toInt(&okS);
-    if (!okS || stock < 0) {
-        QMessageBox::warning(this, "Stock Inválido", "El stock en la celda debe ser un entero mayor o igual a 0.");
-        return;
-    }
-
-    QString errorMsg;
-    if (!SistemaBuffet::instancia().actualizarProducto(id, precio, stock, errorMsg)) {
-        QMessageBox::critical(this, "Error al Actualizar", errorMsg);
-        return;
-    }
-
-    QMessageBox::information(this, "Cambios Guardados",
-        QString("El producto ID %1 se actualizó con éxito (Precio: $%2, Stock: %3).")
-            .arg(id).arg(QString::number(precio, 'f', 0)).arg(stock));
-
-    cargarInventarioSimulado();
-    cargarLogsSimulados();
-}
-
-void AdminWindow::on_btnEliminarProd_clicked()
-{
-    int fila = ui->tableProductosAdmin->currentRow();
-    if (fila < 0) {
-        QMessageBox::warning(this, "Selección Requerida", "Selecciona un producto de la tabla para eliminarlo del inventario.");
+    if (fila == -1) {
+        QMessageBox::warning(this, "Error", "No seleccionó ninguna fila para modificar.");
         return;
     }
 
     int id = ui->tableProductosAdmin->item(fila, 0)->text().toInt();
     QString nombre = ui->tableProductosAdmin->item(fila, 1)->text();
 
-    QMessageBox::StandardButton resp = QMessageBox::question(this, "Confirmar Baja",
-        QString("¿Estás seguro de que deseas eliminar '%1' del catálogo del buffet escolar?").arg(nombre),
-        QMessageBox::Yes | QMessageBox::No);
-
-    if (resp == QMessageBox::Yes) {
-        QString errorMsg;
-        if (!SistemaBuffet::instancia().eliminarProducto(id, errorMsg)) {
-            QMessageBox::critical(this, "Error", errorMsg);
-            return;
-        }
-        cargarInventarioSimulado();
-        cargarLogsSimulados();
-        QMessageBox::information(this, "Producto Eliminado", "El producto fue removido correctamente.");
+    bool okPrecio = false;
+    int precio = ui->tableProductosAdmin->item(fila, 3)->text().toInt(&okPrecio);
+    if (!okPrecio || precio <= 0) {
+        QMessageBox::warning(this, "Precio Inválido", "El precio tiene que ser un número entero mayor a 0.");
+        return;
     }
+
+    bool okStock = false;
+    int stock = ui->tableProductosAdmin->item(fila, 4)->text().toInt(&okStock);
+    if (!okStock || stock < 0) {
+        QMessageBox::warning(this, "Stock Inválido", "El stock tiene que ser un número entero mayor o igual a 0.");
+        return;
+    }
+
+    // Con BDD: CALL sp_modificar_stock(UserID, ProductoID, stock)
+    if (id < SistemaBuffet::productosStock.size()) {
+        SistemaBuffet::productosStock[id] = stock; // el catálogo usa este mismo stock
+    }
+
+    registrarLog("Modificación de Stock de Producto", QString("Producto %1: stock %2").arg(id).arg(stock));
+
+    // Con BDD: CALL sp_modificar_precio(UserID, ProductoID, precio)
+    registrarLog("Modificación de Precio de Producto", QString("Producto %1: precio %2").arg(id).arg(precio));
+    ui->lblEstadoAdmin->setText("Se guardaron los cambios de " + nombre + ".");
+}
+
+void AdminWindow::on_btnEliminarProd_clicked()
+{
+    int fila = ui->tableProductosAdmin->currentRow();
+    if (fila == -1) {
+        QMessageBox::warning(this, "Error", "No seleccionó ninguna fila para dar de baja.");
+        return;
+    }
+
+    QString id = ui->tableProductosAdmin->item(fila, 0)->text();
+    QString nombre = ui->tableProductosAdmin->item(fila, 1)->text();
+
+    // Baja lógica como sp_baja_producto (Activo = FALSE): el producto queda en la tabla
+    ui->tableProductosAdmin->item(fila, 5)->setText("Inactivo");
+
+    registrarLog("Baja de Producto", "Producto " + id + ": " + nombre);
+    ui->lblEstadoAdmin->setText(nombre + " quedó inactivo.");
 }
 
 void AdminWindow::on_btnLogout_clicked()
 {
-    SistemaBuffet::instancia().cerrarSesion();
     LoginWindow *loginWin = new LoginWindow();
     loginWin->show();
     this->close();
