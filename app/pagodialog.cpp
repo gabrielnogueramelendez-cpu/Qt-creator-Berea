@@ -2,8 +2,7 @@
 #include "ui_pagodialog.h"
 #include "sistemabuffet.h"
 #include <QMessageBox>
-#include <QRegularExpression>
-#include <QRegularExpressionValidator>
+#include <QIntValidator>
 
 PagoDialog::PagoDialog(QWidget *parent) :
     QDialog(parent),
@@ -11,23 +10,24 @@ PagoDialog::PagoDialog(QWidget *parent) :
     m_totalPagar(0.0)
 {
     ui->setupUi(this);
-    setWindowTitle("💳 Verificación y Pago - El Buffet de Alejandro");
+    setWindowTitle("Pago - El Buffet de Alejandro");
 
-    m_totalPagar = SistemaBuffet::instancia().getTotalCarrito();
-    ui->lblResumenTotal->setText(QString("Total a Pagar del Pedido: $%1")
-        .arg(QString::number(m_totalPagar, 'f', 0)));
+    // Agrupador lógico de los métodos de pago (guía Configurador de Pedidos)
+    grupoMetodo = new QButtonGroup(this);
+    grupoMetodo->addButton(ui->rbEfectivo, 1);
+    grupoMetodo->addButton(ui->rbMercadoPago, 2);
+    grupoMetodo->addButton(ui->rbSaldo, 3);
 
-    // Validador de efectivo (números enteros o decimales)
-    QRegularExpression regexMonto("^[0-9]{1,6}(\\.[0-9]{1,2})?$");
-    ui->txtMontoAbonado->setValidator(new QRegularExpressionValidator(regexMonto, this));
-
-    // Validador comprobante MP (4 dígitos)
-    QRegularExpression regexMP("^[0-9]{4}$");
-    ui->txtComprobanteMP->setValidator(new QRegularExpressionValidator(regexMP, this));
+    // Solo números en monto y comprobante (guía Gestor de Inventario)
+    ui->txtMontoAbonado->setValidator(new QIntValidator(0, 999999, this));
+    ui->txtComprobanteMP->setValidator(new QIntValidator(0, 9999, this));
     ui->txtComprobanteMP->setMaxLength(4);
 
+    m_totalPagar = SistemaBuffet::getTotalCarrito();
+    ui->lblResumenTotal->setText("Total: $" + QString::number(m_totalPagar, 'f', 0));
+
     cargarDatosAlumno();
-    on_comboMetodoPago_currentIndexChanged(0);
+    habilitarCamposMetodo();
 }
 
 PagoDialog::~PagoDialog()
@@ -37,54 +37,54 @@ PagoDialog::~PagoDialog()
 
 void PagoDialog::cargarDatosAlumno()
 {
-    UsuarioSistema actual = SistemaBuffet::instancia().getUsuarioActual();
-    if (!actual.dni.isEmpty()) {
-        ui->txtPagoDni->setText(actual.dni);
-        ui->txtPagoNombre->setText(actual.nombre + " " + actual.apellido);
-        ui->txtPagoCurso->setText(actual.curso);
-        ui->lblSaldoDisponible->setText(QString("Saldo disponible en tu cuenta escolar: $%1")
-            .arg(QString::number(actual.saldoCuenta, 'f', 0)));
+    ui->txtPagoDni->setText(SistemaBuffet::usuarioDni);
+    ui->txtPagoNombre->setText(SistemaBuffet::usuarioNombre + " " + SistemaBuffet::usuarioApellido);
+    ui->txtPagoCurso->setText(SistemaBuffet::usuarioCurso);
+    ui->lblSaldoDisponible->setText("Saldo disponible: $" + QString::number(SistemaBuffet::usuarioSaldo, 'f', 0));
 
-        if (actual.saldoCuenta >= m_totalPagar) {
-            ui->lblEstadoSaldo->setText(QString("✅ Saldo suficiente. Te quedarán $%1.")
-                .arg(QString::number(actual.saldoCuenta - m_totalPagar, 'f', 0)));
-            ui->lblEstadoSaldo->setStyleSheet("color: #2e7d32; font-weight: bold;");
-        } else {
-            ui->lblEstadoSaldo->setText("❌ Saldo insuficiente en cuenta escolar para cubrir el total.");
-            ui->lblEstadoSaldo->setStyleSheet("color: #c62828; font-weight: bold;");
-        }
+    if (SistemaBuffet::usuarioSaldo >= m_totalPagar) {
+        ui->lblEstadoSaldo->setText(QString("Te quedarán $%1 después de pagar.")
+            .arg(QString::number(SistemaBuffet::usuarioSaldo - m_totalPagar, 'f', 0)));
     } else {
-        ui->txtPagoDni->setText("95671088");
-        ui->txtPagoNombre->setText("Gabriel Noguera");
-        ui->txtPagoCurso->setText("4° Año B");
+        ui->lblEstadoSaldo->setText("El saldo no alcanza para cubrir el total.");
     }
 }
 
-void PagoDialog::on_comboMetodoPago_currentIndexChanged(int index)
+void PagoDialog::habilitarCamposMetodo()
 {
-    ui->stackedDetallePago->setCurrentIndex(index);
-    if (index == 0) {
-        // Efectivo: sugerir el total exacto o recalcular vuelto
-        on_txtMontoAbonado_textChanged(ui->txtMontoAbonado->text());
-    }
+    // Cada método enciende solo los campos que necesita
+    int metodo = grupoMetodo->checkedId();
+    ui->txtMontoAbonado->setEnabled(metodo == 1);
+    ui->lblVueltoCalculado->setEnabled(metodo == 1);
+    ui->txtComprobanteMP->setEnabled(metodo == 2);
+    ui->lblSaldoDisponible->setEnabled(metodo == 3);
+    ui->lblEstadoSaldo->setEnabled(metodo == 3);
+}
+
+void PagoDialog::on_rbEfectivo_clicked()
+{
+    habilitarCamposMetodo();
+}
+
+void PagoDialog::on_rbMercadoPago_clicked()
+{
+    habilitarCamposMetodo();
+}
+
+void PagoDialog::on_rbSaldo_clicked()
+{
+    habilitarCamposMetodo();
 }
 
 void PagoDialog::on_txtMontoAbonado_textChanged(const QString &text)
 {
-    bool ok = false;
-    double abonado = text.toDouble(&ok);
-    if (ok && abonado >= m_totalPagar) {
-        double vuelto = abonado - m_totalPagar;
-        ui->lblVueltoCalculado->setText(QString("✅ Vuelto a recibir en caja: $%1")
-            .arg(QString::number(vuelto, 'f', 0)));
-        ui->lblVueltoCalculado->setStyleSheet("color: #2e7d32; font-weight: bold;");
-    } else if (ok && abonado < m_totalPagar) {
-        double falta = m_totalPagar - abonado;
-        ui->lblVueltoCalculado->setText(QString("⚠️ Monto insuficiente (faltan $%1)").arg(QString::number(falta, 'f', 0)));
-        ui->lblVueltoCalculado->setStyleSheet("color: #c62828; font-weight: bold;");
+    double abonado = text.toDouble();
+    if (text.isEmpty()) {
+        ui->lblVueltoCalculado->setText("Vuelto: $0");
+    } else if (abonado >= m_totalPagar) {
+        ui->lblVueltoCalculado->setText("Vuelto: $" + QString::number(abonado - m_totalPagar, 'f', 0));
     } else {
-        ui->lblVueltoCalculado->setText("Vuelto a recibir en caja: $0");
-        ui->lblVueltoCalculado->setStyleSheet("color: #555;");
+        ui->lblVueltoCalculado->setText("Faltan $" + QString::number(m_totalPagar - abonado, 'f', 0));
     }
 }
 
@@ -99,70 +99,94 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
     QString nombre = ui->txtPagoNombre->text().trimmed();
     QString curso = ui->txtPagoCurso->text().trimmed();
 
-    // 1. Validaciones del Estudiante
     if (dni.isEmpty() || nombre.isEmpty() || curso.isEmpty()) {
-        QMessageBox::warning(this, "Datos Incompletos", "Por favor completa la verificación de los datos del estudiante.");
+        QMessageBox::warning(this, "Datos Incompletos", "Completá los datos del estudiante.");
         return;
     }
 
-    if (dni.length() < 7 || dni.length() > 8) {
-        QMessageBox::warning(this, "DNI Inválido", "El DNI del estudiante debe tener entre 7 y 8 dígitos numéricos.");
+    // El primer ítem del combo es el texto "Seleccioná un horario..."
+    if (ui->comboRecreo->currentIndex() == 0) {
+        QMessageBox::warning(this, "Error", "Debe seleccionar un horario de retiro.");
         return;
     }
 
-    // 2. Validación de Términos
+    int selectMetodo = grupoMetodo->checkedId();
+    if (selectMetodo == -1) {
+        QMessageBox::warning(this, "Error", "Debe seleccionar un método de pago.");
+        return;
+    }
+
     if (!ui->chkConfirmarTerminos->isChecked()) {
         QMessageBox::warning(this, "Confirmación Requerida",
-            "Debes marcar la casilla declarando que los datos son correctos y comprometiéndote a retirar en el recreo indicado.");
+            "Marcá la casilla para confirmar los datos y el horario de retiro.");
         return;
     }
 
-    // 3. Validación según Método de Pago
-    QString metodo = ui->comboMetodoPago->currentText();
+    QString metodo;
     double montoAbonado = m_totalPagar;
+    double vuelto = 0.0;
 
-    if (metodo.contains("Efectivo", Qt::CaseInsensitive)) {
-        bool ok = false;
-        montoAbonado = ui->txtMontoAbonado->text().trimmed().toDouble(&ok);
-        if (!ok || montoAbonado <= 0) {
-            QMessageBox::warning(this, "Monto Abonado Requerido",
-                "Por favor ingresa con cuánto dinero vas a abonar en el mostrador para preparar tu vuelto.");
+    switch (selectMetodo) {
+    case 1: // Efectivo
+        metodo = ui->rbEfectivo->text();
+        montoAbonado = ui->txtMontoAbonado->text().toDouble();
+        if (ui->txtMontoAbonado->text().isEmpty() || montoAbonado < m_totalPagar) {
+            QMessageBox::warning(this, "Monto Insuficiente", "El monto ingresado no alcanza para cubrir el total.");
             return;
         }
-        if (montoAbonado < m_totalPagar) {
-            QMessageBox::critical(this, "Monto Insuficiente",
-                QString("El monto ingresado ($%1) es inferior al total del pedido ($%2).")
-                    .arg(QString::number(montoAbonado, 'f', 0))
-                    .arg(QString::number(m_totalPagar, 'f', 0)));
+        vuelto = montoAbonado - m_totalPagar;
+        break;
+    case 2: // Mercado Pago
+        metodo = ui->rbMercadoPago->text();
+        if (ui->txtComprobanteMP->text().length() != 4) {
+            QMessageBox::warning(this, "Comprobante Inválido", "Ingresá los 4 dígitos finales del comprobante.");
             return;
         }
-    } else if (metodo.contains("Saldo", Qt::CaseInsensitive)) {
-        UsuarioSistema actual = SistemaBuffet::instancia().getUsuarioActual();
-        if (actual.saldoCuenta < m_totalPagar) {
-            QMessageBox::critical(this, "Saldo Insuficiente",
-                QString("No cuentas con saldo suficiente en tu cuenta escolar ($%1 disponible) para cubrir esta compra de $%2.")
-                    .arg(QString::number(actual.saldoCuenta, 'f', 0))
-                    .arg(QString::number(m_totalPagar, 'f', 0)));
+        break;
+    case 3: // Saldo de cuenta escolar
+        metodo = ui->rbSaldo->text();
+        if (SistemaBuffet::usuarioSaldo < m_totalPagar) {
+            QMessageBox::warning(this, "Saldo Insuficiente", "El saldo de tu cuenta escolar no alcanza.");
             return;
         }
-    } else if (metodo.contains("Mercado", Qt::CaseInsensitive)) {
-        QString comp = ui->txtComprobanteMP->text().trimmed();
-        if (comp.length() != 4) {
-            QMessageBox::warning(this, "Comprobante Inválido",
-                "Por favor ingresa los 4 dígitos finales del comprobante de transferencia o Mercado Pago.");
-            return;
-        }
+        SistemaBuffet::usuarioSaldo -= m_totalPagar;
+        break;
     }
 
-    // 4. Crear pedido a través del Sistema Central
     QString recreo = ui->comboRecreo->currentText();
-    QString errorMsg;
-    QString codigo = SistemaBuffet::instancia().crearPedido(recreo, metodo, montoAbonado, errorMsg);
 
-    if (codigo.isEmpty()) {
-        QMessageBox::critical(this, "Error al generar pedido", errorMsg);
-        return;
+    // Código de retiro de 5 caracteres (Codigo_Retiro CHAR(5) en la BDD): P + número correlativo
+    // shortcut: alcanza hasta P9999 por sesión; con BDD el código sale del INSERT en Retiro
+    QString codigo = QString("P%1").arg(1000 + SistemaBuffet::pedidosCodigos.size());
+
+    // Registrar pedido en las listas paralelas de SistemaBuffet
+    SistemaBuffet::pedidosCodigos.append(codigo);
+    SistemaBuffet::pedidosAlumnos.append(nombre);
+    SistemaBuffet::pedidosCursos.append(curso);
+    SistemaBuffet::pedidosDnis.append(dni);
+    SistemaBuffet::pedidosRecreos.append(recreo);
+    SistemaBuffet::pedidosMetodos.append(metodo);
+    SistemaBuffet::pedidosMontos.append(m_totalPagar);
+    SistemaBuffet::pedidosAbonados.append(montoAbonado);
+    SistemaBuffet::pedidosVueltos.append(vuelto);
+    SistemaBuffet::pedidosEstados.append("PENDIENTE");
+
+    QString itemsTexto = "";
+    for (int i = 0; i < SistemaBuffet::carritoNombres.size(); ++i) {
+        itemsTexto += QString("%1 x %2 ($%3)\n")
+            .arg(SistemaBuffet::carritoCantidades[i])
+            .arg(SistemaBuffet::carritoNombres[i])
+            .arg(QString::number(SistemaBuffet::carritoPrecios[i] * SistemaBuffet::carritoCantidades[i], 'f', 0));
     }
+    SistemaBuffet::pedidosDetalles.append(itemsTexto);
+
+    // Restar del stock lo vendido (con BDD: UPDATE Producto SET Stock_Producto = Stock_Producto - ?)
+    for (int i = 0; i < SistemaBuffet::carritoIds.size(); ++i) {
+        SistemaBuffet::productosStock[SistemaBuffet::carritoIds[i]] -= SistemaBuffet::carritoCantidades[i];
+    }
+
+    // Vaciar el carrito tras confirmar la compra
+    SistemaBuffet::vaciarCarrito();
 
     m_codigoGenerado = codigo;
     accept();

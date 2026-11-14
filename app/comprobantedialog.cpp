@@ -21,41 +21,34 @@ void ComprobanteDialog::cargarDatosComprobante()
 {
     ui->lblCode->setText(m_codigo);
 
-    PedidoBuffet *p = SistemaBuffet::instancia().buscarPedidoPorCodigo(m_codigo);
-    if (p) {
-        QString itemsTexto = "";
-        for (const auto &it : p->items) {
-            itemsTexto += QString("  • %1 x %2 ($%3)\n")
-                .arg(it.cantidad)
-                .arg(it.nombre)
-                .arg(QString::number(it.subtotal(), 'f', 0));
-        }
+    int idx = SistemaBuffet::pedidosCodigos.indexOf(m_codigo);
+    if (idx != -1) {
+        QString itemsTexto = SistemaBuffet::pedidosDetalles[idx];
 
         QString resumen = QString(
-            "📋 RESUMEN OFICIAL DEL PEDIDO:\n"
-            "- Estudiante: %1 (DNI %2 - %3)\n"
-            "- Horario de Retiro: %4\n"
-            "- Método de Pago: %5\n"
-            "- Estado: %6\n"
-            "- Ítems:\n%7"
-            "- Total: $%8\n"
-        ).arg(p->nombreAlumno)
-         .arg(p->dniAlumno)
-         .arg(p->cursoAlumno)
-         .arg(p->recreoRetiro)
-         .arg(p->metodoPago)
-         .arg(p->estado)
+            "Estudiante: %1 (DNI %2 · %3)\n"
+            "Retiro: %4\n"
+            "Pago: %5\n"
+            "Estado: %6\n\n"
+            "%7\n"
+            "Total: $%8"
+        ).arg(SistemaBuffet::pedidosAlumnos[idx])
+         .arg(SistemaBuffet::pedidosDnis[idx])
+         .arg(SistemaBuffet::pedidosCursos[idx])
+         .arg(SistemaBuffet::pedidosRecreos[idx])
+         .arg(SistemaBuffet::pedidosMetodos[idx])
+         .arg(SistemaBuffet::pedidosEstados[idx])
          .arg(itemsTexto)
-         .arg(QString::number(p->montoTotal, 'f', 0));
+         .arg(QString::number(SistemaBuffet::pedidosMontos[idx], 'f', 0));
 
-        if (p->metodoPago.contains("Efectivo", Qt::CaseInsensitive)) {
-            resumen += QString("- Abonó con: $%1 | Vuelto a recibir: $%2\n")
-                .arg(QString::number(p->montoAbonado, 'f', 0))
-                .arg(QString::number(p->vuelto, 'f', 0));
+        if (SistemaBuffet::pedidosMetodos[idx].contains("Efectivo", Qt::CaseInsensitive)) {
+            resumen += QString("\nPagás con $%1 · Vuelto $%2")
+                .arg(QString::number(SistemaBuffet::pedidosAbonados[idx], 'f', 0))
+                .arg(QString::number(SistemaBuffet::pedidosVueltos[idx], 'f', 0));
         }
 
         ui->lblDetails->setText(resumen);
-        ui->lblRuleNotice->setText(QString("📱 Solo necesitas dictar el código '%1' o mostrar esta pantalla en el mostrador para retirar tu pedido.").arg(m_codigo));
+        ui->lblRuleNotice->setText("Dictá este código o mostrá esta pantalla en el mostrador para retirar tu pedido.");
     }
 }
 

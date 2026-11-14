@@ -16,6 +16,13 @@ ProductDetailDialog::ProductDetailDialog(int productoId, const QString &nombre, 
     setWindowTitle("Detalle de Producto - " + nombre);
 
     ui->lblTitle->setText(nombre);
+
+    // Foto del producto desde el .qrc (mismo nombre que el producto)
+    QPixmap foto(":/imagenes/imagenes/" + nombre + ".jpg");
+    if (!foto.isNull()) {
+        foto = foto.scaled(ui->lblFotoProducto->size(), Qt::KeepAspectRatio);
+        ui->lblFotoProducto->setPixmap(foto);
+    }
     ui->lblDescription->setText(desc);
     ui->lblPriceTag->setText("$" + QString::number(precio, 'f', 0));
     ui->lblCantidad->setText(QString::number(m_cantidad));
@@ -30,18 +37,22 @@ ProductDetailDialog::~ProductDetailDialog()
 void ProductDetailDialog::actualizarTotal()
 {
     double total = m_precioUnitario * m_cantidad;
-    ui->lblCalculatedTotal->setText("Total a pagar: $" + QString::number(total, 'f', 0));
+    ui->lblCalculatedTotal->setText("Total: $" + QString::number(total, 'f', 0));
 }
 
 void ProductDetailDialog::on_btnPlus_clicked()
 {
     // [NEG-02] Límite máximo razonable por pedido escolar (máx 10 unidades)
     const int LIMITE_MAXIMO_PEDIDO = 10;
-    int topePermitido = qMin(LIMITE_MAXIMO_PEDIDO, m_stockDisponible);
+    int enCarrito = SistemaBuffet::getCantidadEnCarrito(m_productoId);
+    int topePermitido = qMin(LIMITE_MAXIMO_PEDIDO, m_stockDisponible) - enCarrito;
 
     // [NEG-03] Control de stock disponible
     if (m_cantidad >= topePermitido) {
-        if (m_stockDisponible < LIMITE_MAXIMO_PEDIDO) {
+        if (enCarrito > 0) {
+            QMessageBox::warning(this, "Límite Alcanzado",
+                QString("Ya tenés %1 unidad(es) en el carrito. No podés sumar más de este producto.").arg(enCarrito));
+        } else if (m_stockDisponible < LIMITE_MAXIMO_PEDIDO) {
             QMessageBox::warning(this, "Stock Límite",
                 QString("Solo quedan %1 unidad(es) disponibles en stock para este producto.").arg(m_stockDisponible));
         } else {
@@ -68,15 +79,15 @@ void ProductDetailDialog::on_btnMinus_clicked()
 
 void ProductDetailDialog::on_btnAddToCart_clicked()
 {
-    QString errorMsg;
-    bool agregado = SistemaBuffet::instancia().agregarAlCarrito(m_productoId, m_nombre, m_precioUnitario, m_cantidad, m_stockDisponible, errorMsg);
-
-    if (!agregado) {
-        QMessageBox::warning(this, "No se pudo agregar al carrito", errorMsg);
+    // [NEG-03] No superar stock ni el límite de 10 sumando lo que ya está en el carrito
+    int enCarrito = SistemaBuffet::getCantidadEnCarrito(m_productoId);
+    if (enCarrito + m_cantidad > qMin(10, m_stockDisponible)) {
+        QMessageBox::warning(this, "Sin Stock Suficiente",
+            QString("Ya tenés %1 en el carrito. Como máximo podés llevar %2 de este producto.")
+                .arg(enCarrito).arg(qMin(10, m_stockDisponible)));
         return;
     }
 
-    QMessageBox::information(this, "Añadido al Carrito",
-        QString("Se agregaron %1 unidad(es) de '%2' a tu Carrito Express.").arg(m_cantidad).arg(m_nombre));
+    SistemaBuffet::agregarAlCarrito(m_productoId, m_nombre, m_precioUnitario, m_cantidad);
     accept();
 }

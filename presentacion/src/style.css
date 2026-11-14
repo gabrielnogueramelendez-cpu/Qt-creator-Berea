@@ -1,6 +1,6 @@
 /* Concepto: el recreo como reloj. Cada diapositiva avanza la barra de 10:35 a 10:45;
    el único elemento llamativo es el visor de 5 casilleros del código de retiro.
-   Paleta tomada de la app real (app/resources/styles.qss). Diseño de un solo tono, pensado para proyector. */
+   Paleta tomada de la app real (app/main.cpp). Diseño de un solo tono, pensado para proyector. */
 :root {
   --bordo: #2e151b;       /* tinta principal, encabezado de la app */
   --bordo-2: #4a2a31;     /* bordó claro para bordes sobre fondo oscuro */

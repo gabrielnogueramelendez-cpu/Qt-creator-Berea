@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -16,26 +17,34 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_btnVerDetalleMenuDia1_clicked();
-    void on_btnVerDetalleMenuDia2_clicked();
-    void on_btnVerDetalleMilanesa_clicked();
-    void on_btnVerDetalleEmpanada_clicked();
-    void on_btnVerDetalleTarta_clicked();
-    void on_btnVerDetallePebete_clicked();
-    void on_btnVerDetalleAlfajor_clicked();
-    void on_btnVerDetallePastafrola_clicked();
-    void on_btnVerDetalleFactura_clicked();
-    void on_btnVerDetalleMuffin_clicked();
-    void on_btnVerDetalleGaseosa_clicked();
-    void on_btnVerDetalleAgua_clicked();
-    void on_btnVerDetalleJugo_clicked();
-    void on_btnVerDetalleLicuado_clicked();
+    void on_btnVerMilanesa_clicked();
+    void on_btnVerEmpanada_clicked();
+    void on_btnVerPizza_clicked();
+    void on_btnVerPebete_clicked();
+    void on_btnVerMedialuna_clicked();
+    void on_btnVerEnsalada_clicked();
+    void on_btnVerManzana_clicked();
+    void on_btnVerChocolatada_clicked();
+    void on_btnVerYogur_clicked();
+    void on_btnVerAgua_clicked();
+    void on_btnVerJugo_clicked();
+    void on_btnVerGaseosa_clicked();
+    void on_btnVerCafe_clicked();
+    void on_btnVerBarra_clicked();
+    void on_btnVerGalletitas_clicked();
+    void on_btnVerAlfajor_clicked();
+    void on_btnVerTurron_clicked();
+    void on_btnVerFrutosSecos_clicked();
+    void on_btnVerPolloPure_clicked();
+    void on_btnVerCombo_clicked();
     void on_btnCheckout_clicked();
+    void on_btnPerfil_clicked();
     void on_btnLogout_clicked();
 
 private:
     Ui::MainWindow *ui;
     void actualizarBotonCarrito();
+    void cargarFoto(QLabel *lblFoto, QString nombreProducto);
     void abrirDetalleProducto(int id, const QString &nombre, const QString &desc, double precio, int stock = 15);
 };
 

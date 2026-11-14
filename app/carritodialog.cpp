@@ -2,7 +2,6 @@
 #include "ui_carritodialog.h"
 #include "sistemabuffet.h"
 #include <QMessageBox>
-#include <QInputDialog>
 #include <QTableWidgetItem>
 
 CarritoDialog::CarritoDialog(QWidget *parent) :
@@ -11,13 +10,16 @@ CarritoDialog::CarritoDialog(QWidget *parent) :
     m_haciaElPago(false)
 {
     ui->setupUi(this);
-    setWindowTitle("🛒 Mi Carrito - El Buffet de Alejandro");
+    setWindowTitle("Mi Carrito - El Buffet de Alejandro");
 
     ui->tableCarrito->setColumnCount(5);
     QStringList headers;
     headers << "ID" << "Producto" << "Precio Unit." << "Cantidad" << "Subtotal";
     ui->tableCarrito->setHorizontalHeaderLabels(headers);
     ui->tableCarrito->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+
+    // Cantidad por producto: mínimo 1, máximo 10 (el stock se valida al actualizar)
+    ui->spinCantidad->setRange(1, 10);
 
     recargarTablaCarrito();
 }
@@ -29,28 +31,29 @@ CarritoDialog::~CarritoDialog()
 
 void CarritoDialog::recargarTablaCarrito()
 {
-    const auto items = SistemaBuffet::instancia().getCarrito();
     ui->tableCarrito->setRowCount(0);
 
-    for (int i = 0; i < items.size(); ++i) {
+    for (int i = 0; i < SistemaBuffet::carritoIds.size(); ++i) {
         ui->tableCarrito->insertRow(i);
-        ui->tableCarrito->setItem(i, 0, new QTableWidgetItem(QString::number(items[i].productoId)));
-        ui->tableCarrito->setItem(i, 1, new QTableWidgetItem(items[i].nombre));
-        ui->tableCarrito->setItem(i, 2, new QTableWidgetItem("$" + QString::number(items[i].precioUnitario, 'f', 0)));
-        ui->tableCarrito->setItem(i, 3, new QTableWidgetItem(QString::number(items[i].cantidad)));
-        ui->tableCarrito->setItem(i, 4, new QTableWidgetItem("$" + QString::number(items[i].subtotal(), 'f', 0)));
+        ui->tableCarrito->setItem(i, 0, new QTableWidgetItem(QString::number(SistemaBuffet::carritoIds[i])));
+        ui->tableCarrito->setItem(i, 1, new QTableWidgetItem(SistemaBuffet::carritoNombres[i]));
+        ui->tableCarrito->setItem(i, 2, new QTableWidgetItem("$" + QString::number(SistemaBuffet::carritoPrecios[i], 'f', 0)));
+        ui->tableCarrito->setItem(i, 3, new QTableWidgetItem(QString::number(SistemaBuffet::carritoCantidades[i])));
+        double subtotal = SistemaBuffet::carritoPrecios[i] * SistemaBuffet::carritoCantidades[i];
+        ui->tableCarrito->setItem(i, 4, new QTableWidgetItem("$" + QString::number(subtotal, 'f', 0)));
     }
 
-    double total = SistemaBuffet::instancia().getTotalCarrito();
-    int cantTotal = SistemaBuffet::instancia().getCantidadTotalCarrito();
+    double total = SistemaBuffet::getTotalCarrito();
+    int cantTotal = SistemaBuffet::getCantidadTotalCarrito();
     ui->lblTotalPagar->setText(QString("Total (%1 ítems): $%2")
         .arg(cantTotal)
         .arg(QString::number(total, 'f', 0)));
 
-    ui->btnProcederPago->setEnabled(!items.isEmpty());
-    ui->btnVaciarCarrito->setEnabled(!items.isEmpty());
-    ui->btnModificarCantidad->setEnabled(!items.isEmpty());
-    ui->btnEliminarItem->setEnabled(!items.isEmpty());
+    bool hayItems = !SistemaBuffet::carritoIds.isEmpty();
+    ui->btnProcederPago->setEnabled(hayItems);
+    ui->btnVaciarCarrito->setEnabled(hayItems);
+    ui->btnModificarCantidad->setEnabled(hayItems);
+    ui->btnEliminarItem->setEnabled(hayItems);
 }
 
 void CarritoDialog::on_btnModificarCantidad_clicked()
@@ -61,23 +64,22 @@ void CarritoDialog::on_btnModificarCantidad_clicked()
         return;
     }
 
-    int id = ui->tableCarrito->item(fila, 0)->text().toInt();
-    QString nombre = ui->tableCarrito->item(fila, 1)->text();
-    int cantActual = ui->tableCarrito->item(fila, 3)->text().toInt();
-
-    bool ok = false;
-    int nuevaCant = QInputDialog::getInt(this, "Modificar Cantidad",
-        QString("Ingresa la nueva cantidad para '%1':\n(Mínimo 1, Máximo 10 unidades)").arg(nombre),
-        cantActual, 1, 10, 1, &ok);
-
-    if (ok) {
-        QString errorMsg;
-        if (!SistemaBuffet::instancia().modificarCantidadCarrito(id, nuevaCant, errorMsg)) {
-            QMessageBox::warning(this, "No se pudo actualizar", errorMsg);
-            return;
-        }
-        recargarTablaCarrito();
+    int nuevaCant = ui->spinCantidad->value();
+    int maximo = qMin(10, SistemaBuffet::productosStock[SistemaBuffet::carritoIds[fila]]);
+    if (nuevaCant > maximo) {
+        QMessageBox::warning(this, "Sin Stock Suficiente",
+            QString("Solo podés llevar hasta %1 unidad(es) de '%2'.").arg(maximo).arg(SistemaBuffet::carritoNombres[fila]));
+        return;
     }
+
+    SistemaBuffet::carritoCantidades[fila] = nuevaCant;
+    recargarTablaCarrito();
+}
+
+void CarritoDialog::on_tableCarrito_cellClicked(int row, int column)
+{
+    // Al elegir una fila, el selector muestra la cantidad actual de ese producto
+    ui->spinCantidad->setValue(SistemaBuffet::carritoCantidades[row]);
 }
 
 void CarritoDialog::on_btnEliminarItem_clicked()
@@ -88,22 +90,24 @@ void CarritoDialog::on_btnEliminarItem_clicked()
         return;
     }
 
-    int id = ui->tableCarrito->item(fila, 0)->text().toInt();
-    QString nombre = ui->tableCarrito->item(fila, 1)->text();
+    QString nombre = SistemaBuffet::carritoNombres[fila];
 
     QMessageBox::StandardButton resp = QMessageBox::question(this, "Confirmar Eliminación",
         QString("¿Deseas quitar '%1' de tu carrito de compras?").arg(nombre),
         QMessageBox::Yes | QMessageBox::No);
 
     if (resp == QMessageBox::Yes) {
-        SistemaBuffet::instancia().eliminarDelCarrito(id);
+        SistemaBuffet::carritoIds.removeAt(fila);
+        SistemaBuffet::carritoNombres.removeAt(fila);
+        SistemaBuffet::carritoPrecios.removeAt(fila);
+        SistemaBuffet::carritoCantidades.removeAt(fila);
         recargarTablaCarrito();
     }
 }
 
 void CarritoDialog::on_btnVaciarCarrito_clicked()
 {
-    if (SistemaBuffet::instancia().getCarrito().isEmpty()) {
+    if (SistemaBuffet::carritoIds.isEmpty()) {
         return;
     }
 
@@ -112,7 +116,7 @@ void CarritoDialog::on_btnVaciarCarrito_clicked()
         QMessageBox::Yes | QMessageBox::No);
 
     if (resp == QMessageBox::Yes) {
-        SistemaBuffet::instancia().vaciarCarrito();
+        SistemaBuffet::vaciarCarrito();
         recargarTablaCarrito();
     }
 }
@@ -124,7 +128,7 @@ void CarritoDialog::on_btnSeguirComprando_clicked()
 
 void CarritoDialog::on_btnProcederPago_clicked()
 {
-    if (SistemaBuffet::instancia().getCarrito().isEmpty()) {
+    if (SistemaBuffet::carritoIds.isEmpty()) {
         QMessageBox::warning(this, "Carrito Vacío", "Tu carrito no contiene productos para pagar.");
         return;
     }

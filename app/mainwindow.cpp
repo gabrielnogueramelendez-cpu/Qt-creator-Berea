@@ -4,6 +4,7 @@
 #include "carritodialog.h"
 #include "pagodialog.h"
 #include "comprobantedialog.h"
+#include "perfildialog.h"
 #include "loginwindow.h"
 #include "sistemabuffet.h"
 #include <QMessageBox>
@@ -13,18 +14,34 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setWindowTitle("El Buffet de Alejandro - Menú Gourmet Escolar");
+    setWindowTitle("El Buffet de Alejandro - Catálogo");
     ui->tabWidget->setCurrentIndex(0);
 
-    // Saludo personalizado con el usuario activo
-    UsuarioSistema actual = SistemaBuffet::instancia().getUsuarioActual();
-    if (!actual.nombre.isEmpty()) {
-        ui->lblUserGreeting->setText(QString("🎓 %1 %2 (%3) | Saldo: $%4")
-            .arg(actual.nombre)
-            .arg(actual.apellido)
-            .arg(actual.curso)
-            .arg(QString::number(actual.saldoCuenta, 'f', 0)));
-    }
+
+    // Foto de cada producto: el archivo se llama igual que el producto (como en la guía Catálogo)
+    cargarFoto(ui->lblFotoMilanesa, "Sándwich de Milanesa");
+    cargarFoto(ui->lblFotoEmpanada, "Empanada de Carne");
+    cargarFoto(ui->lblFotoPizza, "Porción de Pizza Muzzarella");
+    cargarFoto(ui->lblFotoPebete, "Pebete de Queso");
+    cargarFoto(ui->lblFotoMedialuna, "Medialuna de Manteca");
+    cargarFoto(ui->lblFotoEnsalada, "Ensalada Mixta");
+    cargarFoto(ui->lblFotoManzana, "Manzana");
+    cargarFoto(ui->lblFotoChocolatada, "Chocolatada 250 ml");
+    cargarFoto(ui->lblFotoYogur, "Yogur Bebible de Frutilla");
+    cargarFoto(ui->lblFotoAgua, "Agua Mineral 500 ml");
+    cargarFoto(ui->lblFotoJugo, "Jugo en Caja 200 ml");
+    cargarFoto(ui->lblFotoGaseosa, "Gaseosa 500ml");
+    cargarFoto(ui->lblFotoCafe, "Café con Leche");
+    cargarFoto(ui->lblFotoBarra, "Barra de Cereal");
+    cargarFoto(ui->lblFotoGalletitas, "Galletitas de Agua");
+    cargarFoto(ui->lblFotoAlfajor, "Alfajor de Maicena");
+    cargarFoto(ui->lblFotoTurron, "Turrón de Maní");
+    cargarFoto(ui->lblFotoFrutosSecos, "Mix de Frutos Secos");
+    cargarFoto(ui->lblFotoPolloPure, "Milanesa de Pollo con Puré");
+    cargarFoto(ui->lblFotoCombo, "Combo Sándwich + Gaseosa");
+
+    // Imagen de portada del cuerpo (portada.jpg en el .qrc); sin imagen queda la frase sobre bordó
+    cargarFoto(ui->lblPortada, "portada");
 
     actualizarBotonCarrito();
 }
@@ -36,159 +53,145 @@ MainWindow::~MainWindow()
 
 void MainWindow::actualizarBotonCarrito()
 {
-    int cant = SistemaBuffet::instancia().getCantidadTotalCarrito();
-    double total = SistemaBuffet::instancia().getTotalCarrito();
-    ui->btnCheckout->setText(QString("🛒 VER MI PEDIDO (%1 ítems - $%2) ➔")
+    // Iniciales del estudiante en el círculo del perfil
+    ui->btnPerfil->setText(SistemaBuffet::usuarioNombre.left(1) + SistemaBuffet::usuarioApellido.left(1));
+
+    // Saludo con el saldo actual (cambia al pagar con la cuenta escolar)
+    ui->lblUserGreeting->setText(QString("%1 %2 · %3 · Saldo $%4")
+        .arg(SistemaBuffet::usuarioNombre)
+        .arg(SistemaBuffet::usuarioApellido)
+        .arg(SistemaBuffet::usuarioCurso)
+        .arg(QString::number(SistemaBuffet::usuarioSaldo, 'f', 0)));
+
+    int cant = SistemaBuffet::getCantidadTotalCarrito();
+    double total = SistemaBuffet::getTotalCarrito();
+    ui->btnCheckout->setText(QString("TU PEDIDO · %1 · $%2")
         .arg(cant)
         .arg(QString::number(total, 'f', 0)));
 }
 
+void MainWindow::cargarFoto(QLabel *lblFoto, QString nombreProducto)
+{
+    QPixmap foto(":/imagenes/imagenes/" + nombreProducto + ".jpg");
+    if (foto.isNull()) {
+        return; // todavía no hay foto: queda el texto "Sin foto" del .ui
+    }
+    foto = foto.scaled(lblFoto->size(), Qt::KeepAspectRatio);
+    lblFoto->setPixmap(foto);
+}
+
 void MainWindow::abrirDetalleProducto(int id, const QString &nombre, const QString &desc, double precio, int stock)
 {
-    // Obtener stock actualizado del sistema si existe
-    bool encontrado = false;
-    ProductoBuffet p = SistemaBuffet::instancia().getProductoPorId(id, encontrado);
-    if (encontrado) {
-        stock = p.stock;
-        precio = p.precio;
-    }
-
     ProductDetailDialog dlg(id, nombre, desc, precio, stock, this);
     if (dlg.exec() == QDialog::Accepted) {
         actualizarBotonCarrito();
     }
 }
 
-void MainWindow::on_btnVerDetalleMenuDia1_clicked()
+void MainWindow::on_btnVerMilanesa_clicked()
 {
-    abrirDetalleProducto(1,
-        "🌟 Menu del Dia N° 1: Combo Almuerzo Gourmet",
-        "Incluye: Milanesa a la Napolitana con papas rústicas al horno + Bebida 500ml a elección + Postre o Fruta de estación.",
-        8500.0, 20
-    );
+    abrirDetalleProducto(1, "Sándwich de Milanesa", "Milanesa de carne en pan francés con lechuga y tomate", 2800.0, SistemaBuffet::productosStock[1]);
 }
 
-void MainWindow::on_btnVerDetalleMenuDia2_clicked()
+void MainWindow::on_btnVerEmpanada_clicked()
 {
-    abrirDetalleProducto(2,
-        "🥗 Menu del Dia N° 2: Combo Express Saludable",
-        "Incluye: Porción de Tarta Rústica de Verdura y Queso + Ensalada fresca de estación + Agua Mineral 500ml.",
-        5200.0, 15
-    );
+    abrirDetalleProducto(2, "Empanada de Carne", "Empanada al horno rellena de carne cortada a cuchillo", 1100.0, SistemaBuffet::productosStock[2]);
 }
 
-void MainWindow::on_btnVerDetalleMilanesa_clicked()
+void MainWindow::on_btnVerPizza_clicked()
 {
-    abrirDetalleProducto(3,
-        "🥪 Sándwich de Milanesa Ciabatta Completo",
-        "Milanesa tierna de ternera, lechuga fresca, tomate, queso tybo y aderezo artesanal en pan ciabatta crocante horneado en el día.",
-        2800.0, 35
-    );
+    abrirDetalleProducto(3, "Porción de Pizza Muzzarella", "Porción de pizza de muzzarella", 1800.0, SistemaBuffet::productosStock[3]);
 }
 
-void MainWindow::on_btnVerDetalleEmpanada_clicked()
+void MainWindow::on_btnVerPebete_clicked()
 {
-    abrirDetalleProducto(4,
-        "🥟 Empanada de Carne Cortada a Cuchillo",
-        "Empanada tradicional horneada, rellena de ternera seleccionada cortada a cuchillo, cebolla de verdeo y especias criollas.",
-        1200.0, 40
-    );
+    abrirDetalleProducto(4, "Pebete de Queso", "Pebete con queso cremoso", 1600.0, SistemaBuffet::productosStock[4]);
 }
 
-void MainWindow::on_btnVerDetalleTarta_clicked()
+void MainWindow::on_btnVerMedialuna_clicked()
 {
-    abrirDetalleProducto(5,
-        "🥧 Tarta Rústica de Jamón y Queso",
-        "Porción abundante de tarta casera con doble capa de queso mozzarella fundido, jamón cocido de primera y masa hojaldrada.",
-        2400.0, 18
-    );
+    abrirDetalleProducto(5, "Medialuna de Manteca", "Medialuna dulce de manteca", 800.0, SistemaBuffet::productosStock[5]);
 }
 
-void MainWindow::on_btnVerDetallePebete_clicked()
+void MainWindow::on_btnVerEnsalada_clicked()
 {
-    abrirDetalleProducto(6,
-        "🥖 Pebete Tradicional de Jamón y Queso",
-        "Pan pebete artesanal suave, abundante jamón cocido, queso tybo en fetas y manteca de primera calidad.",
-        1800.0, 25
-    );
+    abrirDetalleProducto(6, "Ensalada Mixta", "Lechuga, tomate y zanahoria", 2200.0, SistemaBuffet::productosStock[6]);
 }
 
-void MainWindow::on_btnVerDetalleAlfajor_clicked()
+void MainWindow::on_btnVerManzana_clicked()
 {
-    abrirDetalleProducto(7,
-        "🍫 Alfajor Artesanal de Dulce de Leche",
-        "Dos tapas suavemente horneadas con relleno abundante de dulce de leche repostero, bañado en fino chocolate semi-amargo.",
-        1100.0, 50
-    );
+    abrirDetalleProducto(7, "Manzana", "Manzana roja por unidad", 700.0, SistemaBuffet::productosStock[7]);
 }
 
-void MainWindow::on_btnVerDetallePastafrola_clicked()
+void MainWindow::on_btnVerChocolatada_clicked()
 {
-    abrirDetalleProducto(8,
-        "🥮 Porción de Pasta Frola Artesanal",
-        "Receta tradicional casera con dulce de membrillo especial y enrejado de masa sablée de manteca.",
-        1500.0, 22
-    );
+    abrirDetalleProducto(8, "Chocolatada 250 ml", "Leche chocolatada en envase individual", 1100.0, SistemaBuffet::productosStock[8]);
 }
 
-void MainWindow::on_btnVerDetalleFactura_clicked()
+void MainWindow::on_btnVerYogur_clicked()
 {
-    abrirDetalleProducto(9,
-        "🥐 Factura de Manteca Seleccionada",
-        "Medialuna u opción hojaldrada artesanal horneada cada mañana en el buffet.",
-        600.0, 60
-    );
+    abrirDetalleProducto(9, "Yogur Bebible de Frutilla", "Yogur bebible 200 ml", 1200.0, SistemaBuffet::productosStock[9]);
 }
 
-void MainWindow::on_btnVerDetalleMuffin_clicked()
+void MainWindow::on_btnVerAgua_clicked()
 {
-    abrirDetalleProducto(10,
-        "🧁 Muffin de Chocolate con Corazón Dulce",
-        "Esponjoso muffin de cacao intenso con chispas de chocolate y corazón de dulce de leche.",
-        1400.0, 30
-    );
+    abrirDetalleProducto(10, "Agua Mineral 500 ml", "Agua mineral sin gas", 1000.0, SistemaBuffet::productosStock[10]);
 }
 
-void MainWindow::on_btnVerDetalleGaseosa_clicked()
+void MainWindow::on_btnVerJugo_clicked()
 {
-    abrirDetalleProducto(11,
-        "🥤 Gaseosa Línea Coca-Cola 500ml",
-        "Botella de 500ml bien fría (Coca-Cola, Sprite o Fanta a elección al retirar).",
-        1300.0, 45
-    );
+    abrirDetalleProducto(11, "Jugo en Caja 200 ml", "Jugo de frutas en envase individual", 900.0, SistemaBuffet::productosStock[11]);
 }
 
-void MainWindow::on_btnVerDetalleAgua_clicked()
+void MainWindow::on_btnVerGaseosa_clicked()
 {
-    abrirDetalleProducto(12,
-        "💧 Agua Mineral Villavicencio 500ml",
-        "Agua mineral de manantial sin gas de 500ml.",
-        900.0, 50
-    );
+    abrirDetalleProducto(12, "Gaseosa 500ml", "Gaseosa línea cola 500 ml", 1300.0, SistemaBuffet::productosStock[12]);
 }
 
-void MainWindow::on_btnVerDetalleJugo_clicked()
+void MainWindow::on_btnVerCafe_clicked()
 {
-    abrirDetalleProducto(13,
-        "🍊 Jugo Natural Exprimido de Naranja 350ml",
-        "Jugo 100% natural de naranjas seleccionadas exprimidas en el día, sin conservantes.",
-        1600.0, 25
-    );
+    abrirDetalleProducto(13, "Café con Leche", "Vaso de café con leche", 1400.0, SistemaBuffet::productosStock[13]);
 }
 
-void MainWindow::on_btnVerDetalleLicuado_clicked()
+void MainWindow::on_btnVerBarra_clicked()
 {
-    abrirDetalleProducto(14,
-        "🍓 Licuado Frutal de Frutilla y Banana 400ml",
-        "Licuado con leche o agua y fruta fresca de estación preparado en el momento.",
-        2200.0, 20
-    );
+    abrirDetalleProducto(14, "Barra de Cereal", "Barra de cereal con frutas", 900.0, SistemaBuffet::productosStock[14]);
+}
+
+void MainWindow::on_btnVerGalletitas_clicked()
+{
+    abrirDetalleProducto(15, "Galletitas de Agua", "Paquete individual de galletitas de agua", 700.0, SistemaBuffet::productosStock[15]);
+}
+
+void MainWindow::on_btnVerAlfajor_clicked()
+{
+    abrirDetalleProducto(16, "Alfajor de Maicena", "Alfajor de maicena con dulce de leche y coco", 800.0, SistemaBuffet::productosStock[16]);
+}
+
+void MainWindow::on_btnVerTurron_clicked()
+{
+    abrirDetalleProducto(17, "Turrón de Maní", "Turrón de maní individual", 600.0, SistemaBuffet::productosStock[17]);
+}
+
+void MainWindow::on_btnVerFrutosSecos_clicked()
+{
+    abrirDetalleProducto(18, "Mix de Frutos Secos", "Mix de almendras, pasas y maní sin sal", 1500.0, SistemaBuffet::productosStock[18]);
+}
+
+void MainWindow::on_btnVerPolloPure_clicked()
+{
+    abrirDetalleProducto(19, "Milanesa de Pollo con Puré", "Milanesa al horno con puré de papas", 4200.0, SistemaBuffet::productosStock[19]);
+}
+
+void MainWindow::on_btnVerCombo_clicked()
+{
+    abrirDetalleProducto(20, "Combo Sándwich + Gaseosa", "Sándwich de milanesa + gaseosa 500 ml", 4100.0, SistemaBuffet::productosStock[20]);
 }
 
 void MainWindow::on_btnCheckout_clicked()
 {
     // [NEG-04] Carrito no vacío
-    if (SistemaBuffet::instancia().getCarrito().isEmpty()) {
+    if (SistemaBuffet::carritoNombres.isEmpty()) {
         QMessageBox::warning(this, "Carrito Vacío",
             "Tu carrito está actualmente vacío.\nPor favor agrega al menos un producto o menú antes de proceder.");
         return;
@@ -212,8 +215,14 @@ void MainWindow::on_btnCheckout_clicked()
 
 void MainWindow::on_btnLogout_clicked()
 {
-    SistemaBuffet::instancia().cerrarSesion();
     LoginWindow *loginWin = new LoginWindow();
     loginWin->show();
     this->close();
+}
+
+void MainWindow::on_btnPerfil_clicked()
+{
+    PerfilDialog perfil(this);
+    perfil.exec();
+    actualizarBotonCarrito(); // por si cargó saldo
 }
