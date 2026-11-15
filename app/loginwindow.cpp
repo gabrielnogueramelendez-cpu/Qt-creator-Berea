@@ -57,14 +57,14 @@ void LoginWindow::actualizarCamposSegunRol(int index)
     switch (index) {
     case 0: // Estudiante
         ui->lblUser->setText("APODO");
-        ui->txtUser->setPlaceholderText("jorgedah09");
+        ui->txtUser->setPlaceholderText("davidmel09");
         ui->lblPinCajero->hide();
         ui->txtPinCajero->hide();
         ui->lblTokenDev->hide();
         ui->txtTokenDev->hide();
         ui->lblNoAccount->show();
         ui->btnGoRegister->show();
-        ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: jorgedah09 · Clave: Jorgedah#2026");
+        ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: davidmel09 · Clave: Davidmel#2026");
         break;
 
     case 1: // Personal de Buffet / Cajero
