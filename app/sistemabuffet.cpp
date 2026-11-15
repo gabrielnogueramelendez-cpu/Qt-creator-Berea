@@ -56,12 +56,13 @@ QString SistemaBuffet::menuHoyPlato = "";
 QString SistemaBuffet::menuHoyIncluye = "";
 double SistemaBuffet::menuHoyPrecio = 0;
 
-// Mismos menús que Menu_Del_Dia y Detalle_Menu_Dia (04_DatosSQL), en orden de Menu_Del_DiaID
-QStringList SistemaBuffet::menusPlatos = {"Milanesa de pollo con puré", "Fideos con tuco y queso", "Tarta de zapallitos con ensalada", "Pollo al horno con arroz", "Tortilla de papas con ensalada", "Ñoquis con salsa mixta", "Hamburguesa casera con ensalada", "Pastel de papa", "Wok de verduras y pollo", "Canelones de verdura", "Empanadas (2) con ensalada", "Guiso de lentejas", "Arroz con pollo", "Pizza casera con ensalada", "Milanesa napolitana con papas", "Salpicón de ave", "Revuelto gramajo", "Ravioles con salsa fileto", "Tarta de choclo con ensalada", "Zapallitos rellenos"};
-QList<double> SistemaBuffet::menusPrecios = {4200, 3800, 3900, 4300, 3900, 4000, 4400, 4100, 4300, 4200, 3700, 3800, 4000, 3900, 4600, 3800, 4100, 4300, 3900, 3900};
-QList<int> SistemaBuffet::menusStocks = {40, 35, 30, 40, 40, 35, 35, 35, 25, 30, 30, 20, 20, 25, 40, 35, 40, 35, 30, 25};
-QStringList SistemaBuffet::menusFechas = {"2026-10-14", "2026-10-15", "2026-10-16", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-09", "2026-11-10"};
-QStringList SistemaBuffet::menusIncluye = {"Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla"};
+// Menú semanal fijo: los 5 primeros menús de Menu_Del_Dia y Detalle_Menu_Dia (04_DatosSQL), en orden de Menu_Del_DiaID.
+// Las semanas siguientes de la BDD repiten estos mismos platos
+QStringList SistemaBuffet::menusDias = {"Miércoles", "Jueves", "Viernes", "Lunes", "Martes"};
+QStringList SistemaBuffet::menusPlatos = {"Milanesa de pollo con puré", "Fideos con tuco y queso", "Ravioles con salsa fileto", "Tarta de choclo con ensalada", "Tortilla de papas con ensalada"};
+QList<double> SistemaBuffet::menusPrecios = {4200, 3800, 4300, 3900, 3900};
+QList<int> SistemaBuffet::menusStocks = {40, 35, 35, 30, 40};
+QStringList SistemaBuffet::menusIncluye = {"Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Jugo en Caja 200 ml", "Manzana", "Agua Mineral 500 ml"};
 
 QList<int> SistemaBuffet::pedidosRetiroIds;
 QStringList SistemaBuffet::pedidosCodigos;
@@ -140,9 +141,13 @@ void SistemaBuffet::cargarMenuDelDia()
     menuHoyPrecio = 0;
     productosStock[0] = 0;
 
+    // El día de la semana lo calcula Qt (dayOfWeek: 1 = lunes ... 7 = domingo) y se lo pasa al SP
+    QStringList dias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
+    QString hoy = dias[QDate::currentDate().dayOfWeek() - 1];
+
     if (conn != NULL) {
-        // Con BDD: sp_menu_del_dia devuelve el menú de hoy (y lo copia del ciclo si no estaba cargado)
-        MYSQL_RES *result = obtener_menu_del_dia(conn);
+        // Con BDD: sp_menu_del_dia devuelve el menú de hoy (y copia el menú fijo de ese día si no estaba cargado)
+        MYSQL_RES *result = obtener_menu_del_dia(conn, hoy);
         if (result == NULL) return;
         MYSQL_ROW fila = NULL;
         if (error_del_sp(result) == 0) {
@@ -159,19 +164,14 @@ void SistemaBuffet::cargarMenuDelDia()
         return;
     }
 
-    // Sin BDD: el primer menú cargado un múltiplo de 28 días antes de hoy (o el mismo día)
-    QDate hoy = QDate::currentDate();
-    if (hoy.dayOfWeek() > 5) return; // sábado o domingo
-    for (int i = 0; i < menusFechas.size(); ++i) {
-        int dias = QDate::fromString(menusFechas[i], "yyyy-MM-dd").daysTo(hoy);
-        if (dias >= 0 && dias % 28 == 0) {
-            menuHoyID = i + 1;
-            menuHoyPlato = menusPlatos[i];
-            menuHoyIncluye = menusIncluye[i];
-            menuHoyPrecio = menusPrecios[i];
-            productosStock[0] = menusStocks[i];
-            return;
-        }
+    // Sin BDD: el menú fijo de ese día de la semana (sábado y domingo no están en la lista)
+    int i = menusDias.indexOf(hoy);
+    if (i != -1) {
+        menuHoyID = i + 1;
+        menuHoyPlato = menusPlatos[i];
+        menuHoyIncluye = menusIncluye[i];
+        menuHoyPrecio = menusPrecios[i];
+        productosStock[0] = menusStocks[i];
     }
 }
 
