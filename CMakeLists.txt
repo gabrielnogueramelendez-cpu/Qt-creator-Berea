@@ -75,19 +75,26 @@ target_link_libraries(ElBuffetDeAlejandro PRIVATE
     Qt${QT_VERSION_MAJOR}::Sql
 )
 
-# Librería de C de MySQL (mysql.h y libmysql), la que viene con MySQL Server
-set(MYSQL_DIR "C:/Program Files/MySQL/MySQL Server 8.0")
-target_include_directories(ElBuffetDeAlejandro PRIVATE "${MYSQL_DIR}/include")
-target_link_libraries(ElBuffetDeAlejandro PRIVATE "${MYSQL_DIR}/lib/libmysql.lib")
+# Librería de C de MySQL (mysql.h y libmysql)
+if(WIN32)
+    # Windows: la que viene con MySQL Server
+    set(MYSQL_DIR "C:/Program Files/MySQL/MySQL Server 8.0")
+    target_include_directories(ElBuffetDeAlejandro PRIVATE "${MYSQL_DIR}/include")
+    target_link_libraries(ElBuffetDeAlejandro PRIVATE "${MYSQL_DIR}/lib/libmysql.lib")
 
-# libmysql.dll y las dos de OpenSSL que usa tienen que estar al lado del .exe
-add_custom_command(TARGET ElBuffetDeAlejandro POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${MYSQL_DIR}/lib/libmysql.dll"
-        "${MYSQL_DIR}/bin/libssl-3-x64.dll"
-        "${MYSQL_DIR}/bin/libcrypto-3-x64.dll"
-        $<TARGET_FILE_DIR:ElBuffetDeAlejandro>
-)
+    # libmysql.dll y las dos de OpenSSL que usa tienen que estar al lado del .exe
+    add_custom_command(TARGET ElBuffetDeAlejandro POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${MYSQL_DIR}/lib/libmysql.dll"
+            "${MYSQL_DIR}/bin/libssl-3-x64.dll"
+            "${MYSQL_DIR}/bin/libcrypto-3-x64.dll"
+            $<TARGET_FILE_DIR:ElBuffetDeAlejandro>
+    )
+else()
+    # Ubuntu: paquete libmysqlclient-dev, igual que "g++ ... -lmysqlclient" de la guía del profesor
+    target_include_directories(ElBuffetDeAlejandro PRIVATE /usr/include/mysql)
+    target_link_libraries(ElBuffetDeAlejandro PRIVATE mysqlclient)
+endif()
 
 # Finalización para Qt6
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
