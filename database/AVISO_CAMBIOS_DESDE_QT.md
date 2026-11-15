@@ -58,3 +58,9 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
    - las enumeraciones: los IDs de 05, el "-- 21" de los inserts, los casos i a iv de 06 y los "Paso 1/2/3" de los tuneados.
 2. 06: P01 ahora espera UserID 32 (el 31 es soporte.dev). El caso ii de P25 dice "No se crea el retiro (0 filas)".
 3. 06_PruebasSQL (1).xlsx: se rehizo desde una corrida real de 03 -> 04 -> 05 -> 06 en MySQL 8.0. Tiene 27 pruebas y 108 casos, todos en PASS, con el mismo formato que antes. Las redacciones viejas de H e I se conservaron.
+
+## Sexta tanda: estudiantes para probar el registro
+
+1. 04_DatosSQL: se agregaron 3 estudiantes sin usuario, para que se pueda probar sp_registrar_usuario en la exposición. Los 20 anteriores ya tenían usuario.
+   - 48715903 Pablo Linares (6° 1ra), 48902617 Cynthia Berea (6° 2da), 49031458 Cristian Dávalos (6° 3ra). DNI y fecha de nacimiento son inventados.
+2. No cambia ningún UserID ni ningún resultado de 06: la planilla de pruebas sigue igual.
