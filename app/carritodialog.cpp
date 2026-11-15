@@ -35,7 +35,9 @@ void CarritoDialog::recargarTablaCarrito()
 
     for (int i = 0; i < SistemaBuffet::carritoIds.size(); ++i) {
         ui->tableCarrito->insertRow(i);
-        ui->tableCarrito->setItem(i, 0, new QTableWidgetItem(QString::number(SistemaBuffet::carritoIds[i])));
+        // El id 0 es el menú del día
+        QString id = SistemaBuffet::carritoIds[i] == 0 ? QString("Menú") : QString::number(SistemaBuffet::carritoIds[i]);
+        ui->tableCarrito->setItem(i, 0, new QTableWidgetItem(id));
         ui->tableCarrito->setItem(i, 1, new QTableWidgetItem(SistemaBuffet::carritoNombres[i]));
         ui->tableCarrito->setItem(i, 2, new QTableWidgetItem("$" + QString::number(SistemaBuffet::carritoPrecios[i], 'f', 0)));
         ui->tableCarrito->setItem(i, 3, new QTableWidgetItem(QString::number(SistemaBuffet::carritoCantidades[i])));

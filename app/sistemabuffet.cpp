@@ -1,5 +1,6 @@
 #include "sistemabuffet.h"
 #include "basedatos.h"
+#include <QDate>
 
 // Definición e inicialización de variables estáticas
 MYSQL *SistemaBuffet::conn = NULL;
@@ -49,6 +50,18 @@ QList<int> SistemaBuffet::productosStock = {0, 40, 80, 50, 45, 90, 25, 70, 70, 6
                                             100, 100, 60, 80, 80, 70, 60, 40, 25, 40};
 QList<double> SistemaBuffet::productosPrecios = {0, 2800, 1100, 1800, 1600, 800, 2200, 700, 1100, 1200, 1000,
                                                  900, 1300, 1400, 900, 700, 800, 600, 1500, 4200, 4100};
+
+int SistemaBuffet::menuHoyID = 0;
+QString SistemaBuffet::menuHoyPlato = "";
+QString SistemaBuffet::menuHoyIncluye = "";
+double SistemaBuffet::menuHoyPrecio = 0;
+
+// Mismos menús que Menu_Del_Dia y Detalle_Menu_Dia (04_DatosSQL), en orden de Menu_Del_DiaID
+QStringList SistemaBuffet::menusPlatos = {"Milanesa de pollo con puré", "Fideos con tuco y queso", "Tarta de zapallitos con ensalada", "Pollo al horno con arroz", "Tortilla de papas con ensalada", "Ñoquis con salsa mixta", "Hamburguesa casera con ensalada", "Pastel de papa", "Wok de verduras y pollo", "Canelones de verdura", "Empanadas (2) con ensalada", "Guiso de lentejas", "Arroz con pollo", "Pizza casera con ensalada", "Milanesa napolitana con papas", "Salpicón de ave", "Revuelto gramajo", "Ravioles con salsa fileto", "Tarta de choclo con ensalada", "Zapallitos rellenos"};
+QList<double> SistemaBuffet::menusPrecios = {4200, 3800, 3900, 4300, 3900, 4000, 4400, 4100, 4300, 4200, 3700, 3800, 4000, 3900, 4600, 3800, 4100, 4300, 3900, 3900};
+QList<int> SistemaBuffet::menusStocks = {40, 35, 30, 40, 40, 35, 35, 35, 25, 30, 30, 20, 20, 25, 40, 35, 40, 35, 30, 25};
+QStringList SistemaBuffet::menusFechas = {"2026-10-14", "2026-10-15", "2026-10-16", "2026-10-19", "2026-10-20", "2026-10-21", "2026-10-22", "2026-10-23", "2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05", "2026-11-06", "2026-11-09", "2026-11-10"};
+QStringList SistemaBuffet::menusIncluye = {"Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Manzana", "Yogur Bebible de Frutilla"};
 
 QList<int> SistemaBuffet::pedidosRetiroIds;
 QStringList SistemaBuffet::pedidosCodigos;
@@ -115,6 +128,51 @@ void SistemaBuffet::inicializarDatos()
     pedidosVueltos.append(0.0);
     pedidosEstados.append("PENDIENTE");
     pedidosDetalles.append("1x Sándwich de Milanesa ($2800)");
+
+    cargarMenuDelDia();
+}
+
+void SistemaBuffet::cargarMenuDelDia()
+{
+    menuHoyID = 0;
+    menuHoyPlato = "";
+    menuHoyIncluye = "";
+    menuHoyPrecio = 0;
+    productosStock[0] = 0;
+
+    if (conn != NULL) {
+        // Con BDD: sp_menu_del_dia devuelve el menú de hoy (y lo copia del ciclo si no estaba cargado)
+        MYSQL_RES *result = obtener_menu_del_dia(conn);
+        if (result == NULL) return;
+        MYSQL_ROW fila = NULL;
+        if (error_del_sp(result) == 0) {
+            fila = mysql_fetch_row(result);
+        }
+        if (fila != NULL) {
+            menuHoyID = valor_fila(fila, 0).toInt();
+            menuHoyPlato = valor_fila(fila, 1);
+            menuHoyPrecio = valor_fila(fila, 2).toDouble();
+            productosStock[0] = valor_fila(fila, 3).toInt();
+            menuHoyIncluye = valor_fila(fila, 5);
+        }
+        mysql_free_result(result);
+        return;
+    }
+
+    // Sin BDD: el primer menú cargado un múltiplo de 28 días antes de hoy (o el mismo día)
+    QDate hoy = QDate::currentDate();
+    if (hoy.dayOfWeek() > 5) return; // sábado o domingo
+    for (int i = 0; i < menusFechas.size(); ++i) {
+        int dias = QDate::fromString(menusFechas[i], "yyyy-MM-dd").daysTo(hoy);
+        if (dias >= 0 && dias % 28 == 0) {
+            menuHoyID = i + 1;
+            menuHoyPlato = menusPlatos[i];
+            menuHoyIncluye = menusIncluye[i];
+            menuHoyPrecio = menusPrecios[i];
+            productosStock[0] = menusStocks[i];
+            return;
+        }
+    }
 }
 
 void SistemaBuffet::agregarAlCarrito(int id, QString nombre, double precio, int cantidad)
@@ -246,6 +304,8 @@ void SistemaBuffet::cargarDesdeBDD()
         }
         mysql_free_result(result);
     }
+
+    cargarMenuDelDia();
 }
 
 void SistemaBuffet::cerrarSesion()

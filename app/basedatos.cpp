@@ -191,6 +191,18 @@ MYSQL_RES* agregar_producto_carrito(MYSQL *conn, int ventaID, int productoID, in
     return ejecutar_consulta(conn, sql);
 }
 
+MYSQL_RES* obtener_menu_del_dia(MYSQL *conn)
+{
+    return ejecutar_consulta(conn, "CALL schema_comercial.sp_menu_del_dia(CURDATE());");
+}
+
+MYSQL_RES* agregar_menu_carrito(MYSQL *conn, int ventaID, int menuID, int cantidad)
+{
+    std::string sql = "CALL schema_comercial.sp_agregar_menu_carrito(" + std::to_string(ventaID) + ", "
+                      + std::to_string(menuID) + ", " + std::to_string(cantidad) + ");";
+    return ejecutar_consulta(conn, sql);
+}
+
 MYSQL_RES* generar_retiro(MYSQL *conn, int ventaID, int franjaID, const QString &codigo)
 {
     std::string sql = "CALL schema_comercial.sp_generar_retiro(" + std::to_string(ventaID) + ", "

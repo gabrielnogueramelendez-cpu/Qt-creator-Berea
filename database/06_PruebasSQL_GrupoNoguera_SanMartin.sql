@@ -363,3 +363,24 @@ CALL sp_modificar_precio(27, 1, -1);
 SELECT Precio_Producto,
        (SELECT COUNT(*) FROM schema_usuarios.Log_Auditoria WHERE Tipo_Evento_ID = 22) AS Cambios_De_Precio
 FROM Producto WHERE ProductoID = 1;
+
+-- ############################################################################
+-- MENÚ DEL DÍA QUE SE REPITE CADA 4 SEMANAS
+-- ############################################################################
+USE schema_comercial;
+
+-- ---------------- P28 sp_menu_del_dia ----------------
+-- i. Éxito: miércoles 03/03/2027 sin menú cargado: copia el menú 1 (mismo día del ciclo de 28 días)
+CALL sp_menu_del_dia('2027-03-03');
+-- ii. Sábado 06/03/2027: 0 filas (los fines de semana no hay menú)
+CALL sp_menu_del_dia('2027-03-06');
+-- iii. Fecha NULL: 0 filas
+CALL sp_menu_del_dia(NULL);
+-- iii-bis. Día que ya tiene menú (14/10/2026): devuelve el menú 1 sin copiar nada
+CALL sp_menu_del_dia('2026-10-14');
+-- iv. Consistencia: pedirlo otra vez no lo duplica (1 menú y 1 producto incluido el 03/03/2027)
+CALL sp_menu_del_dia('2027-03-03');
+SELECT COUNT(*) AS Menus,
+       (SELECT COUNT(*) FROM Detalle_Menu_Dia d INNER JOIN Menu_Del_Dia m ON d.Menu_Del_DiaID = m.Menu_Del_DiaID
+        WHERE m.Fecha_menu = '2027-03-03') AS Productos_Incluidos
+FROM Menu_Del_Dia WHERE Fecha_menu = '2027-03-03';

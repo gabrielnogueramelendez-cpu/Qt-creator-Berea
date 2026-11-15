@@ -82,3 +82,14 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
 4. 06_PruebasSQL: P01 suma el caso "i-bis" (registro de un profesor, UserID 33) y el caso iv revisa los dos usuarios. P02 espera "Personal de caja".
 5. Planilla: se rehizo desde una corrida real. Cambian P01, P02 y la cantidad de eventos de hoy en P21.
 6. Falta actualizar el DER y el modelo de Codd en drawio con Rol, Profesor y las dos columnas nuevas de Usuario.
+
+## Octava tanda: menú del día que se repite
+
+1. 05_Backend: SP nuevo sp_menu_del_dia(p_Fecha), en schema_comercial (ahora son 27 SPs).
+   - Los menús se repiten cada 4 semanas (20 días hábiles). Si un día hábil no tiene menú cargado, copia el primer menú cargado hace 28, 56, ... días, con su stock inicial y su producto incluido.
+   - Sábado, domingo o fecha NULL sin menú cargado: 0 filas. Si ese día ya tiene menú, lo devuelve sin copiar nada.
+   - sp_agregar_menu_carrito no cambia: se sigue comprando solo el menú con la fecha de la venta.
+2. 06_PruebasSQL: P28 sp_menu_del_dia (copia el 03/03/2027 desde el menú 1, sábado sin menú, NULL, día ya cargado y que no se duplica).
+3. Planilla: se rehizo desde una corrida real. Ahora tiene 28 pruebas y 112 casos; P01 a P27 no cambian.
+4. La app (Qt) usa sp_menu_del_dia para la pestaña "Menú del día" y sp_agregar_menu_carrito al pagar.
+5. El horario de retiro (recreo posterior a la compra) se controla en la app, no en sp_generar_retiro: si lo controlara el SP, P11 daría distinto según la hora a la que se corre 06.
