@@ -10,8 +10,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-# Buscar paquetes Qt (Widgets y Sql)
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Sql)
+# Buscar paquetes Qt (Widgets y Sql). Versión para Qt 5: busca primero Qt5 y, si no está, usa Qt6
+find_package(QT NAMES Qt5 Qt6 REQUIRED COMPONENTS Widgets Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 
 # Lista de fuentes, encabezados e interfaces gráficas
