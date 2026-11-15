@@ -8,6 +8,7 @@
 #include "loginwindow.h"
 #include "sistemabuffet.h"
 #include <QMessageBox>
+#include <QDate>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -66,6 +67,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Imagen de portada del cuerpo (portada.jpg en el .qrc); sin imagen queda la frase sobre bordó
     cargarFoto(ui->lblPortada, "portada");
 
+    mostrarMenuDelDia();
     actualizarBotonCarrito();
 }
 
@@ -91,6 +93,19 @@ void MainWindow::actualizarBotonCarrito()
     ui->btnCheckout->setText(QString("TU PEDIDO · %1 · $%2")
         .arg(cant)
         .arg(QString::number(total, 'f', 0)));
+}
+
+void MainWindow::mostrarMenuDelDia()
+{
+    // Sin menú hoy (sábado o domingo): queda el texto del .ui y no se puede agregar
+    ui->btnVerMenu->setEnabled(SistemaBuffet::menuHoyID != 0);
+    if (SistemaBuffet::menuHoyID == 0) return;
+
+    ui->lblFechaMenu->setText("Menú del día\n" + QDate::currentDate().toString("dd/MM/yyyy"));
+    ui->lblPlatoMenu->setText(SistemaBuffet::menuHoyPlato);
+    ui->lblIncluyeMenu->setText("Incluye: " + SistemaBuffet::menuHoyIncluye);
+    ui->lblPrecioMenu->setText("$" + QString::number(SistemaBuffet::menuHoyPrecio, 'f', 0));
+    ui->lblStockMenu->setText(QString("QUEDAN %1").arg(SistemaBuffet::productosStock[0]));
 }
 
 void MainWindow::cargarFoto(QLabel *lblFoto, QString nombreProducto)
@@ -211,6 +226,11 @@ void MainWindow::on_btnVerCombo_clicked()
     abrirDetalleProducto(20, "Combo Sándwich + Gaseosa", "Sándwich de milanesa + gaseosa 500 ml", SistemaBuffet::productosPrecios[20], SistemaBuffet::productosStock[20]);
 }
 
+void MainWindow::on_btnVerMenu_clicked()
+{
+    abrirDetalleProducto(0, SistemaBuffet::menuHoyPlato, "Menú del día. Incluye: " + SistemaBuffet::menuHoyIncluye, SistemaBuffet::menuHoyPrecio, SistemaBuffet::productosStock[0]);
+}
+
 void MainWindow::on_btnCheckout_clicked()
 {
     // [NEG-04] Carrito no vacío
@@ -233,6 +253,8 @@ void MainWindow::on_btnCheckout_clicked()
         }
     }
 
+    SistemaBuffet::cargarDesdeBDD(); // con BDD: stock y menú actualizados después de la compra
+    mostrarMenuDelDia();
     actualizarBotonCarrito();
 }
 

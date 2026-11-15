@@ -222,6 +222,219 @@ QPushButton:hover { color: #6B1B2A; }</string>
       <property name="currentIndex">
        <number>0</number>
       </property>
+      <widget class="QWidget" name="tabMenuDia">
+       <attribute name="title">
+        <string>MENÚ DEL DÍA</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="layoutTabMenuDia">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="fondoMenuDia">
+          <property name="styleSheet">
+           <string>#fondoMenuDia { background-color: #EDE3D3; }</string>
+          </property>
+          <layout class="QGridLayout" name="grillaMenuDia">
+           <property name="leftMargin">
+            <number>40</number>
+           </property>
+           <property name="topMargin">
+            <number>22</number>
+           </property>
+           <property name="rightMargin">
+            <number>24</number>
+           </property>
+           <property name="bottomMargin">
+            <number>22</number>
+           </property>
+           <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop">
+            <widget class="QFrame" name="cardMenuDia">
+             <property name="minimumSize">
+              <size>
+               <width>352</width>
+               <height>370</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>352</width>
+               <height>370</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string>#cardMenuDia { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+             </property>
+             <layout class="QVBoxLayout" name="layoutCardMenuDia">
+              <property name="spacing">
+               <number>8</number>
+              </property>
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>14</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="lblFechaMenu">
+                <property name="minimumSize">
+                 <size>
+                  <width>350</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>350</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string>background-color: #6B1B2A; color: #FBF6EC; font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px;</string>
+                </property>
+                <property name="text">
+                 <string>Menú del día</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="layoutTextoMenuDia">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <property name="leftMargin">
+                 <number>16</number>
+                </property>
+                <property name="topMargin">
+                 <number>4</number>
+                </property>
+                <property name="rightMargin">
+                 <number>16</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="lblPlatoMenu">
+                  <property name="styleSheet">
+                   <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                  </property>
+                  <property name="text">
+                   <string>Hoy no hay menú del día</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblIncluyeMenu">
+                  <property name="styleSheet">
+                   <string>font-size: 12px; color: #7A6A60;</string>
+                  </property>
+                  <property name="text">
+                   <string>El menú se sirve de lunes a viernes.</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="espacioCardMenuDia">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QFrame" name="lineaMenuDia">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string>background-color: #D9CBB5;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="layoutPieMenuDia">
+                  <item>
+                   <layout class="QVBoxLayout" name="layoutPrecioMenuDia">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lblPrecioMenu">
+                      <property name="styleSheet">
+                       <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lblStockMenu">
+                      <property name="styleSheet">
+                       <string>font-size: 10px; color: #7A6A60;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <widget class="QPushButton" name="btnVerMenu">
+                    <property name="text">
+                     <string>AGREGAR</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tabPlatos">
        <attribute name="title">
         <string>PLATOS Y COMBOS</string>

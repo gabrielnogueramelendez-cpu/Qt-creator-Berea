@@ -38,7 +38,7 @@ cmake --build build
 
 ## Base de datos
 
-Ver [`database/README.md`](database/README.md): son 3 schemas, 27 tablas y 26 stored procedures. Antes de abrir la app hay que ejecutar en MySQL los scripts 03, 04 y 05. La app se conecta con la API de C de MySQL y usa los stored procedures; si MySQL no está corriendo, avisa y funciona con los mismos datos en memoria, sin guardar cambios.
+Ver [`database/README.md`](database/README.md): son 3 schemas, 27 tablas y 27 stored procedures. Antes de abrir la app hay que ejecutar en MySQL los scripts 03, 04 y 05. La app se conecta con la API de C de MySQL y usa los stored procedures; si MySQL no está corriendo, avisa y funciona con los mismos datos en memoria, sin guardar cambios.
 
 ## Roles
 

@@ -37,6 +37,7 @@ private slots:
     void on_btnVerFrutosSecos_clicked();
     void on_btnVerPolloPure_clicked();
     void on_btnVerCombo_clicked();
+    void on_btnVerMenu_clicked();
     void on_btnCheckout_clicked();
     void on_btnPerfil_clicked();
     void on_btnLogout_clicked();
@@ -44,6 +45,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     void actualizarBotonCarrito();
+    void mostrarMenuDelDia();
     void cargarFoto(QLabel *lblFoto, QString nombreProducto);
     void abrirDetalleProducto(int id, const QString &nombre, const QString &desc, double precio, int stock = 15);
 };
