@@ -281,7 +281,7 @@ INSERT INTO Rol (Nombre_Rol) VALUES ('Desarrollador');  -- 5
 -- ----------------------------------------------------------------------------
 -- Estudiante (22 - todos de la ET N° 3, ID_Colegio = 1)
 -- ----------------------------------------------------------------------------
-INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('12345678', '20-12345678-3', 'Jorge', 'Dahan', '2008-08-21', 1, 21);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('12345678', '20-12345678-3', 'David', 'Melendez', '2008-08-21', 1, 21);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('45987654', '27-45987654-0', 'Lucía', 'Gómez', '2008-11-03', 1, 22);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48499250', '23-48499250-9', 'Mateo', 'Fernández', '2011-09-30', 1, 11);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('51715407', '27-51715407-0', 'Valentina', 'Rodríguez', '2013-11-26', 1, 4);
@@ -332,7 +332,7 @@ INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacim
 -- ----------------------------------------------------------------------------
 -- Usuario (31) - 1 a 20: estudiantes / 21 a 30: personal del buffet / 31: desarrollador
 -- ----------------------------------------------------------------------------
-INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('12345678', 'jorgedah09', 'Jorgedah#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('12345678', 'davidmel09', 'Davidmel#2026', 1);
 INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('45987654', 'luciagom08', 'Luciagom#2026', 1);
 INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('48499250', 'mateofer11', 'Mateofer#2026', 1);
 INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('51715407', 'valentinarod13', 'Valentinarod#2026', 1);
@@ -405,7 +405,7 @@ UPDATE Empleado SET PIN = '8146' WHERE UserID = 29;
 -- ----------------------------------------------------------------------------
 -- Email (20)
 -- ----------------------------------------------------------------------------
-INSERT INTO Email (UserID, Email) VALUES (1, 'jorge.dahan@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (1, 'david.melendez@bue.edu.ar');
 INSERT INTO Email (UserID, Email) VALUES (2, 'lucia.gomez@bue.edu.ar');
 INSERT INTO Email (UserID, Email) VALUES (3, 'mateo.fernandez@bue.edu.ar');
 INSERT INTO Email (UserID, Email) VALUES (4, 'valentina.rodriguez@bue.edu.ar');
