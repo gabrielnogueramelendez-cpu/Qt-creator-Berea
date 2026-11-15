@@ -6,16 +6,16 @@
 MYSQL *SistemaBuffet::conn = NULL;
 int SistemaBuffet::usuarioID = 1;
 QString SistemaBuffet::usuarioRol = "Estudiante";
-QString SistemaBuffet::usuarioNombre = "Jorge";
-QString SistemaBuffet::usuarioApellido = "Dahan";
+QString SistemaBuffet::usuarioNombre = "David";
+QString SistemaBuffet::usuarioApellido = "Melendez";
 QString SistemaBuffet::usuarioCurso = "6° Año 1ra";
 QString SistemaBuffet::usuarioDni = "12345678";
 double SistemaBuffet::usuarioSaldo = 10000.0;
 
 // Estudiante (04_DatosSQL); los 2 últimos no tienen usuario y sirven para probar el registro. Con BDD: SELECT de Estudiante y Curso
 QStringList SistemaBuffet::estudiantesDnis = {"12345678", "45987654", "48499250", "51715407", "52929091", "49373046", "52303055", "52420093", "49512712", "52652318", "48428925", "48322516", "47596375", "53199127", "49263492", "49609844", "50491680", "51808284", "50355436", "52176234", "95671088", "50283716"};
-QStringList SistemaBuffet::estudiantesNombres = {"Jorge", "Lucía", "Mateo", "Valentina", "Santiago", "Camila", "Benjamín", "Martina", "Thiago", "Sofía", "Joaquín", "Julieta", "Bautista", "Agustina", "Lautaro", "Micaela", "Facundo", "Florencia", "Nicolás", "Rocío", "Gabriel", "Tomás"};
-QStringList SistemaBuffet::estudiantesApellidos = {"Dahan", "Gómez", "Fernández", "Rodríguez", "López", "Martínez", "García", "Pérez", "Sánchez", "Romero", "Díaz", "Álvarez", "Torres", "Ruiz", "Acosta", "Benítez", "Medina", "Herrera", "Suárez", "Aguirre", "Noguera", "San Martín"};
+QStringList SistemaBuffet::estudiantesNombres = {"David", "Lucía", "Mateo", "Valentina", "Santiago", "Camila", "Benjamín", "Martina", "Thiago", "Sofía", "Joaquín", "Julieta", "Bautista", "Agustina", "Lautaro", "Micaela", "Facundo", "Florencia", "Nicolás", "Rocío", "Gabriel", "Tomás"};
+QStringList SistemaBuffet::estudiantesApellidos = {"Melendez", "Gómez", "Fernández", "Rodríguez", "López", "Martínez", "García", "Pérez", "Sánchez", "Romero", "Díaz", "Álvarez", "Torres", "Ruiz", "Acosta", "Benítez", "Medina", "Herrera", "Suárez", "Aguirre", "Noguera", "San Martín"};
 QStringList SistemaBuffet::estudiantesCursos = {"6° Año 1ra", "6° Año 2da", "3° Año 3ra", "1° Año 4ta", "5° Año 1ra", "2° Año 2da", "1° Año 3ra", "1° Año 4ta", "6° Año 1ra", "5° Año 2da", "3° Año 3ra", "1° Año 4ta", "1° Año 1ra", "3° Año 2da", "2° Año 3ra", "2° Año 4ta", "2° Año 1ra", "5° Año 2da", "5° Año 3ra", "3° Año 4ta", "4° Año 2da", "4° Año 2da"};
 
 // Profesor (04_DatosSQL); ninguno tiene usuario todavía. Con BDD: SELECT de Profesor
@@ -28,8 +28,8 @@ QStringList SistemaBuffet::roles = {"Estudiante", "Profesor", "Personal de caja"
 
 // Usuario (04_DatosSQL): la posición + 1 es el UserID. El personal no tiene DNI; el de un profesor es su DNI_Profesor
 QStringList SistemaBuffet::usuariosDnis = {"12345678", "45987654", "48499250", "51715407", "52929091", "49373046", "52303055", "52420093", "49512712", "52652318", "48428925", "48322516", "47596375", "53199127", "49263492", "49609844", "50491680", "51808284", "50355436", "52176234", "", "", "", "", "", "", "", "", "", "", ""};
-QStringList SistemaBuffet::usuariosApodos = {"jorgedah09", "luciagom08", "mateofer11", "valentinarod13", "santiagolop09", "camilamar12", "benjamingar13", "martinaper13", "thiagosan08", "sofiarom09", "joaquindia11", "julietaalv13", "bautistator13", "agustinarui11", "lautaroaco12", "micaelaben12", "facundomed12", "florenciaher09", "nicolassua09", "rocioagu11", "marcela.ibanez", "diego.paz", "karina.luna", "sergio.ledesma", "paola.vega", "hector.maldonado", "alejandro.funes", "silvia.arce", "ramiro.sosa", "veronica.campos", "soporte.dev"};
-QStringList SistemaBuffet::usuariosContrasenas = {"Jorgedah#2026", "Luciagom#2026", "Mateofer#2026", "Valentinarod#2026", "Santiagolop#2026", "Camilamar#2026", "Benjamingar#2026", "Martinaper#2026", "Thiagosan#2026", "Sofiarom#2026", "Joaquindia#2026", "Julietaalv#2026", "Bautistator#2026", "Agustinarui#2026", "Lautaroaco#2026", "Micaelaben#2026", "Facundomed#2026", "Florenciaher#2026", "Nicolassua#2026", "Rocioagu#2026", "MarcelaBuffet#2026", "DiegoBuffet#2026", "KarinaBuffet#2026", "SergioBuffet#2026", "PaolaBuffet#2026", "HectorBuffet#2026", "AlejandroBuffet#2026", "SilviaBuffet#2026", "RamiroBuffet#2026", "VeronicaBuffet#2026", "SoporteDev#2026"};
+QStringList SistemaBuffet::usuariosApodos = {"davidmel09", "luciagom08", "mateofer11", "valentinarod13", "santiagolop09", "camilamar12", "benjamingar13", "martinaper13", "thiagosan08", "sofiarom09", "joaquindia11", "julietaalv13", "bautistator13", "agustinarui11", "lautaroaco12", "micaelaben12", "facundomed12", "florenciaher09", "nicolassua09", "rocioagu11", "marcela.ibanez", "diego.paz", "karina.luna", "sergio.ledesma", "paola.vega", "hector.maldonado", "alejandro.funes", "silvia.arce", "ramiro.sosa", "veronica.campos", "soporte.dev"};
+QStringList SistemaBuffet::usuariosContrasenas = {"Davidmel#2026", "Luciagom#2026", "Mateofer#2026", "Valentinarod#2026", "Santiagolop#2026", "Camilamar#2026", "Benjamingar#2026", "Martinaper#2026", "Thiagosan#2026", "Sofiarom#2026", "Joaquindia#2026", "Julietaalv#2026", "Bautistator#2026", "Agustinarui#2026", "Lautaroaco#2026", "Micaelaben#2026", "Facundomed#2026", "Florenciaher#2026", "Nicolassua#2026", "Rocioagu#2026", "MarcelaBuffet#2026", "DiegoBuffet#2026", "KarinaBuffet#2026", "SergioBuffet#2026", "PaolaBuffet#2026", "HectorBuffet#2026", "AlejandroBuffet#2026", "SilviaBuffet#2026", "RamiroBuffet#2026", "VeronicaBuffet#2026", "SoporteDev#2026"};
 QStringList SistemaBuffet::usuariosRoles = {"Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Personal de caja", "Personal de caja", "Personal de caja", "Personal de caja", "Personal de caja", "Personal de caja", "Administración", "Personal de caja", "Personal de caja", "Administración", "Desarrollador"};
 QList<double> SistemaBuffet::usuariosSaldos = {10000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -106,7 +106,7 @@ void SistemaBuffet::inicializarDatos()
 
     // Pedido de ejemplo 1
     pedidosCodigos.append("3C6MB");
-    pedidosAlumnos.append("Jorge Dahan");
+    pedidosAlumnos.append("David Melendez");
     pedidosCursos.append("6° Año 1ra");
     pedidosDnis.append("12345678");
     pedidosRecreos.append("2do Recreo TM (10:35 a 10:45 hs)");

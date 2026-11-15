@@ -35,7 +35,7 @@ WHERE (u.DNI = '50111222' OR u.DNI_Profesor = '25418763') AND l.Tipo_Evento_ID =
 
 -- ---------------- P02 sp_iniciar_sesion ----------------
 -- i. Éxito: devuelve UserID 1, Tipo_Usuario Estudiante
-CALL sp_iniciar_sesion('jorgedah09', 'Jorgedah#2026');
+CALL sp_iniciar_sesion('davidmel09', 'Davidmel#2026');
 -- i-bis. Éxito con una cajera: Tipo_Usuario Personal de caja
 CALL sp_iniciar_sesion('marcela.ibanez', 'MarcelaBuffet#2026');
 -- ii. Usuario inexistente: 0 filas (y queda un "Fallo de Autenticación" en el log)
@@ -342,7 +342,7 @@ CALL sp_acceso_personal('soporte.dev', 'SoporteDev#2026', 'DEV-BEREA-2026');
 CALL sp_acceso_personal('marcela.ibanez', 'MarcelaBuffet#2026', '9999');
 CALL sp_acceso_personal('marcela.ibanez', 'MarcelaBuffet#2026', NULL);
 -- iii. Un estudiante o el encargado (sin PIN ni token): 0 filas
-CALL sp_acceso_personal('jorgedah09', 'Jorgedah#2026', '1234');
+CALL sp_acceso_personal('davidmel09', 'Davidmel#2026', '1234');
 CALL sp_acceso_personal('alejandro.funes', 'AlejandroBuffet#2026', NULL);
 -- iv. Restricción: un PIN que no tiene 4 dígitos lo rechaza el CHECK (error 3819)
 UPDATE Empleado SET PIN = '12' WHERE UserID = 22;
