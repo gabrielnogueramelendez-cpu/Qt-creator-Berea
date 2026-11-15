@@ -23,6 +23,7 @@ private slots:
     void on_btnLogout_clicked();
 
 private:
+    void cambiarEstadoEnBDD(int idx, int estadoID);
     Ui::CajeroWindow *ui;
     QString m_codigoActual;
     void cargarPedidosDelSistema();

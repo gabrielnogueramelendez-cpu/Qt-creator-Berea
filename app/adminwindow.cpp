@@ -2,6 +2,7 @@
 #include "ui_adminwindow.h"
 #include "loginwindow.h"
 #include "sistemabuffet.h"
+#include "basedatos.h"
 #include <QMessageBox>
 #include <QTableWidgetItem>
 #include <QIntValidator>
@@ -32,7 +33,6 @@ AdminWindow::~AdminWindow()
 
 void AdminWindow::cargarInventario()
 {
-    // Con BDD: SELECT de Producto + Categoria
     ui->tableProductosAdmin->setRowCount(0);
     ui->tableProductosAdmin->setColumnCount(6);
     QStringList headers;
@@ -50,6 +50,28 @@ void AdminWindow::cargarInventario()
                            "900", "1300", "1400", "900", "700", "800", "600", "1500", "4200", "4100"};
     // ID_Categoria de cada producto (columna de Producto); es la posición en comboCategoria
     QList<int> categorias = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+
+    if (SistemaBuffet::conn != NULL) {
+        // Con BDD: Producto + Categoria (ver obtener_productos)
+        MYSQL_RES *result = obtener_productos(SistemaBuffet::conn);
+        if (result != NULL) {
+            MYSQL_ROW fila;
+            int i = 0;
+            while ((fila = mysql_fetch_row(result)) != NULL) {
+                ui->tableProductosAdmin->insertRow(i);
+                for (int columna = 0; columna < 6; ++columna) {
+                    QString texto = valor_fila(fila, columna);
+                    if (columna == 3) {
+                        texto = QString::number(texto.toDouble(), 'f', 0); // el precio sin los ,00
+                    }
+                    ui->tableProductosAdmin->setItem(i, columna, new QTableWidgetItem(texto));
+                }
+                i++;
+            }
+            mysql_free_result(result);
+        }
+        return;
+    }
 
     for (int i = 0; i < nombres.size(); ++i) {
         ui->tableProductosAdmin->insertRow(i);
@@ -76,8 +98,45 @@ void AdminWindow::cargarLogs()
     registrarLog("Inicio de Sesión Exitoso", "Ingreso al panel de administración");
 }
 
+void AdminWindow::cargarLogsDesdeBDD()
+{
+    // Con BDD los logs los escriben los SP; acá solo se muestran los últimos de Log_Auditoria
+    ui->tableLogsAdmin->setRowCount(0);
+    MYSQL_RES *result = obtener_logs(SistemaBuffet::conn);
+    if (result == NULL) return;
+    MYSQL_ROW fila;
+    int i = 0;
+    while ((fila = mysql_fetch_row(result)) != NULL) {
+        ui->tableLogsAdmin->insertRow(i);
+        for (int columna = 0; columna < 3; ++columna) {
+            ui->tableLogsAdmin->setItem(i, columna, new QTableWidgetItem(valor_fila(fila, columna)));
+        }
+        i++;
+    }
+    mysql_free_result(result);
+}
+
+bool AdminWindow::resultadoCorrecto(MYSQL_RES *result)
+{
+    // El SP respondió sin ERROR y cambió una fila (Filas_Actualizadas = 1)
+    bool correcto = false;
+    if (result != NULL && error_del_sp(result) == 0) {
+        MYSQL_ROW fila = mysql_fetch_row(result);
+        correcto = fila != NULL && valor_fila(fila, 0) != "0";
+    }
+    if (result != NULL) {
+        mysql_free_result(result);
+    }
+    return correcto;
+}
+
 void AdminWindow::registrarLog(QString evento, QString detalle)
 {
+    if (SistemaBuffet::conn != NULL) {
+        cargarLogsDesdeBDD();
+        return;
+    }
+
     // Los nombres de evento son los de la tabla Tipo_Evento
     int fila = ui->tableLogsAdmin->rowCount();
     ui->tableLogsAdmin->insertRow(fila);
@@ -102,7 +161,25 @@ void AdminWindow::on_btnAgregarProd_clicked()
         return;
     }
 
-    // Con BDD: CALL sp_alta_producto(UserID, categoría, nombre, descripcion, stock, precio); el ID lo da AUTO_INCREMENT
+    if (SistemaBuffet::conn != NULL) {
+        // La posición en comboCategoria es el ID_Categoria; el ProductoID lo da AUTO_INCREMENT
+        MYSQL_RES *result = alta_producto(SistemaBuffet::conn, SistemaBuffet::usuarioID, ui->comboCategoria->currentIndex(),
+                                          nombre, descripcion, stock.toInt(), precio.toInt());
+        if (!resultadoCorrecto(result)) {
+            QMessageBox::warning(this, "Error", "No se pudo dar de alta el producto en la base de datos.");
+            return;
+        }
+        cargarInventario();
+        cargarLogsDesdeBDD();
+        ui->lblEstadoAdmin->setText("Se agregó " + nombre + ".");
+        ui->txtNombreProd->clear();
+        ui->txtPrecioProd->clear();
+        ui->txtStockProd->clear();
+        ui->txtDescripcionProd->clear();
+        ui->comboCategoria->setCurrentIndex(0);
+        return;
+    }
+
     int fila = ui->tableProductosAdmin->rowCount();
     ui->tableProductosAdmin->insertRow(fila);
     ui->tableProductosAdmin->setItem(fila, 0, new QTableWidgetItem(QString::number(fila + 1)));
@@ -147,14 +224,24 @@ void AdminWindow::on_btnGuardarEdit_clicked()
         return;
     }
 
-    // Con BDD: CALL sp_modificar_stock(UserID, ProductoID, stock)
+    if (SistemaBuffet::conn != NULL) {
+        bool stockOk = resultadoCorrecto(modificar_stock(SistemaBuffet::conn, SistemaBuffet::usuarioID, id, stock));
+        bool precioOk = resultadoCorrecto(modificar_precio(SistemaBuffet::conn, SistemaBuffet::usuarioID, id, precio));
+        if (!stockOk || !precioOk) {
+            QMessageBox::warning(this, "Error", "No se pudieron guardar los cambios en la base de datos.");
+        }
+        cargarInventario();
+        cargarLogsDesdeBDD();
+        ui->lblEstadoAdmin->setText("Se guardaron los cambios de " + nombre + ".");
+        return;
+    }
+
     if (id < SistemaBuffet::productosStock.size()) {
         SistemaBuffet::productosStock[id] = stock; // el catálogo usa este mismo stock
     }
 
     registrarLog("Modificación de Stock de Producto", QString("Producto %1: stock %2").arg(id).arg(stock));
 
-    // Con BDD: CALL sp_modificar_precio(UserID, ProductoID, precio)
     registrarLog("Modificación de Precio de Producto", QString("Producto %1: precio %2").arg(id).arg(precio));
     ui->lblEstadoAdmin->setText("Se guardaron los cambios de " + nombre + ".");
 }
@@ -170,6 +257,17 @@ void AdminWindow::on_btnEliminarProd_clicked()
     QString id = ui->tableProductosAdmin->item(fila, 0)->text();
     QString nombre = ui->tableProductosAdmin->item(fila, 1)->text();
 
+    if (SistemaBuffet::conn != NULL) {
+        if (!resultadoCorrecto(baja_producto(SistemaBuffet::conn, SistemaBuffet::usuarioID, id.toInt()))) {
+            QMessageBox::warning(this, "Error", nombre + " ya estaba inactivo o no se pudo dar de baja.");
+            return;
+        }
+        cargarInventario();
+        cargarLogsDesdeBDD();
+        ui->lblEstadoAdmin->setText(nombre + " quedó inactivo.");
+        return;
+    }
+
     // Baja lógica como sp_baja_producto (Activo = FALSE): el producto queda en la tabla
     ui->tableProductosAdmin->item(fila, 5)->setText("Inactivo");
 
@@ -179,6 +277,7 @@ void AdminWindow::on_btnEliminarProd_clicked()
 
 void AdminWindow::on_btnLogout_clicked()
 {
+    SistemaBuffet::cerrarSesion();
     LoginWindow *loginWin = new LoginWindow();
     loginWin->show();
     this->close();

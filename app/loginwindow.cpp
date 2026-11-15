@@ -6,6 +6,7 @@
 #include "adminwindow.h"
 #include "devwindow.h"
 #include "sistemabuffet.h"
+#include "basedatos.h"
 #include <QMessageBox>
 
 LoginWindow::LoginWindow(QWidget *parent) :
@@ -127,20 +128,65 @@ void LoginWindow::on_btnLogin_clicked()
         return;
     }
 
-    // Igual que sp_iniciar_sesion: el apodo y la contraseña tienen que coincidir
-    int indiceUsuario = SistemaBuffet::usuariosApodos.indexOf(usuario);
-    bool claveCorrecta = indiceUsuario != -1 && SistemaBuffet::usuariosContrasenas[indiceUsuario] == password;
-    int indicePersonal = SistemaBuffet::personalApodos.indexOf(usuario);
-    // Igual que Usuario.RolID: el rol dice a qué ventana puede entrar
-    QString rol = "";
-    if (indiceUsuario != -1) {
-        rol = SistemaBuffet::usuariosRoles[indiceUsuario];
+    QString pin = ui->txtPinCajero->text().trimmed();
+    QString token = ui->txtTokenDev->text().trimmed();
+    if (indexRol == 1 && pin.length() != 4) {
+        QMessageBox::warning(this, "PIN Inválido", "El PIN debe tener exactamente 4 dígitos.");
+        return;
+    }
+    if (indexRol == 3 && token.isEmpty()) {
+        QMessageBox::warning(this, "Token Inválido", "Ingresá el token de desarrollador.");
+        return;
     }
 
-    if (indexRol == 0) { // Alumno o profesor (Con BDD: CALL sp_iniciar_sesion)
-        if (claveCorrecta && (rol == "Estudiante" || rol == "Profesor")) {
+    // accesoCorrecto: apodo, contraseña y (si corresponde) PIN o token correctos. rol: el Nombre_Rol del usuario
+    bool accesoCorrecto = false;
+    QString rol = "";
+    int indiceUsuario = SistemaBuffet::usuariosApodos.indexOf(usuario);
+
+    if (SistemaBuffet::conn != NULL) {
+        // Con BDD: el SP valida y deja el inicio de sesión (o el fallo) en Log_Auditoria
+        MYSQL_RES *result = NULL;
+        if (indexRol == 0 || indexRol == 2) {
+            result = iniciar_sesion(SistemaBuffet::conn, usuario, password);
+        } else if (indexRol == 1) {
+            result = acceso_personal(SistemaBuffet::conn, usuario, password, pin);
+        } else {
+            result = acceso_personal(SistemaBuffet::conn, usuario, password, token);
+        }
+
+        if (result != NULL) {
+            MYSQL_ROW fila = NULL;
+            if (error_del_sp(result) == 0) {
+                fila = mysql_fetch_row(result);
+            }
+            if (fila != NULL) {
+                accesoCorrecto = SistemaBuffet::cargarUsuarioDesdeBDD(valor_fila(fila, 0).toInt());
+                rol = SistemaBuffet::usuarioRol;
+            }
+            mysql_free_result(result);
+        }
+    } else {
+        // Sin BDD: las mismas reglas con las listas de SistemaBuffet
+        int indicePersonal = SistemaBuffet::personalApodos.indexOf(usuario);
+        accesoCorrecto = indiceUsuario != -1 && SistemaBuffet::usuariosContrasenas[indiceUsuario] == password;
+        if (indexRol == 1) {
+            accesoCorrecto = accesoCorrecto && indicePersonal != -1 && SistemaBuffet::personalPines[indicePersonal] == pin;
+        }
+        if (indexRol == 3) {
+            accesoCorrecto = accesoCorrecto && indicePersonal != -1 && SistemaBuffet::personalTokens[indicePersonal] == token;
+        }
+        if (indiceUsuario != -1) {
+            rol = SistemaBuffet::usuariosRoles[indiceUsuario];
+        }
+    }
+
+    if (indexRol == 0) { // Alumno o profesor
+        if (accesoCorrecto && (rol == "Estudiante" || rol == "Profesor")) {
             m_intentosFallidos = 0;
-            SistemaBuffet::cargarUsuarioActivo(indiceUsuario);
+            if (SistemaBuffet::conn == NULL) {
+                SistemaBuffet::cargarUsuarioActivo(indiceUsuario);
+            }
             MainWindow *mainWin = new MainWindow();
             mainWin->show();
             this->close();
@@ -155,14 +201,8 @@ void LoginWindow::on_btnLogin_clicked()
             }
         }
     }
-    else if (indexRol == 1) { // Personal de Buffet (Con BDD: CALL sp_acceso_personal con el PIN)
-        QString pin = ui->txtPinCajero->text().trimmed();
-        if (pin.length() != 4) {
-            QMessageBox::warning(this, "PIN Inválido", "El PIN debe tener exactamente 4 dígitos.");
-            return;
-        }
-
-        if (claveCorrecta && rol == "Personal de caja" && SistemaBuffet::personalPines[indicePersonal] == pin) {
+    else if (indexRol == 1) { // Personal de caja
+        if (accesoCorrecto && rol == "Personal de caja") {
             m_intentosFallidos = 0;
             CajeroWindow *cajeroWin = new CajeroWindow();
             cajeroWin->show();
@@ -172,8 +212,8 @@ void LoginWindow::on_btnLogin_clicked()
             QMessageBox::warning(this, "Acceso Denegado", "Apodo, contraseña o PIN incorrectos.");
         }
     }
-    else if (indexRol == 2) { // Administración (Con BDD: sp_iniciar_sesion devuelve el rol)
-        if (claveCorrecta && rol == "Administración") {
+    else if (indexRol == 2) { // Administración
+        if (accesoCorrecto && rol == "Administración") {
             m_intentosFallidos = 0;
             AdminWindow *adminWin = new AdminWindow();
             adminWin->show();
@@ -183,14 +223,8 @@ void LoginWindow::on_btnLogin_clicked()
             QMessageBox::warning(this, "Acceso Denegado", "Apodo o contraseña incorrectos, o el usuario no es de administración.");
         }
     }
-    else if (indexRol == 3) { // Desarrollador (Con BDD: CALL sp_acceso_personal con el token)
-        QString token = ui->txtTokenDev->text().trimmed();
-        if (token.isEmpty()) {
-            QMessageBox::warning(this, "Token Inválido", "Ingresá el token de desarrollador.");
-            return;
-        }
-
-        if (claveCorrecta && rol == "Desarrollador" && SistemaBuffet::personalTokens[indicePersonal] == token) {
+    else if (indexRol == 3) { // Desarrollador
+        if (accesoCorrecto && rol == "Desarrollador") {
             m_intentosFallidos = 0;
             DevWindow *devWin = new DevWindow();
             devWin->show();

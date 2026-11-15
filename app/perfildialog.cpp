@@ -1,6 +1,7 @@
 #include "perfildialog.h"
 #include "ui_perfildialog.h"
 #include "sistemabuffet.h"
+#include "basedatos.h"
 #include <QMessageBox>
 #include <QIntValidator>
 
@@ -39,7 +40,8 @@ void PerfilDialog::mostrarSaldo()
 
 void PerfilDialog::cargarHistorial()
 {
-    // Con BDD: SELECT de Venta + Retiro filtrando por el UserID del estudiante
+    // Con BDD: los pedidos se leen de nuevo de la BDD y se filtran por el DNI del usuario
+    SistemaBuffet::cargarDesdeBDD();
     ui->listPedidos->clear();
     for (int i = SistemaBuffet::pedidosCodigos.size() - 1; i >= 0; --i) {
         if (SistemaBuffet::pedidosDnis[i] != SistemaBuffet::usuarioDni) {
@@ -71,8 +73,26 @@ void PerfilDialog::on_btnCargarSaldo_clicked()
         return;
     }
 
-    // Con BDD: CALL sp_cargar_saldo(UserID, monto)
-    SistemaBuffet::usuarioSaldo += textoMonto.toInt();
+    if (SistemaBuffet::conn != NULL) {
+        MYSQL_RES *result = cargar_saldo(SistemaBuffet::conn, SistemaBuffet::usuarioID, textoMonto.toInt());
+        bool cargado = false;
+        if (result != NULL && error_del_sp(result) == 0) {
+            MYSQL_ROW fila = mysql_fetch_row(result);
+            if (fila != NULL && valor_fila(fila, 0) == "1") {
+                cargado = true;
+                SistemaBuffet::usuarioSaldo = valor_fila(fila, 1).toDouble(); // el saldo nuevo que devuelve el SP
+            }
+        }
+        if (result != NULL) {
+            mysql_free_result(result);
+        }
+        if (!cargado) {
+            QMessageBox::warning(this, "Error", "No se pudo cargar el saldo en la base de datos.");
+            return;
+        }
+    } else {
+        SistemaBuffet::usuarioSaldo += textoMonto.toInt();
+    }
 
     ui->txtMontoCarga->clear();
     ui->txtComprobanteCarga->clear();

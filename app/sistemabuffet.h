@@ -4,13 +4,19 @@
 #include <QString>
 #include <QStringList>
 #include <QList>
+#include <mysql.h>
 
 // Clase auxiliar de datos globales compartidos entre ventanas
 // Implementada exclusivamente con tipos primitivos y clases estándar de Qt (SIN STRUCTS)
 class SistemaBuffet
 {
 public:
+    // Conexión a MySQL (NULL si no se pudo conectar: la app usa los datos de ejemplo de abajo)
+    static MYSQL *conn;
+
     // Datos del Usuario Activo
+    static int usuarioID;
+    static QString usuarioRol;
     static QString usuarioNombre;
     static QString usuarioApellido;
     static QString usuarioCurso;
@@ -39,6 +45,8 @@ public:
 
     // Pasa los datos del usuario que inició sesión a las variables del usuario activo
     static void cargarUsuarioActivo(int indiceUsuario);
+    // Lo mismo pero leyendo de la BDD el usuario que devolvió el SP de login
+    static bool cargarUsuarioDesdeBDD(int userID);
 
     // Carrito de compras (listas paralelas simples)
     static QList<int> carritoIds;
@@ -55,8 +63,10 @@ public:
 
     // Stock de cada producto: la posición es el ProductoID de la BDD (la posición 0 no se usa)
     static QList<int> productosStock;
+    static QList<double> productosPrecios;
 
     // Pedidos generados para Mostrador/Caja y Comprobantes
+    static QList<int> pedidosRetiroIds;
     static QStringList pedidosCodigos;
     static QStringList pedidosAlumnos;
     static QStringList pedidosCursos;
@@ -71,6 +81,10 @@ public:
 
     // Inicializador de datos predeterminados
     static void inicializarDatos();
+    // Con conexión: reemplaza el stock, los precios y los pedidos por los de la BDD
+    static void cargarDesdeBDD();
+    // Deja el cierre de sesión en Log_Auditoria (sp_cerrar_sesion)
+    static void cerrarSesion();
 };
 
 #endif // SISTEMABUFFET_H

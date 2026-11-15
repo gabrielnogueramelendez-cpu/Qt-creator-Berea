@@ -2,6 +2,7 @@
 #include "ui_cajerowindow.h"
 #include "loginwindow.h"
 #include "sistemabuffet.h"
+#include "basedatos.h"
 #include <QMessageBox>
 #include <QTableWidgetItem>
 
@@ -31,7 +32,8 @@ CajeroWindow::~CajeroWindow()
 
 void CajeroWindow::cargarPedidosDelSistema()
 {
-    // Con BDD: SELECT de Retiro + Venta + Franja_Retiro + Estado_Retiro del día
+    // Con BDD: los pedidos salen de Retiro + Venta + Carrito (ver obtener_pedidos)
+    SistemaBuffet::cargarDesdeBDD();
     ui->tableColasPedidos->setRowCount(0);
     ui->tableColasPedidos->setColumnCount(5);
     QStringList headers;
@@ -106,7 +108,7 @@ void CajeroWindow::on_btnBuscarCodigo_clicked()
     }
 
     QString textoTotal = "Total: $" + QString::number(SistemaBuffet::pedidosMontos[idx], 'f', 0);
-    if (SistemaBuffet::pedidosMetodos[idx].contains("Efectivo")) {
+    if (SistemaBuffet::pedidosMetodos[idx].contains("Efectivo") && SistemaBuffet::pedidosVueltos[idx] > 0) {
         textoTotal += QString("\nPaga con $%1 · Vuelto $%2")
             .arg(QString::number(SistemaBuffet::pedidosAbonados[idx], 'f', 0))
             .arg(QString::number(SistemaBuffet::pedidosVueltos[idx], 'f', 0));
@@ -119,8 +121,11 @@ void CajeroWindow::on_btnEntregarPedido_clicked()
     int idx = SistemaBuffet::pedidosCodigos.indexOf(m_codigoActual);
     if (idx == -1) return;
 
-    // Con BDD: CALL sp_actualizar_estado_retiro(UserID, RetiroID, 2)
-    SistemaBuffet::pedidosEstados[idx] = "ENTREGADO";
+    if (SistemaBuffet::conn != NULL) {
+        cambiarEstadoEnBDD(idx, 2); // 2 = ENTREGADO
+    } else {
+        SistemaBuffet::pedidosEstados[idx] = "ENTREGADO";
+    }
     cargarPedidosDelSistema();
     on_btnBuscarCodigo_clicked();
 }
@@ -130,7 +135,12 @@ void CajeroWindow::on_btnCancelarPedido_clicked()
     int idx = SistemaBuffet::pedidosCodigos.indexOf(m_codigoActual);
     if (idx == -1) return;
 
-    // Con BDD: CALL sp_actualizar_estado_retiro(UserID, RetiroID, 3), que devuelve el stock y el saldo
+    if (SistemaBuffet::conn != NULL) {
+        cambiarEstadoEnBDD(idx, 3); // 3 = CANCELADO: el SP devuelve el stock y el saldo
+        cargarPedidosDelSistema();
+        on_btnBuscarCodigo_clicked();
+        return;
+    }
     SistemaBuffet::pedidosEstados[idx] = "CANCELADO";
 
     // shortcut: sin BDD no se devuelve el stock y el saldo solo existe para el estudiante logueado; con BDD lo hace el SP
@@ -144,7 +154,19 @@ void CajeroWindow::on_btnCancelarPedido_clicked()
 
 void CajeroWindow::on_btnLogout_clicked()
 {
+    SistemaBuffet::cerrarSesion();
     LoginWindow *loginWin = new LoginWindow();
     loginWin->show();
     this->close();
+}
+
+void CajeroWindow::cambiarEstadoEnBDD(int idx, int estadoID)
+{
+    MYSQL_RES *result = actualizar_estado_retiro(SistemaBuffet::conn, SistemaBuffet::usuarioID, SistemaBuffet::pedidosRetiroIds[idx], estadoID);
+    if (result == NULL || error_del_sp(result) != 0) {
+        QMessageBox::warning(this, "Error", "No se pudo actualizar el pedido en la base de datos.");
+    }
+    if (result != NULL) {
+        mysql_free_result(result);
+    }
 }

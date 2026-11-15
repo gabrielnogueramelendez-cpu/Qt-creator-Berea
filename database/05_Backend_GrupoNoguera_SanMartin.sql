@@ -183,7 +183,7 @@ BEGIN
 
     UPDATE Usuario
     SET Saldo = Saldo + p_Monto
-    WHERE UserID = p_UserID AND DNI IS NOT NULL AND p_Monto > 0;
+    WHERE UserID = p_UserID AND (DNI IS NOT NULL OR DNI_Profesor IS NOT NULL) AND p_Monto > 0;
 
     SET filas = ROW_COUNT();
 

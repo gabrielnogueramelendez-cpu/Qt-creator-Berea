@@ -4,6 +4,8 @@
 #include "cajerowindow.h"
 #include "adminwindow.h"
 #include "loginwindow.h"
+#include "sistemabuffet.h"
+#include "basedatos.h"
 #include <QMessageBox>
 #include <QFile>
 
@@ -126,12 +128,37 @@ void DevWindow::on_btnEjecutarSP_clicked()
         return;
     }
 
-    // shortcut: todavía no hay conexión con MySQL; con la conexión, esta línea se manda a la BDD
     QString llamada = QString("CALL %1.%2(%3);")
         .arg(spSchemas[fila])
         .arg(spNombres[fila])
         .arg(ui->txtParametros->text().trimmed());
-    ui->lblSalidaSP->setText(llamada);
+    if (SistemaBuffet::conn == NULL) {
+        ui->lblSalidaSP->setText(llamada + "\n(sin conexión con MySQL: no se ejecutó)");
+        return;
+    }
+
+    // Con BDD: se manda el CALL y se muestran las filas que devuelve, como en los ejemplos con cout
+    MYSQL_RES *result = ejecutar_consulta(SistemaBuffet::conn, llamada.toStdString());
+    if (result == NULL) {
+        ui->lblSalidaSP->setText(llamada + "\nError: " + QString::fromUtf8(mysql_error(SistemaBuffet::conn)));
+        return;
+    }
+    QString salida = llamada + "\n";
+    int columnas = mysql_num_fields(result);
+    for (int c = 0; c < columnas; ++c) {
+        salida += QString::fromUtf8(mysql_fetch_field_direct(result, c)->name) + (c < columnas - 1 ? " | " : "\n");
+    }
+    MYSQL_ROW registro;
+    int mostradas = 0;
+    while ((registro = mysql_fetch_row(result)) != NULL && mostradas < 15) {
+        for (int c = 0; c < columnas; ++c) {
+            salida += valor_fila(registro, c) + (c < columnas - 1 ? " | " : "\n");
+        }
+        mostradas++;
+    }
+    salida += QString("(%1 filas)").arg(mysql_num_rows(result));
+    mysql_free_result(result);
+    ui->lblSalidaSP->setText(salida);
 }
 
 void DevWindow::on_listPruebas_currentRowChanged(int fila)
@@ -161,6 +188,7 @@ void DevWindow::on_btnAbrirVistaAdmin_clicked()
 
 void DevWindow::on_btnLogoutDev_clicked()
 {
+    SistemaBuffet::cerrarSesion();
     LoginWindow *loginWin = new LoginWindow();
     loginWin->show();
     this->close();

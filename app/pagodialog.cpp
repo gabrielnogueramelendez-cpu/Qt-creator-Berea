@@ -1,6 +1,7 @@
 #include "pagodialog.h"
 #include "ui_pagodialog.h"
 #include "sistemabuffet.h"
+#include "basedatos.h"
 #include <QMessageBox>
 #include <QIntValidator>
 #include <QRandomGenerator>
@@ -150,11 +151,18 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
             QMessageBox::warning(this, "Saldo Insuficiente", "El saldo de tu cuenta escolar no alcanza.");
             return;
         }
-        SistemaBuffet::usuarioSaldo -= m_totalPagar;
         break;
     }
 
     QString recreo = ui->comboRecreo->currentText();
+    // El orden del combo es el de Franja_Retiro (ID_Franja 1 a 7) y los métodos son los ID 1, 2 y 21 de Metodo_Pago
+    int franjaID = ui->comboRecreo->currentIndex();
+    int metodoPagoID = 1;
+    if (selectMetodo == 2) {
+        metodoPagoID = 2;
+    } else if (selectMetodo == 3) {
+        metodoPagoID = 21;
+    }
 
     // Código de retiro de 5 caracteres al azar (Codigo_Retiro CHAR(5) UNIQUE en la BDD)
     QString caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -164,7 +172,23 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
         for (int i = 0; i < 5; i++)
             codigo += caracteres[QRandomGenerator::global()->bounded(caracteres.length())];
     } while (SistemaBuffet::pedidosCodigos.contains(codigo));
-    // Con BDD: CALL sp_generar_retiro(VentaID, franja, codigo); si el UNIQUE lo rechaza, se sortea otro
+
+    if (SistemaBuffet::conn != NULL) {
+        if (!guardarPedidoEnBDD(metodoPagoID, franjaID, codigo)) {
+            return;
+        }
+        SistemaBuffet::vaciarCarrito();
+        SistemaBuffet::cargarUsuarioDesdeBDD(SistemaBuffet::usuarioID); // el SP ya descontó el saldo
+        SistemaBuffet::cargarDesdeBDD();
+        m_codigoGenerado = codigo;
+        accept();
+        return;
+    }
+
+    // Sin BDD: se descuenta el saldo y se guarda el pedido en las listas
+    if (selectMetodo == 3) {
+        SistemaBuffet::usuarioSaldo -= m_totalPagar;
+    }
 
     // Registrar pedido en las listas paralelas de SistemaBuffet
     SistemaBuffet::pedidosCodigos.append(codigo);
@@ -197,4 +221,80 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
 
     m_codigoGenerado = codigo;
     accept();
+}
+
+bool PagoDialog::guardarPedidoEnBDD(int metodoPagoID, int franjaID, QString &codigo)
+{
+    // Los 3 pasos van juntos: si uno falla, ROLLBACK deshace la venta y el stock descontado
+    mysql_query(SistemaBuffet::conn, "START TRANSACTION;");
+
+    // Paso 1: la venta (sp_registrar_venta devuelve el VentaID)
+    MYSQL_RES *result = registrar_venta(SistemaBuffet::conn, SistemaBuffet::usuarioID, metodoPagoID);
+    int ventaID = 0;
+    if (result != NULL && error_del_sp(result) == 0) {
+        MYSQL_ROW fila = mysql_fetch_row(result);
+        if (fila != NULL) {
+            ventaID = valor_fila(fila, 0).toInt();
+        }
+    }
+    if (result != NULL) {
+        mysql_free_result(result);
+    }
+    if (ventaID == 0) {
+        mysql_query(SistemaBuffet::conn, "ROLLBACK;");
+        QMessageBox::warning(this, "Error", "No se pudo registrar la venta en la base de datos.");
+        return false;
+    }
+
+    // Paso 2: cada producto del carrito (el SP controla el stock y lo descuenta)
+    for (int i = 0; i < SistemaBuffet::carritoIds.size(); ++i) {
+        result = agregar_producto_carrito(SistemaBuffet::conn, ventaID, SistemaBuffet::carritoIds[i], SistemaBuffet::carritoCantidades[i]);
+        int agregados = 0;
+        if (result != NULL && error_del_sp(result) == 0) {
+            MYSQL_ROW fila = mysql_fetch_row(result);
+            if (fila != NULL) {
+                agregados = valor_fila(fila, 0).toInt();
+            }
+        }
+        if (result != NULL) {
+            mysql_free_result(result);
+        }
+        if (agregados == 0) {
+            mysql_query(SistemaBuffet::conn, "ROLLBACK;");
+            QMessageBox::warning(this, "Sin Stock",
+                "No hay stock suficiente de " + SistemaBuffet::carritoNombres[i] + ". Revisá el carrito.");
+            return false;
+        }
+    }
+
+    // Paso 3: el retiro con el código; si el código ya existe (UNIQUE, error 1062) se sortea otro
+    QString caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    for (int intento = 0; intento < 5; ++intento) {
+        result = generar_retiro(SistemaBuffet::conn, ventaID, franjaID, codigo);
+        int error = error_del_sp(result);
+        int creados = 0;
+        if (result != NULL && error == 0) {
+            MYSQL_ROW fila = mysql_fetch_row(result);
+            if (fila != NULL) {
+                creados = valor_fila(fila, 0).toInt();
+            }
+        }
+        if (result != NULL) {
+            mysql_free_result(result);
+        }
+        if (creados == 1) {
+            mysql_query(SistemaBuffet::conn, "COMMIT;");
+            return true;
+        }
+        if (error != 1062) {
+            break;
+        }
+        codigo = "";
+        for (int i = 0; i < 5; i++)
+            codigo += caracteres[QRandomGenerator::global()->bounded(caracteres.length())];
+    }
+
+    mysql_query(SistemaBuffet::conn, "ROLLBACK;");
+    QMessageBox::warning(this, "Error", "No se pudo generar el retiro (revisá el saldo de tu cuenta escolar).");
+    return false;
 }

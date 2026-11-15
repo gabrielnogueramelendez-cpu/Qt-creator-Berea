@@ -1,6 +1,7 @@
 #include "registerdialog.h"
 #include "ui_registerdialog.h"
 #include "sistemabuffet.h"
+#include "basedatos.h"
 #include <QMessageBox>
 #include <QIntValidator>
 
@@ -52,7 +53,43 @@ void RegisterDialog::on_btnRegisterConfirm_clicked()
         return;
     }
 
-    // Las mismas reglas que pone la BDD en sp_registrar_usuario (FK y UNIQUE)
+    if (SistemaBuffet::conn != NULL) {
+        // Con BDD: el SP valida con la FK (DNI de un estudiante o profesor) y los UNIQUE (DNI y apodo)
+        MYSQL_RES *result = registrar_usuario(SistemaBuffet::conn, dni, apodo, password);
+        int error = error_del_sp(result);
+        QString detalle = "";
+        if (error > 0) {
+            MYSQL_ROW fila = mysql_fetch_row(result);
+            detalle = valor_fila(fila, 2);
+        }
+        if (result != NULL) {
+            mysql_free_result(result);
+        }
+
+        if (error == 1452) {
+            QMessageBox::warning(this, "DNI Inválido", "Ese DNI no corresponde a un estudiante ni a un profesor de la escuela.");
+            return;
+        }
+        if (error == 1062 && detalle.contains("Apodo")) {
+            QMessageBox::warning(this, "Apodo Ocupado", "Ese apodo ya existe. Elegí otro.");
+            return;
+        }
+        if (error == 1062) {
+            QMessageBox::warning(this, "DNI Registrado", "Ese DNI ya tiene una cuenta. Iniciá sesión con tu apodo.");
+            return;
+        }
+        if (error != 0) {
+            QMessageBox::warning(this, "Error", "No se pudo crear la cuenta: " + detalle);
+            return;
+        }
+
+        QMessageBox::information(this, "Registro Exitoso",
+            QString("Tu cuenta quedó creada con el apodo %1.\nYa podés iniciar sesión.").arg(apodo));
+        accept();
+        return;
+    }
+
+    // Sin BDD: las mismas reglas que pone la BDD en sp_registrar_usuario (FK y UNIQUE)
     bool esEstudiante = SistemaBuffet::estudiantesDnis.contains(dni);
     bool esProfesor = SistemaBuffet::profesoresDnis.contains(dni);
     if (!esEstudiante && !esProfesor) {
@@ -68,7 +105,6 @@ void RegisterDialog::on_btnRegisterConfirm_clicked()
         return;
     }
 
-    // Con BDD: CALL sp_registrar_usuario(dni, apodo, password)
     SistemaBuffet::usuariosDnis.append(dni);
     SistemaBuffet::usuariosApodos.append(apodo);
     SistemaBuffet::usuariosContrasenas.append(password);
