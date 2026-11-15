@@ -344,7 +344,7 @@ DROP PROCEDURE IF EXISTS sp_alta_menu_dia;
 DELIMITER //
 CREATE PROCEDURE sp_alta_menu_dia(p_UserID INT, p_ID_Categoria INT, p_Plato VARCHAR(100),
                                   p_Precio DECIMAL(10,2), p_Stock INT, p_Fecha DATE,
-                                  p_ProductoIncluido INT)
+                                  p_Dia VARCHAR(10), p_ProductoIncluido INT)
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
@@ -357,8 +357,8 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
-    INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu)
-    VALUES (p_ID_Categoria, p_Plato, p_Precio, p_Stock, p_Fecha);
+    INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana)
+    VALUES (p_ID_Categoria, p_Plato, p_Precio, p_Stock, p_Fecha, p_Dia);
 
     INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID)
     SELECT (SELECT MAX(Menu_Del_DiaID) FROM Menu_Del_Dia), ProductoID
@@ -368,7 +368,7 @@ BEGIN
     INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
     VALUES (p_UserID, 16, CURDATE(), CURTIME(), CONCAT('Menú del ', p_Fecha, ': ', p_Plato));
 
-    SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Fecha_menu, d.ProductoID AS Producto_Incluido
+    SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Fecha_menu, m.Dia_Semana, d.ProductoID AS Producto_Incluido
     FROM Menu_Del_Dia m
     LEFT JOIN Detalle_Menu_Dia d ON m.Menu_Del_DiaID = d.Menu_Del_DiaID
     WHERE m.Menu_Del_DiaID = (SELECT MAX(Menu_Del_DiaID) FROM Menu_Del_Dia);
@@ -504,14 +504,15 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
--- SP 11b: Menú del día de una fecha. Los menús se repiten cada 4 semanas
--- (20 días hábiles): si un día hábil no tiene menú cargado, se copia el del mismo
--- día del ciclo (el primero cargado hace 28, 56, ... días) con su stock inicial
--- y su producto incluido. Sábado, domingo o fecha NULL sin menú cargado: 0 filas.
+-- SP 11b: Menú del día de una fecha. El menú es semanal y fijo: cada día hábil
+-- (Dia_Semana) repite siempre el mismo plato. Si la fecha todavía no tiene menú,
+-- se copia el primero cargado para ese día de la semana, con su stock inicial
+-- y su producto incluido. El día de la semana lo calcula la aplicación (Qt).
+-- Sábado, domingo o fecha NULL: 0 filas.
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_menu_del_dia;
 DELIMITER //
-CREATE PROCEDURE sp_menu_del_dia(p_Fecha DATE)
+CREATE PROCEDURE sp_menu_del_dia(p_Fecha DATE, p_Dia VARCHAR(10))
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
@@ -526,20 +527,15 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
-    -- El menú que se repite: el primero cargado en el mismo día del ciclo de 28 días
-    SET molde = (SELECT Menu_Del_DiaID
-                 FROM Menu_Del_Dia
-                 WHERE Fecha_menu < p_Fecha
-                   AND MOD(DATEDIFF(p_Fecha, Fecha_menu), 28) = 0
-                 ORDER BY Fecha_menu, Menu_Del_DiaID
-                 LIMIT 1);
+    -- El menú fijo de ese día de la semana: el primero que se cargó
+    SET molde = (SELECT MIN(Menu_Del_DiaID) FROM Menu_Del_Dia WHERE Dia_Semana = p_Dia);
 
-    -- Se copia solo si es día hábil (WEEKDAY 0 a 4 = lunes a viernes) y ese día no tiene menú
-    INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu)
-    SELECT ID_Categoria, Plato_menu, Precio_menu, Stock_menu, p_Fecha
+    -- Se copia solo si la fecha todavía no tiene menú
+    INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana)
+    SELECT ID_Categoria, Plato_menu, Precio_menu, Stock_menu, p_Fecha, Dia_Semana
     FROM Menu_Del_Dia
     WHERE Menu_Del_DiaID = molde
-      AND WEEKDAY(p_Fecha) < 5
+      AND p_Fecha IS NOT NULL
       AND NOT EXISTS (SELECT 1 FROM Menu_Del_Dia WHERE Fecha_menu = p_Fecha);
 
     SET filas = ROW_COUNT();
@@ -550,14 +546,12 @@ BEGIN
     WHERE Menu_Del_DiaID = molde AND filas = 1;
 
     SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Precio_menu, m.Stock_menu, m.Fecha_menu,
-           GROUP_CONCAT(p.Nombre_Producto SEPARATOR ', ') AS Incluye
+           p.Nombre_Producto AS Incluye, m.Dia_Semana
     FROM Menu_Del_Dia m
     LEFT JOIN Detalle_Menu_Dia d ON m.Menu_Del_DiaID = d.Menu_Del_DiaID
     LEFT JOIN Producto p ON d.ProductoID = p.ProductoID
     WHERE m.Fecha_menu = p_Fecha
-    GROUP BY m.Menu_Del_DiaID
-    ORDER BY m.Menu_Del_DiaID DESC
-    LIMIT 1;
+    ORDER BY m.Menu_Del_DiaID DESC;
 END //
 DELIMITER ;
 

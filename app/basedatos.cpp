@@ -191,9 +191,10 @@ MYSQL_RES* agregar_producto_carrito(MYSQL *conn, int ventaID, int productoID, in
     return ejecutar_consulta(conn, sql);
 }
 
-MYSQL_RES* obtener_menu_del_dia(MYSQL *conn)
+MYSQL_RES* obtener_menu_del_dia(MYSQL *conn, const QString &dia)
 {
-    return ejecutar_consulta(conn, "CALL schema_comercial.sp_menu_del_dia(CURDATE());");
+    std::string sql = "CALL schema_comercial.sp_menu_del_dia(CURDATE(), '" + texto_sql(conn, dia) + "');";
+    return ejecutar_consulta(conn, sql);
 }
 
 MYSQL_RES* agregar_menu_carrito(MYSQL *conn, int ventaID, int menuID, int cantidad)
