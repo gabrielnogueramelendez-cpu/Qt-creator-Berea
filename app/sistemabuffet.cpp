@@ -1,6 +1,10 @@
 #include "sistemabuffet.h"
+#include "basedatos.h"
 
 // Definición e inicialización de variables estáticas
+MYSQL *SistemaBuffet::conn = NULL;
+int SistemaBuffet::usuarioID = 1;
+QString SistemaBuffet::usuarioRol = "Estudiante";
 QString SistemaBuffet::usuarioNombre = "Jorge";
 QString SistemaBuffet::usuarioApellido = "Dahan";
 QString SistemaBuffet::usuarioCurso = "6° Año 1ra";
@@ -43,7 +47,10 @@ QList<int> SistemaBuffet::carritoCantidades;
 // Mismo stock que la tabla Producto (04_DatosSQL). Con BDD: SELECT Stock_Producto FROM Producto
 QList<int> SistemaBuffet::productosStock = {0, 40, 80, 50, 45, 90, 25, 70, 70, 60, 150,
                                             100, 100, 60, 80, 80, 70, 60, 40, 25, 40};
+QList<double> SistemaBuffet::productosPrecios = {0, 2800, 1100, 1800, 1600, 800, 2200, 700, 1100, 1200, 1000,
+                                                 900, 1300, 1400, 900, 700, 800, 600, 1500, 4200, 4100};
 
+QList<int> SistemaBuffet::pedidosRetiroIds;
 QStringList SistemaBuffet::pedidosCodigos;
 QStringList SistemaBuffet::pedidosAlumnos;
 QStringList SistemaBuffet::pedidosCursos;
@@ -161,4 +168,91 @@ int SistemaBuffet::getCantidadEnCarrito(int id)
         }
     }
     return 0;
+}
+
+bool SistemaBuffet::cargarUsuarioDesdeBDD(int userID)
+{
+    MYSQL_RES *result = obtener_datos_usuario(conn, userID);
+    if (result == NULL) {
+        return false;
+    }
+    MYSQL_ROW fila = mysql_fetch_row(result);
+    if (fila != NULL) {
+        usuarioID = userID;
+        usuarioRol = valor_fila(fila, 0);
+        usuarioNombre = valor_fila(fila, 1);
+        usuarioApellido = valor_fila(fila, 2);
+        usuarioCurso = valor_fila(fila, 3);
+        usuarioDni = valor_fila(fila, 4);
+        usuarioSaldo = valor_fila(fila, 5).toDouble();
+    }
+    mysql_free_result(result);
+    return fila != NULL;
+}
+
+void SistemaBuffet::cargarDesdeBDD()
+{
+    if (conn == NULL) return;
+
+    MYSQL_RES *result = obtener_productos(conn);
+    if (result != NULL) {
+        MYSQL_ROW fila;
+        while ((fila = mysql_fetch_row(result)) != NULL) {
+            int id = valor_fila(fila, 0).toInt();
+            while (productosStock.size() <= id) {
+                productosStock.append(0);
+                productosPrecios.append(0);
+            }
+            productosPrecios[id] = valor_fila(fila, 3).toDouble();
+            productosStock[id] = valor_fila(fila, 4).toInt();
+            // Un producto dado de baja no se puede vender (sp_agregar_producto_carrito pide Activo = TRUE)
+            if (valor_fila(fila, 5) == "Inactivo") {
+                productosStock[id] = 0;
+            }
+        }
+        mysql_free_result(result);
+    }
+
+    result = obtener_pedidos(conn);
+    if (result != NULL) {
+        pedidosRetiroIds.clear();
+        pedidosCodigos.clear();
+        pedidosAlumnos.clear();
+        pedidosCursos.clear();
+        pedidosDnis.clear();
+        pedidosRecreos.clear();
+        pedidosMetodos.clear();
+        pedidosMontos.clear();
+        pedidosAbonados.clear();
+        pedidosVueltos.clear();
+        pedidosEstados.clear();
+        pedidosDetalles.clear();
+
+        MYSQL_ROW fila;
+        while ((fila = mysql_fetch_row(result)) != NULL) {
+            pedidosRetiroIds.append(valor_fila(fila, 0).toInt());
+            pedidosCodigos.append(valor_fila(fila, 1));
+            pedidosAlumnos.append(valor_fila(fila, 2));
+            pedidosCursos.append(valor_fila(fila, 3));
+            pedidosDnis.append(valor_fila(fila, 4));
+            pedidosRecreos.append(valor_fila(fila, 5));
+            pedidosMetodos.append(valor_fila(fila, 6));
+            pedidosMontos.append(valor_fila(fila, 7).toDouble());
+            // La BDD no guarda con cuánto pagó en efectivo
+            pedidosAbonados.append(valor_fila(fila, 7).toDouble());
+            pedidosVueltos.append(0.0);
+            pedidosEstados.append(valor_fila(fila, 8));
+            pedidosDetalles.append(valor_fila(fila, 9));
+        }
+        mysql_free_result(result);
+    }
+}
+
+void SistemaBuffet::cerrarSesion()
+{
+    if (conn == NULL) return;
+    MYSQL_RES *result = cerrar_sesion(conn, usuarioID);
+    if (result != NULL) {
+        mysql_free_result(result);
+    }
 }

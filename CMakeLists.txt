@@ -17,6 +17,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Sql)
 # Lista de fuentes, encabezados e interfaces gráficas
 set(PROJECT_SOURCES
     app/main.cpp
+    app/basedatos.cpp
+    app/basedatos.h
     app/sistemabuffet.cpp
     app/sistemabuffet.h
     app/loginwindow.cpp
@@ -71,6 +73,20 @@ endif()
 target_link_libraries(ElBuffetDeAlejandro PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Sql
+)
+
+# Librería de C de MySQL (mysql.h y libmysql), la que viene con MySQL Server
+set(MYSQL_DIR "C:/Program Files/MySQL/MySQL Server 8.0")
+target_include_directories(ElBuffetDeAlejandro PRIVATE "${MYSQL_DIR}/include")
+target_link_libraries(ElBuffetDeAlejandro PRIVATE "${MYSQL_DIR}/lib/libmysql.lib")
+
+# libmysql.dll y las dos de OpenSSL que usa tienen que estar al lado del .exe
+add_custom_command(TARGET ElBuffetDeAlejandro POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${MYSQL_DIR}/lib/libmysql.dll"
+        "${MYSQL_DIR}/bin/libssl-3-x64.dll"
+        "${MYSQL_DIR}/bin/libcrypto-3-x64.dll"
+        $<TARGET_FILE_DIR:ElBuffetDeAlejandro>
 )
 
 # Finalización para Qt6

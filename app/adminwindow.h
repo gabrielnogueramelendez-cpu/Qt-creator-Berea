@@ -2,6 +2,7 @@
 #define ADMINWINDOW_H
 
 #include <QWidget>
+#include <mysql.h>
 
 namespace Ui {
 class AdminWindow;
@@ -22,6 +23,8 @@ private slots:
     void on_btnLogout_clicked();
 
 private:
+    void cargarLogsDesdeBDD();
+    bool resultadoCorrecto(MYSQL_RES *result);
     Ui::AdminWindow *ui;
     void cargarInventario();
     void cargarLogs();

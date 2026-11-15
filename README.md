@@ -21,6 +21,8 @@ CMakeLists.txt     proyecto de Qt Creator
 1. Abrir `CMakeLists.txt` con **Qt Creator** (Qt 6, módulos Widgets y Sql).
 2. Elegir un kit (por ejemplo *Desktop Qt 6 MinGW 64-bit*) y compilar.
 
+Requiere **MySQL Server 8.0** instalado en `C:/Program Files/MySQL/MySQL Server 8.0` (de ahí salen `mysql.h`, `libmysql.lib` y las DLL que CMake copia al lado del `.exe`). Usuario, contraseña y puerto de la conexión están en `app/basedatos.cpp`.
+
 Desde la terminal:
 
 ```bash
@@ -30,7 +32,7 @@ cmake --build build
 
 ## Base de datos
 
-Ver [`database/README.md`](database/README.md): son 3 schemas, 27 tablas y 26 stored procedures. Si MySQL no está corriendo, la app funciona igual con los mismos datos en memoria.
+Ver [`database/README.md`](database/README.md): son 3 schemas, 27 tablas y 26 stored procedures. Antes de abrir la app hay que ejecutar en MySQL los scripts 03, 04 y 05. La app se conecta con la API de C de MySQL y usa los stored procedures; si MySQL no está corriendo, avisa y funciona con los mismos datos en memoria, sin guardar cambios.
 
 ## Roles
 

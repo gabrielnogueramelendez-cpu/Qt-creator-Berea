@@ -27,6 +27,7 @@ private slots:
     void on_btnConfirmarPedido_clicked();
 
 private:
+    bool guardarPedidoEnBDD(int metodoPagoID, int franjaID, QString &codigo);
     Ui::PagoDialog *ui;
     QButtonGroup *grupoMetodo;
     double m_totalPagar;
