@@ -48,13 +48,15 @@ void AdminWindow::cargarInventario()
                            "Milanesa de Pollo con Puré", "Combo Sándwich + Gaseosa"};
     QStringList precios = {"2800", "1100", "1800", "1600", "800", "2200", "700", "1100", "1200", "1000",
                            "900", "1300", "1400", "900", "700", "800", "600", "1500", "4200", "4100"};
+    // ID_Categoria de cada producto (columna de Producto); es la posición en comboCategoria
+    QList<int> categorias = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
 
     for (int i = 0; i < nombres.size(); ++i) {
         ui->tableProductosAdmin->insertRow(i);
         ui->tableProductosAdmin->setItem(i, 0, new QTableWidgetItem(QString::number(i + 1)));
         ui->tableProductosAdmin->setItem(i, 1, new QTableWidgetItem(nombres[i]));
-        // La categoría i+1 de la BDD es la del producto i+1 (item 0 del combo es "Seleccioná...")
-        ui->tableProductosAdmin->setItem(i, 2, new QTableWidgetItem(ui->comboCategoria->itemText(i + 1)));
+        // El item 0 del combo es "Seleccioná...", así que el ID_Categoria coincide con la posición
+        ui->tableProductosAdmin->setItem(i, 2, new QTableWidgetItem(ui->comboCategoria->itemText(categorias[i])));
         ui->tableProductosAdmin->setItem(i, 3, new QTableWidgetItem(precios[i]));
         ui->tableProductosAdmin->setItem(i, 4, new QTableWidgetItem(QString::number(SistemaBuffet::productosStock[i + 1])));
         ui->tableProductosAdmin->setItem(i, 5, new QTableWidgetItem("Activo"));
