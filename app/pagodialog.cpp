@@ -3,6 +3,7 @@
 #include "sistemabuffet.h"
 #include <QMessageBox>
 #include <QIntValidator>
+#include <QRandomGenerator>
 
 PagoDialog::PagoDialog(QWidget *parent) :
     QDialog(parent),
@@ -155,9 +156,16 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
 
     QString recreo = ui->comboRecreo->currentText();
 
-    // Código de retiro de 5 caracteres (Codigo_Retiro CHAR(5) en la BDD): P + número correlativo
-    // shortcut: alcanza hasta P9999 por sesión; con BDD el código sale del INSERT en Retiro
-    QString codigo = QString("P%1").arg(1000 + SistemaBuffet::pedidosCodigos.size());
+    // Código de retiro de 5 caracteres al azar (Codigo_Retiro CHAR(5) UNIQUE en la BDD)
+    // Sin O, 0, I ni 1 para que no se confundan al dictarlo en caja
+    QString caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    QString codigo;
+    do {
+        codigo = "";
+        for (int i = 0; i < 5; i++)
+            codigo += caracteres[QRandomGenerator::global()->bounded(caracteres.length())];
+    } while (SistemaBuffet::pedidosCodigos.contains(codigo));
+    // Con BDD: CALL sp_generar_retiro(VentaID, franja, codigo); si el UNIQUE lo rechaza, se sortea otro
 
     // Registrar pedido en las listas paralelas de SistemaBuffet
     SistemaBuffet::pedidosCodigos.append(codigo);
