@@ -30,13 +30,13 @@ cmake --build build
 
 ## Base de datos
 
-Ver [`database/README.md`](database/README.md): son 3 schemas, 22 tablas y 26 stored procedures. Si MySQL no está corriendo, la app funciona igual con los mismos datos en memoria.
+Ver [`database/README.md`](database/README.md): son 3 schemas, 27 tablas y 26 stored procedures. Si MySQL no está corriendo, la app funciona igual con los mismos datos en memoria.
 
 ## Roles
 
 | Rol | Cómo entra | Qué hace |
 |---|---|---|
-| Alumno | Apodo y contraseña | Menú, carrito, pago y código de retiro |
+| Alumno o profesor | Apodo y contraseña | Menú, carrito, pago y código de retiro |
 | Cajero | Apodo, contraseña y PIN de 4 dígitos | Busca el código, entrega o anula con motivo |
 | Administración | Apodo y contraseña del encargado general | Productos, precios, stock y auditoría |
 | Desarrollo | Apodo, contraseña y token de acceso | Consola de conexión MySQL y procedimientos |

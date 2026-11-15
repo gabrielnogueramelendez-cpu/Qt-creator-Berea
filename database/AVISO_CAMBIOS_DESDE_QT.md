@@ -64,3 +64,21 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
 1. 04_DatosSQL: se agregaron 3 estudiantes sin usuario, para que se pueda probar sp_registrar_usuario en la exposición. Los 20 anteriores ya tenían usuario.
    - 48715903 Pablo Linares (6° 1ra), 48902617 Cynthia Berea (6° 2da), 49031458 Cristian Dávalos (6° 3ra). DNI y fecha de nacimiento son inventados.
 2. No cambia ningún UserID ni ningún resultado de 06: la planilla de pruebas sigue igual.
+
+## Séptima tanda: profesores y roles
+
+1. 03_ModeloSQL: dos tablas nuevas en schema_usuarios (ahora son 27 tablas en total).
+   - Rol (RolID, Nombre_Rol).
+   - Profesor (DNI, CUIT, nombre, apellido, fecha de nacimiento, colegio), igual que Estudiante pero sin curso.
+   - Usuario suma DNI_Profesor (FK a Profesor) y RolID (FK a Rol, obligatorio).
+2. 04_DatosSQL:
+   - Rol: 1 Estudiante, 2 Profesor, 3 Personal de caja, 4 Administración, 5 Desarrollador.
+   - Profesor: 21 profesores, sin usuario. DNI, CUIT y fecha de nacimiento son inventados.
+   - Estudiante: salen Linares, Berea y Dávalos (ahora son profesores). Entran Gabriel Noguera (DNI 95671088) y Tomás San Martín, los dos en 4° Año 2da y sin usuario.
+   - Usuario: cada uno tiene su RolID. Los usuarios 27 (encargado) y 30 (administrativa) son Administración.
+3. 05_Backend:
+   - sp_registrar_usuario: si el DNI es de un profesor lo guarda en DNI_Profesor con rol 2; si no, en DNI con rol 1. Devuelve también Nombre_Rol.
+   - sp_iniciar_sesion: Tipo_Usuario ahora es el Nombre_Rol.
+4. 06_PruebasSQL: P01 suma el caso "i-bis" (registro de un profesor, UserID 33) y el caso iv revisa los dos usuarios. P02 espera "Personal de caja".
+5. Planilla: se rehizo desde una corrida real. Cambian P01, P02 y la cantidad de eventos de hoy en P21.
+6. Falta actualizar el DER y el modelo de Codd en drawio con Rol, Profesor y las dos columnas nuevas de Usuario.

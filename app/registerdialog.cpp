@@ -9,7 +9,7 @@ RegisterDialog::RegisterDialog(QWidget *parent) :
     ui(new Ui::RegisterDialog)
 {
     ui->setupUi(this);
-    setWindowTitle("Registro de Alumno - El Buffet de Alejandro");
+    setWindowTitle("Registro - El Buffet de Alejandro");
     aplicarValidadores();
 }
 
@@ -53,8 +53,10 @@ void RegisterDialog::on_btnRegisterConfirm_clicked()
     }
 
     // Las mismas reglas que pone la BDD en sp_registrar_usuario (FK y UNIQUE)
-    if (!SistemaBuffet::estudiantesDnis.contains(dni)) {
-        QMessageBox::warning(this, "DNI Inválido", "Ese DNI no corresponde a un estudiante de la escuela.");
+    bool esEstudiante = SistemaBuffet::estudiantesDnis.contains(dni);
+    bool esProfesor = SistemaBuffet::profesoresDnis.contains(dni);
+    if (!esEstudiante && !esProfesor) {
+        QMessageBox::warning(this, "DNI Inválido", "Ese DNI no corresponde a un estudiante ni a un profesor de la escuela.");
         return;
     }
     if (SistemaBuffet::usuariosDnis.contains(dni)) {
@@ -71,6 +73,11 @@ void RegisterDialog::on_btnRegisterConfirm_clicked()
     SistemaBuffet::usuariosApodos.append(apodo);
     SistemaBuffet::usuariosContrasenas.append(password);
     SistemaBuffet::usuariosSaldos.append(0.0); // igual que en la BDD: Usuario.Saldo arranca en 0
+    if (esProfesor) {
+        SistemaBuffet::usuariosRoles.append("Profesor");
+    } else {
+        SistemaBuffet::usuariosRoles.append("Estudiante");
+    }
 
     QMessageBox::information(this, "Registro Exitoso",
         QString("Tu cuenta quedó creada con el apodo %1.\nYa podés iniciar sesión.").arg(apodo));

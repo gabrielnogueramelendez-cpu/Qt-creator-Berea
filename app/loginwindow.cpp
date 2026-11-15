@@ -131,9 +131,14 @@ void LoginWindow::on_btnLogin_clicked()
     int indiceUsuario = SistemaBuffet::usuariosApodos.indexOf(usuario);
     bool claveCorrecta = indiceUsuario != -1 && SistemaBuffet::usuariosContrasenas[indiceUsuario] == password;
     int indicePersonal = SistemaBuffet::personalApodos.indexOf(usuario);
+    // Igual que Usuario.RolID: el rol dice a qué ventana puede entrar
+    QString rol = "";
+    if (indiceUsuario != -1) {
+        rol = SistemaBuffet::usuariosRoles[indiceUsuario];
+    }
 
-    if (indexRol == 0) { // Estudiante (Con BDD: CALL sp_iniciar_sesion)
-        if (claveCorrecta && SistemaBuffet::usuariosDnis[indiceUsuario] != "") {
+    if (indexRol == 0) { // Alumno o profesor (Con BDD: CALL sp_iniciar_sesion)
+        if (claveCorrecta && (rol == "Estudiante" || rol == "Profesor")) {
             m_intentosFallidos = 0;
             SistemaBuffet::cargarUsuarioActivo(indiceUsuario);
             MainWindow *mainWin = new MainWindow();
@@ -157,7 +162,7 @@ void LoginWindow::on_btnLogin_clicked()
             return;
         }
 
-        if (claveCorrecta && indicePersonal != -1 && SistemaBuffet::personalPines[indicePersonal] == pin) {
+        if (claveCorrecta && rol == "Personal de caja" && SistemaBuffet::personalPines[indicePersonal] == pin) {
             m_intentosFallidos = 0;
             CajeroWindow *cajeroWin = new CajeroWindow();
             cajeroWin->show();
@@ -167,16 +172,15 @@ void LoginWindow::on_btnLogin_clicked()
             QMessageBox::warning(this, "Acceso Denegado", "Apodo, contraseña o PIN incorrectos.");
         }
     }
-    else if (indexRol == 2) { // Encargado (Con BDD: sp_iniciar_sesion devuelve el puesto)
-        if (claveCorrecta && indicePersonal != -1 &&
-            SistemaBuffet::personalPuestos[indicePersonal] == "Encargado General de Buffet") {
+    else if (indexRol == 2) { // Administración (Con BDD: sp_iniciar_sesion devuelve el rol)
+        if (claveCorrecta && rol == "Administración") {
             m_intentosFallidos = 0;
             AdminWindow *adminWin = new AdminWindow();
             adminWin->show();
             this->close();
         } else {
             m_intentosFallidos++;
-            QMessageBox::warning(this, "Acceso Denegado", "Apodo o contraseña incorrectos, o el usuario no es el encargado.");
+            QMessageBox::warning(this, "Acceso Denegado", "Apodo o contraseña incorrectos, o el usuario no es de administración.");
         }
     }
     else if (indexRol == 3) { // Desarrollador (Con BDD: CALL sp_acceso_personal con el token)
@@ -186,7 +190,7 @@ void LoginWindow::on_btnLogin_clicked()
             return;
         }
 
-        if (claveCorrecta && indicePersonal != -1 && SistemaBuffet::personalTokens[indicePersonal] == token) {
+        if (claveCorrecta && rol == "Desarrollador" && SistemaBuffet::personalTokens[indicePersonal] == token) {
             m_intentosFallidos = 0;
             DevWindow *devWin = new DevWindow();
             devWin->show();

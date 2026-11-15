@@ -22,7 +22,12 @@ public:
     static QStringList estudiantesNombres;
     static QStringList estudiantesApellidos;
     static QStringList estudiantesCursos;
+    static QStringList profesoresDnis;
+    static QStringList profesoresNombres;
+    static QStringList profesoresApellidos;
+    static QStringList roles;
     static QStringList usuariosDnis;
+    static QStringList usuariosRoles;
     static QStringList usuariosApodos;
     static QStringList usuariosContrasenas;
     static QList<double> usuariosSaldos;

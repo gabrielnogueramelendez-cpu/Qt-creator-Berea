@@ -19,21 +19,24 @@ INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha
 VALUES ('50111222', '20-50111222-4', 'Tomás', 'Prueba', '2010-05-10', 1, 13);
 
 -- ---------------- P01 sp_registrar_usuario ----------------
--- i. Éxito: devuelve el usuario nuevo (UserID 32)
+-- i. Éxito: devuelve el usuario nuevo (UserID 32, Nombre_Rol Estudiante)
 CALL sp_registrar_usuario('50111222', 'tomaspru10', 'Tomas#2026');
--- ii. DNI que no es de ningún estudiante: ERROR 1452 (clave foránea)
+-- i-bis. Éxito con el DNI de un profesor: UserID 33, Nombre_Rol Profesor
+CALL sp_registrar_usuario('25418763', 'pablolin', 'Pablo#2026');
+-- ii. DNI que no es de ningún estudiante ni profesor: ERROR 1452 (clave foránea)
 CALL sp_registrar_usuario('99999999', 'nadie', 'Clave#1');
 -- iii. Apodo NULL: ERROR 1048 (la columna no acepta NULL)
 CALL sp_registrar_usuario('50111222', NULL, NULL);
--- iv. Consistencia: el usuario quedó guardado y su alta está en el log
-SELECT u.UserID, u.Apodo, u.Contrasena, l.Detalle
-FROM Usuario u INNER JOIN Log_Auditoria l ON u.UserID = l.UserID
-WHERE u.DNI = '50111222' AND l.Tipo_Evento_ID = 4;
+-- iv. Consistencia: los dos usuarios quedaron guardados con su rol y su alta está en el log
+SELECT u.UserID, u.Apodo, r.Nombre_Rol, l.Detalle
+FROM Usuario u INNER JOIN Rol r ON u.RolID = r.RolID
+INNER JOIN Log_Auditoria l ON u.UserID = l.UserID
+WHERE (u.DNI = '50111222' OR u.DNI_Profesor = '25418763') AND l.Tipo_Evento_ID = 4;
 
 -- ---------------- P02 sp_iniciar_sesion ----------------
 -- i. Éxito: devuelve UserID 1, Tipo_Usuario Estudiante
 CALL sp_iniciar_sesion('jorgedah09', 'Jorgedah#2026');
--- i-bis. Éxito con una cajera: Tipo_Usuario Cajera Turno Mañana
+-- i-bis. Éxito con una cajera: Tipo_Usuario Personal de caja
 CALL sp_iniciar_sesion('marcela.ibanez', 'MarcelaBuffet#2026');
 -- ii. Usuario inexistente: 0 filas (y queda un "Fallo de Autenticación" en el log)
 CALL sp_iniciar_sesion('noexiste', 'x');
