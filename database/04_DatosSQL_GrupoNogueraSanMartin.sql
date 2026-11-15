@@ -7,6 +7,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- para vaciar el contenenidod e las tablas
 TRUNCATE TABLE schema_comercial.Retiro;
 TRUNCATE TABLE schema_comercial.Carrito;
 TRUNCATE TABLE schema_comercial.Detalle_Menu_Dia;
@@ -267,7 +268,7 @@ INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Carga de Saldo');  -- 21
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Modificación de Precio de Producto');  -- 22
 
 -- ----------------------------------------------------------------------------
--- Estudiante (20 - todos de la ET N° 3, ID_Colegio = 1)
+-- Estudiante (23 - todos de la ET N° 3, ID_Colegio = 1)
 -- ----------------------------------------------------------------------------
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('12345678', '20-12345678-3', 'Jorge', 'Dahan', '2008-08-21', 1, 21);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('45987654', '27-45987654-0', 'Lucía', 'Gómez', '2008-11-03', 1, 22);
@@ -289,6 +290,9 @@ INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('51808284', '27-51808284-7', 'Florencia', 'Herrera', '2009-01-07', 1, 18);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('50355436', '20-50355436-5', 'Nicolás', 'Suárez', '2009-03-03', 1, 19);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('52176234', '27-52176234-4', 'Rocío', 'Aguirre', '2011-06-10', 1, 12);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48715903', '20-48715903-5', 'Pablo', 'Linares', '2008-04-17', 1, 21);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48902617', '27-48902617-7', 'Cynthia', 'Berea', '2008-06-02', 1, 22);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('49031458', '20-49031458-0', 'Cristian', 'Dávalos', '2008-09-25', 1, 23);
 
 -- ----------------------------------------------------------------------------
 -- Usuario (31) - 1 a 20: estudiantes / 21 a 30: personal del buffet / 31: desarrollador

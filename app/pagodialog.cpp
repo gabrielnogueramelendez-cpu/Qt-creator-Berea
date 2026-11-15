@@ -157,8 +157,7 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
     QString recreo = ui->comboRecreo->currentText();
 
     // Código de retiro de 5 caracteres al azar (Codigo_Retiro CHAR(5) UNIQUE en la BDD)
-    // Sin O, 0, I ni 1 para que no se confundan al dictarlo en caja
-    QString caracteres = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    QString caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     QString codigo;
     do {
         codigo = "";

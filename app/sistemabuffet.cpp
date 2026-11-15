@@ -7,11 +7,11 @@ QString SistemaBuffet::usuarioCurso = "6° Año 1ra";
 QString SistemaBuffet::usuarioDni = "12345678";
 double SistemaBuffet::usuarioSaldo = 10000.0;
 
-// Estudiante (04_DatosSQL). Con BDD: SELECT de Estudiante y Curso
-QStringList SistemaBuffet::estudiantesDnis = {"12345678", "45987654", "48499250", "51715407", "52929091", "49373046", "52303055", "52420093", "49512712", "52652318", "48428925", "48322516", "47596375", "53199127", "49263492", "49609844", "50491680", "51808284", "50355436", "52176234"};
-QStringList SistemaBuffet::estudiantesNombres = {"Jorge", "Lucía", "Mateo", "Valentina", "Santiago", "Camila", "Benjamín", "Martina", "Thiago", "Sofía", "Joaquín", "Julieta", "Bautista", "Agustina", "Lautaro", "Micaela", "Facundo", "Florencia", "Nicolás", "Rocío"};
-QStringList SistemaBuffet::estudiantesApellidos = {"Dahan", "Gómez", "Fernández", "Rodríguez", "López", "Martínez", "García", "Pérez", "Sánchez", "Romero", "Díaz", "Álvarez", "Torres", "Ruiz", "Acosta", "Benítez", "Medina", "Herrera", "Suárez", "Aguirre"};
-QStringList SistemaBuffet::estudiantesCursos = {"6° Año 1ra", "6° Año 2da", "3° Año 3ra", "1° Año 4ta", "5° Año 1ra", "2° Año 2da", "1° Año 3ra", "1° Año 4ta", "6° Año 1ra", "5° Año 2da", "3° Año 3ra", "1° Año 4ta", "1° Año 1ra", "3° Año 2da", "2° Año 3ra", "2° Año 4ta", "2° Año 1ra", "5° Año 2da", "5° Año 3ra", "3° Año 4ta"};
+// Estudiante (04_DatosSQL); los 3 últimos no tienen usuario y sirven para probar el registro. Con BDD: SELECT de Estudiante y Curso
+QStringList SistemaBuffet::estudiantesDnis = {"12345678", "45987654", "48499250", "51715407", "52929091", "49373046", "52303055", "52420093", "49512712", "52652318", "48428925", "48322516", "47596375", "53199127", "49263492", "49609844", "50491680", "51808284", "50355436", "52176234", "48715903", "48902617", "49031458"};
+QStringList SistemaBuffet::estudiantesNombres = {"Jorge", "Lucía", "Mateo", "Valentina", "Santiago", "Camila", "Benjamín", "Martina", "Thiago", "Sofía", "Joaquín", "Julieta", "Bautista", "Agustina", "Lautaro", "Micaela", "Facundo", "Florencia", "Nicolás", "Rocío", "Pablo", "Cynthia", "Cristian"};
+QStringList SistemaBuffet::estudiantesApellidos = {"Dahan", "Gómez", "Fernández", "Rodríguez", "López", "Martínez", "García", "Pérez", "Sánchez", "Romero", "Díaz", "Álvarez", "Torres", "Ruiz", "Acosta", "Benítez", "Medina", "Herrera", "Suárez", "Aguirre", "Linares", "Berea", "Dávalos"};
+QStringList SistemaBuffet::estudiantesCursos = {"6° Año 1ra", "6° Año 2da", "3° Año 3ra", "1° Año 4ta", "5° Año 1ra", "2° Año 2da", "1° Año 3ra", "1° Año 4ta", "6° Año 1ra", "5° Año 2da", "3° Año 3ra", "1° Año 4ta", "1° Año 1ra", "3° Año 2da", "2° Año 3ra", "2° Año 4ta", "2° Año 1ra", "5° Año 2da", "5° Año 3ra", "3° Año 4ta", "6° Año 1ra", "6° Año 2da", "6° Año 3ra"};
 
 // Usuario (04_DatosSQL): la posición + 1 es el UserID. El personal no tiene DNI
 QStringList SistemaBuffet::usuariosDnis = {"12345678", "45987654", "48499250", "51715407", "52929091", "49373046", "52303055", "52420093", "49512712", "52652318", "48428925", "48322516", "47596375", "53199127", "49263492", "49609844", "50491680", "51808284", "50355436", "52176234", "", "", "", "", "", "", "", "", "", "", ""};
