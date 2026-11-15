@@ -18,7 +18,7 @@
 
 | Criterio | El Buffet de Alejandro | SaaS comercial (OrderEAT) | POS comercial | Manual / efectivo |
 |---|---|---|---|---|
-| Arquitectura | App de escritorio C++/Qt + MySQL (3 schemas, 22 tablas en 3FN) | App móvil o web en la nube | Software propietario en terminales | Papel o planillas |
+| Arquitectura | App de escritorio C++/Qt + MySQL (3 schemas, 27 tablas en 3FN) | App móvil o web en la nube | Software propietario en terminales | Papel o planillas |
 | Retiro express | Código alfanumérico único de 5 caracteres | QR o notificación push | Número de ticket impreso | Fila por orden de llegada |
 | Validación en caja | Menos de 5 s (entrega en menos de 30 s) | Según la red y los datos móviles | 15 a 30 s por impresión y cobro | 30 a 60 s por contar efectivo y dar vuelto |
 | Control de stock | Descuento automático en MySQL y bloqueo de agotados | Sincronización sujeta a la nube | Inventario general de tienda | Control visual |

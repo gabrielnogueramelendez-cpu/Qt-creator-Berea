@@ -22,7 +22,7 @@ SET NAMES utf8mb4;
 USE schema_usuarios;
 
 -- ----------------------------------------------------------------------------
--- SP 1: Registrar un usuario nuevo para un estudiante
+-- SP 1: Registrar un usuario nuevo para un estudiante o un profesor
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_registrar_usuario;
 DELIMITER //
@@ -30,6 +30,7 @@ CREATE PROCEDURE sp_registrar_usuario(p_DNI VARCHAR(20), p_Apodo VARCHAR(50), p_
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
+    DECLARE es_profesor INT DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -39,17 +40,20 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
-    INSERT INTO Usuario (DNI, Apodo, Contrasena)
-    VALUES (p_DNI, p_Apodo, p_Contrasena);
+    SELECT COUNT(*) INTO es_profesor FROM Profesor WHERE DNI = p_DNI;
+
+    INSERT INTO Usuario (DNI, DNI_Profesor, Apodo, Contrasena, RolID)
+    VALUES (IF(es_profesor = 1, NULL, p_DNI), IF(es_profesor = 1, p_DNI, NULL), p_Apodo, p_Contrasena, IF(es_profesor = 1, 2, 1));
 
     INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
     SELECT UserID, 4, CURDATE(), CURTIME(), CONCAT('Nuevo usuario: ', Apodo)
     FROM Usuario
     WHERE Apodo = p_Apodo;
 
-    SELECT UserID, DNI, Apodo
-    FROM Usuario
-    WHERE Apodo = p_Apodo;
+    SELECT u.UserID, COALESCE(u.DNI, u.DNI_Profesor) AS DNI, u.Apodo, r.Nombre_Rol
+    FROM Usuario u
+    INNER JOIN Rol r ON u.RolID = r.RolID
+    WHERE u.Apodo = p_Apodo;
 END //
 DELIMITER ;
 
@@ -82,10 +86,9 @@ BEGIN
     FROM DUAL
     WHERE NOT EXISTS (SELECT 1 FROM Usuario WHERE Apodo = p_Apodo AND Contrasena = p_Contrasena);
 
-    SELECT u.UserID, u.Apodo, COALESCE(p.Nombre_Puesto, 'Estudiante') AS Tipo_Usuario
+    SELECT u.UserID, u.Apodo, r.Nombre_Rol AS Tipo_Usuario
     FROM Usuario u
-    LEFT JOIN Empleado e ON u.UserID = e.UserID
-    LEFT JOIN Puesto p ON e.ID_Puesto = p.ID_Puesto
+    INNER JOIN Rol r ON u.RolID = r.RolID
     WHERE u.Apodo = p_Apodo AND u.Contrasena = p_Contrasena;
 END //
 DELIMITER ;
@@ -335,7 +338,7 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
--- SP 8: Alta del menú del día con el producto que incluye (ej.: la bebida)
+-- SP 8: Alta del menú del día con el producto que incluye (por ej: la bebida)
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_alta_menu_dia;
 DELIMITER //
@@ -1023,7 +1026,7 @@ BEGIN
         GROUP BY v.UserID
         HAVING COUNT(v.VentaID) >= 2;
 
-    -- Paso 2: se agregan los datos del estudiante (pocas filas)
+    -- Paso 2: se agregan los datos del estudiante
     SELECT u.UserID, u.Apodo, e.Nombre_Estudiante, e.Apellido_Estudiante, cu.Anio, cu.Division,
            t.Compras_Realizadas, t.Total_Gastado, t.Ultima_Compra
     FROM tmp_compras t

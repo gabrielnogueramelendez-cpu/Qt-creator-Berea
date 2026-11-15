@@ -206,7 +206,7 @@
        <widget class="QComboBox" name="comboRole">
         <item>
          <property name="text">
-          <string>Estudiante</string>
+          <string>Alumno o profesor</string>
          </property>
         </item>
         <item>
@@ -365,7 +365,7 @@ QPushButton:hover { color: #42101A; }</string>
            <string>font-size: 12px; color: #7A6A60;</string>
           </property>
           <property name="text">
-           <string>¿Sos alumno y no tenés cuenta?</string>
+           <string>¿Sos alumno o profesor y no tenés cuenta?</string>
           </property>
          </widget>
         </item>

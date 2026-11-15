@@ -24,6 +24,8 @@ TRUNCATE TABLE schema_usuarios.Email;
 TRUNCATE TABLE schema_usuarios.Empleado;
 TRUNCATE TABLE schema_usuarios.Usuario;
 TRUNCATE TABLE schema_usuarios.Estudiante;
+TRUNCATE TABLE schema_usuarios.Profesor;
+TRUNCATE TABLE schema_usuarios.Rol;
 TRUNCATE TABLE schema_usuarios.Tipo_Evento;
 TRUNCATE TABLE schema_usuarios.Puesto;
 TRUNCATE TABLE schema_usuarios.Curso;
@@ -268,7 +270,16 @@ INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Carga de Saldo');  -- 21
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Modificación de Precio de Producto');  -- 22
 
 -- ----------------------------------------------------------------------------
--- Estudiante (23 - todos de la ET N° 3, ID_Colegio = 1)
+-- Rol (5)
+-- ----------------------------------------------------------------------------
+INSERT INTO Rol (Nombre_Rol) VALUES ('Estudiante');  -- 1
+INSERT INTO Rol (Nombre_Rol) VALUES ('Profesor');  -- 2
+INSERT INTO Rol (Nombre_Rol) VALUES ('Personal de caja');  -- 3
+INSERT INTO Rol (Nombre_Rol) VALUES ('Administración');  -- 4
+INSERT INTO Rol (Nombre_Rol) VALUES ('Desarrollador');  -- 5
+
+-- ----------------------------------------------------------------------------
+-- Estudiante (22 - todos de la ET N° 3, ID_Colegio = 1)
 -- ----------------------------------------------------------------------------
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('12345678', '20-12345678-3', 'Jorge', 'Dahan', '2008-08-21', 1, 21);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('45987654', '27-45987654-0', 'Lucía', 'Gómez', '2008-11-03', 1, 22);
@@ -290,44 +301,68 @@ INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('51808284', '27-51808284-7', 'Florencia', 'Herrera', '2009-01-07', 1, 18);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('50355436', '20-50355436-5', 'Nicolás', 'Suárez', '2009-03-03', 1, 19);
 INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('52176234', '27-52176234-4', 'Rocío', 'Aguirre', '2011-06-10', 1, 12);
-INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48715903', '20-48715903-5', 'Pablo', 'Linares', '2008-04-17', 1, 21);
-INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48902617', '27-48902617-7', 'Cynthia', 'Berea', '2008-06-02', 1, 22);
-INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('49031458', '20-49031458-0', 'Cristian', 'Dávalos', '2008-09-25', 1, 23);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('95671088', '20-95671088-0', 'Gabriel', 'Noguera', '2010-02-11', 1, 14);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('50283716', '20-50283716-9', 'Tomás', 'San Martín', '2010-07-19', 1, 14);
+
+-- ----------------------------------------------------------------------------
+-- Profesor (21 - todos de la ET N° 3, ID_Colegio = 1)
+-- ----------------------------------------------------------------------------
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('25418763', '20-25418763-2', 'Pablo', 'Linares', '1977-03-14', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('27904512', '27-27904512-8', 'Cynthya', 'Berea', '1980-07-22', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('29387104', '20-29387104-4', 'Cristian', 'Dávalos', '1982-01-09', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('26150938', '27-26150938-0', 'Gabriela', 'Tamer', '1978-05-30', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('23716485', '20-23716485-8', 'Sergio', 'Ipolo', '1974-11-18', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('22058391', '20-22058391-1', 'Julio', 'Toni', '1972-02-26', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('33842017', '20-33842017-0', 'Facundo', 'Scally', '1988-09-04', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('30217649', '27-30217649-9', 'Mariana', 'Milano', '1983-12-11', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('20574836', '27-20574836-4', 'Norma', 'Aloma', '1969-06-19', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('21863270', '20-21863270-0', 'Néstor', 'Quiñones', '1970-10-02', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('28640195', '20-28640195-4', 'Miguel', 'Riños', '1981-04-27', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('34129057', '27-34129057-6', 'Victoria', 'Erramuspe', '1989-08-15', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('31406782', '27-31406782-2', 'Cecilia', 'Garabato', '1985-03-03', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('32791546', '20-32791546-1', 'Andrés', 'Diz', '1986-12-20', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('35268014', '27-35268014-7', 'Josefina', 'Maldonado', '1990-05-08', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('33015479', '20-33015479-9', 'Yamil', 'Decastelli', '1987-07-31', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('36482910', '27-36482910-3', 'Luz', 'Retamazo', '1991-10-24', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('31957320', '27-31957320-3', 'Bárbara', 'Saldaño', '1985-01-16', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('29801643', '27-29801643-0', 'Natalia', 'Guerrero', '1982-09-29', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('24360871', '27-24360871-1', 'Rossana', 'Fortunatti', '1975-04-12', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('27512398', '20-27512398-7', 'Francisco', 'Anselmi', '1979-11-05', 1);
 
 -- ----------------------------------------------------------------------------
 -- Usuario (31) - 1 a 20: estudiantes / 21 a 30: personal del buffet / 31: desarrollador
 -- ----------------------------------------------------------------------------
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('12345678', 'jorgedah09', 'Jorgedah#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('45987654', 'luciagom08', 'Luciagom#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48499250', 'mateofer11', 'Mateofer#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('51715407', 'valentinarod13', 'Valentinarod#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52929091', 'santiagolop09', 'Santiagolop#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49373046', 'camilamar12', 'Camilamar#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52303055', 'benjamingar13', 'Benjamingar#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52420093', 'martinaper13', 'Martinaper#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49512712', 'thiagosan08', 'Thiagosan#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52652318', 'sofiarom09', 'Sofiarom#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48428925', 'joaquindia11', 'Joaquindia#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('48322516', 'julietaalv13', 'Julietaalv#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('47596375', 'bautistator13', 'Bautistator#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('53199127', 'agustinarui11', 'Agustinarui#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49263492', 'lautaroaco12', 'Lautaroaco#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('49609844', 'micaelaben12', 'Micaelaben#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('50491680', 'facundomed12', 'Facundomed#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('51808284', 'florenciaher09', 'Florenciaher#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('50355436', 'nicolassua09', 'Nicolassua#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES ('52176234', 'rocioagu11', 'Rocioagu#2026');
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'marcela.ibanez', 'MarcelaBuffet#2026');  -- 21: Marcela Ibáñez
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'diego.paz', 'DiegoBuffet#2026');  -- 22: Diego Paz
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'karina.luna', 'KarinaBuffet#2026');  -- 23: Karina Luna
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'sergio.ledesma', 'SergioBuffet#2026');  -- 24: Sergio Ledesma
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'paola.vega', 'PaolaBuffet#2026');  -- 25: Paola Vega
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'hector.maldonado', 'HectorBuffet#2026');  -- 26: Héctor Maldonado
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'alejandro.funes', 'AlejandroBuffet#2026');  -- 27: Alejandro Funes
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'silvia.arce', 'SilviaBuffet#2026');  -- 28: Silvia Arce
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'ramiro.sosa', 'RamiroBuffet#2026');  -- 29: Ramiro Sosa
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'veronica.campos', 'VeronicaBuffet#2026');  -- 30: Verónica Campos
-INSERT INTO Usuario (DNI, Apodo, Contrasena) VALUES (NULL, 'soporte.dev', 'SoporteDev#2026');  -- 31: desarrollador
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('12345678', 'jorgedah09', 'Jorgedah#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('45987654', 'luciagom08', 'Luciagom#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('48499250', 'mateofer11', 'Mateofer#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('51715407', 'valentinarod13', 'Valentinarod#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52929091', 'santiagolop09', 'Santiagolop#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49373046', 'camilamar12', 'Camilamar#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52303055', 'benjamingar13', 'Benjamingar#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52420093', 'martinaper13', 'Martinaper#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49512712', 'thiagosan08', 'Thiagosan#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52652318', 'sofiarom09', 'Sofiarom#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('48428925', 'joaquindia11', 'Joaquindia#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('48322516', 'julietaalv13', 'Julietaalv#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('47596375', 'bautistator13', 'Bautistator#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('53199127', 'agustinarui11', 'Agustinarui#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49263492', 'lautaroaco12', 'Lautaroaco#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49609844', 'micaelaben12', 'Micaelaben#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('50491680', 'facundomed12', 'Facundomed#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('51808284', 'florenciaher09', 'Florenciaher#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('50355436', 'nicolassua09', 'Nicolassua#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52176234', 'rocioagu11', 'Rocioagu#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'marcela.ibanez', 'MarcelaBuffet#2026', 3);  -- 21: Marcela Ibáñez
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'diego.paz', 'DiegoBuffet#2026', 3);  -- 22: Diego Paz
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'karina.luna', 'KarinaBuffet#2026', 3);  -- 23: Karina Luna
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'sergio.ledesma', 'SergioBuffet#2026', 3);  -- 24: Sergio Ledesma
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'paola.vega', 'PaolaBuffet#2026', 3);  -- 25: Paola Vega
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'hector.maldonado', 'HectorBuffet#2026', 3);  -- 26: Héctor Maldonado
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'alejandro.funes', 'AlejandroBuffet#2026', 4);  -- 27: Alejandro Funes
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'silvia.arce', 'SilviaBuffet#2026', 3);  -- 28: Silvia Arce
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'ramiro.sosa', 'RamiroBuffet#2026', 3);  -- 29: Ramiro Sosa
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'veronica.campos', 'VeronicaBuffet#2026', 4);  -- 30: Verónica Campos
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'soporte.dev', 'SoporteDev#2026', 5);  -- 31: desarrollador
 
 -- Saldo inicial de prueba para el usuario 1 (el resto arranca en 0)
 UPDATE Usuario SET Saldo = 10000 WHERE UserID = 1;

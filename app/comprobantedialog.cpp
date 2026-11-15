@@ -26,7 +26,7 @@ void ComprobanteDialog::cargarDatosComprobante()
         QString itemsTexto = SistemaBuffet::pedidosDetalles[idx];
 
         QString resumen = QString(
-            "Estudiante: %1 (DNI %2 · %3)\n"
+            "Cliente: %1 (DNI %2 · %3)\n"
             "Retiro: %4\n"
             "Pago: %5\n"
             "Estado: %6\n\n"

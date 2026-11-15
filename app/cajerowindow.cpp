@@ -35,7 +35,7 @@ void CajeroWindow::cargarPedidosDelSistema()
     ui->tableColasPedidos->setRowCount(0);
     ui->tableColasPedidos->setColumnCount(5);
     QStringList headers;
-    headers << "Código" << "Estudiante" << "Retiro" << "Total" << "Estado";
+    headers << "Código" << "Cliente" << "Retiro" << "Total" << "Estado";
     ui->tableColasPedidos->setHorizontalHeaderLabels(headers);
     ui->tableColasPedidos->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
 
@@ -90,7 +90,7 @@ void CajeroWindow::on_btnBuscarCodigo_clicked()
         ui->lblStatusPedido->setText("PEDIDO " + codigo + " · " + estado + " · ya no se puede modificar");
     }
 
-    ui->lblDetalleAlumno->setText(QString("Estudiante: %1\nDNI %2 · %3")
+    ui->lblDetalleAlumno->setText(QString("Cliente: %1\nDNI %2 · %3")
         .arg(SistemaBuffet::pedidosAlumnos[idx])
         .arg(SistemaBuffet::pedidosDnis[idx])
         .arg(SistemaBuffet::pedidosCursos[idx]));

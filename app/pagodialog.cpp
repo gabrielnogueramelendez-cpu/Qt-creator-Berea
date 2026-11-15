@@ -101,7 +101,7 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
     QString curso = ui->txtPagoCurso->text().trimmed();
 
     if (dni.isEmpty() || nombre.isEmpty() || curso.isEmpty()) {
-        QMessageBox::warning(this, "Datos Incompletos", "Completá los datos del estudiante.");
+        QMessageBox::warning(this, "Datos Incompletos", "Completá tus datos.");
         return;
     }
 
