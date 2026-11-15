@@ -96,11 +96,12 @@ SELECT ProductoID, Activo FROM Producto WHERE ProductoID = 21;
 
 -- ---------------- P07 sp_alta_menu_dia ----------------
 -- i. Éxito: menú de HOY que incluye un agua (producto 10). Menu_Del_DiaID 21
-CALL sp_alta_menu_dia(27, 19, 'Milanesa con ensalada', 4500.00, 30, CURDATE(), 10);
+-- (el día de la semana lo manda Qt; en la prueba va uno fijo)
+CALL sp_alta_menu_dia(27, 19, 'Milanesa con ensalada', 4500.00, 30, CURDATE(), 'Lunes', 10);
 -- ii. Categoría inexistente: ERROR 1452 (clave foránea)
-CALL sp_alta_menu_dia(27, 999, 'Plato X', 4000.00, 10, CURDATE(), NULL);
+CALL sp_alta_menu_dia(27, 999, 'Plato X', 4000.00, 10, CURDATE(), 'Lunes', NULL);
 -- iii. Fecha NULL: ERROR 1048 (la columna no acepta NULL)
-CALL sp_alta_menu_dia(27, 19, 'Plato X', 4000.00, 10, NULL, NULL);
+CALL sp_alta_menu_dia(27, 19, 'Plato X', 4000.00, 10, NULL, 'Lunes', NULL);
 -- iv. Consistencia: el menú y su producto incluido existen
 SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Fecha_menu, d.ProductoID
 FROM Menu_Del_Dia m INNER JOIN Detalle_Menu_Dia d ON m.Menu_Del_DiaID = d.Menu_Del_DiaID
@@ -365,21 +366,21 @@ SELECT Precio_Producto,
 FROM Producto WHERE ProductoID = 1;
 
 -- ############################################################################
--- MENÚ DEL DÍA QUE SE REPITE CADA 4 SEMANAS
+-- MENÚ SEMANAL FIJO (CADA DÍA HÁBIL REPITE SU PLATO)
 -- ############################################################################
 USE schema_comercial;
 
 -- ---------------- P28 sp_menu_del_dia ----------------
--- i. Éxito: miércoles 03/03/2027 sin menú cargado: copia el menú 1 (mismo día del ciclo de 28 días)
-CALL sp_menu_del_dia('2027-03-03');
+-- i. Éxito: miércoles 03/03/2027 sin menú cargado: copia el menú 1 (el primer miércoles cargado)
+CALL sp_menu_del_dia('2027-03-03', 'Miércoles');
 -- ii. Sábado 06/03/2027: 0 filas (los fines de semana no hay menú)
-CALL sp_menu_del_dia('2027-03-06');
+CALL sp_menu_del_dia('2027-03-06', 'Sábado');
 -- iii. Fecha NULL: 0 filas
-CALL sp_menu_del_dia(NULL);
+CALL sp_menu_del_dia(NULL, NULL);
 -- iii-bis. Día que ya tiene menú (14/10/2026): devuelve el menú 1 sin copiar nada
-CALL sp_menu_del_dia('2026-10-14');
+CALL sp_menu_del_dia('2026-10-14', 'Miércoles');
 -- iv. Consistencia: pedirlo otra vez no lo duplica (1 menú y 1 producto incluido el 03/03/2027)
-CALL sp_menu_del_dia('2027-03-03');
+CALL sp_menu_del_dia('2027-03-03', 'Miércoles');
 SELECT COUNT(*) AS Menus,
        (SELECT COUNT(*) FROM Detalle_Menu_Dia d INNER JOIN Menu_Del_Dia m ON d.Menu_Del_DiaID = m.Menu_Del_DiaID
         WHERE m.Fecha_menu = '2027-03-03') AS Productos_Incluidos

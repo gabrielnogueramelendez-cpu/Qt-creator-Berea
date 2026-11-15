@@ -564,52 +564,52 @@ INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock
 INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (20, 'Combo Sándwich + Gaseosa', 'Sándwich de milanesa + gaseosa 500 ml', 40, '4100.00');
 
 -- ----------------------------------------------------------------------------
--- Menu_Del_Dia (20 - un menú por día hábil)
+-- Menu_Del_Dia (20 - menú semanal fijo: cada día hábil repite su plato)
 -- ----------------------------------------------------------------------------
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-10-14');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-10-15');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (2, 'Tarta de zapallitos con ensalada', '3900.00', 30, '2026-10-16');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Pollo al horno con arroz', '4300.00', 40, '2026-10-19');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-10-20');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Ñoquis con salsa mixta', '4000.00', 35, '2026-10-21');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Hamburguesa casera con ensalada', '4400.00', 35, '2026-10-22');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Pastel de papa', '4100.00', 35, '2026-10-23');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Wok de verduras y pollo', '4300.00', 25, '2026-10-26');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Canelones de verdura', '4200.00', 30, '2026-10-27');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (2, 'Empanadas (2) con ensalada', '3700.00', 30, '2026-10-28');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Guiso de lentejas', '3800.00', 20, '2026-10-29');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Arroz con pollo', '4000.00', 20, '2026-10-30');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (3, 'Pizza casera con ensalada', '3900.00', 25, '2026-11-02');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Milanesa napolitana con papas', '4600.00', 40, '2026-11-03');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (6, 'Salpicón de ave', '3800.00', 35, '2026-11-04');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Revuelto gramajo', '4100.00', 40, '2026-11-05');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-11-06');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-11-09');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu) VALUES (19, 'Zapallitos rellenos', '3900.00', 25, '2026-11-10');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-10-14', 'Miércoles');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-10-15', 'Jueves');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-10-16', 'Viernes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-10-19', 'Lunes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-10-20', 'Martes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-10-21', 'Miércoles');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-10-22', 'Jueves');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-10-23', 'Viernes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-10-26', 'Lunes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-10-27', 'Martes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-10-28', 'Miércoles');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-10-29', 'Jueves');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-10-30', 'Viernes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-11-02', 'Lunes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-11-03', 'Martes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-11-04', 'Miércoles');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-11-05', 'Jueves');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-11-06', 'Viernes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-11-09', 'Lunes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-11-10', 'Martes');
 
 -- ----------------------------------------------------------------------------
 -- Detalle_Menu_Dia (20 - producto que incluye cada menú: bebida, fruta o postre)
 -- ----------------------------------------------------------------------------
 INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (1, 10);
 INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (2, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (3, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (4, 9);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (3, 11);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (4, 7);
 INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (5, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (6, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (7, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (8, 9);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (9, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (10, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (11, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (12, 9);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (13, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (14, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (15, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (16, 9);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (17, 10);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (6, 10);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (7, 11);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (8, 11);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (9, 7);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (10, 10);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (11, 10);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (12, 11);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (13, 11);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (14, 7);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (15, 10);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (16, 10);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (17, 11);
 INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (18, 11);
 INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (19, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (20, 9);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (20, 10);
 
 -- ----------------------------------------------------------------------------
 -- Venta (50 - TABLA PRINCIPAL). Monto_Total = suma de sus renglones de Carrito
@@ -620,7 +620,7 @@ INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) 
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 12, 3, '2026-10-15', '14:55:00', '2600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 5, 2, '2026-10-15', '16:25:00', '3800.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-10-15', '18:10:00', '1600.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-10-16', '09:10:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-10-16', '09:10:00', '4300.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 2, 1, '2026-10-20', '12:20:00', '3600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (6, 5, 2, '2026-10-20', '16:25:00', '3900.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 9, 1, '2026-10-21', '09:08:00', '4100.00');
@@ -629,12 +629,12 @@ INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) 
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 1, 3, '2026-10-23', '09:12:00', '2800.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 18, 1, '2026-10-26', '12:30:00', '1400.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 6, 3, '2026-10-26', '14:55:00', '1100.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 1, 1, '2026-10-27', '09:05:00', '4200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 1, 1, '2026-10-27', '09:05:00', '3900.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 10, 2, '2026-10-27', '10:42:00', '800.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 3, 1, '2026-10-27', '12:15:00', '1400.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 20, 1, '2026-10-27', '14:52:00', '3600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 17, 1, '2026-10-27', '16:22:00', '2800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (5, 6, 1, '2026-10-27', '18:20:00', '4200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (5, 6, 1, '2026-10-27', '18:20:00', '3900.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 2, '2026-10-28', '16:25:00', '1400.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 14, 2, '2026-10-29', '10:38:00', '3800.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 4, 1, '2026-10-29', '12:25:00', '3800.00');
@@ -643,7 +643,7 @@ INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) 
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 10, 1, '2026-10-30', '10:40:00', '1800.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 18, 1, '2026-11-02', '09:05:00', '3900.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 18, 2, '2026-11-02', '14:53:00', '700.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 9, 1, '2026-11-03', '09:12:00', '4600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 9, 1, '2026-11-03', '09:12:00', '3900.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 5, 3, '2026-11-03', '12:10:00', '2100.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 6, 2, '2026-11-03', '14:55:00', '1100.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 11, 1, '2026-11-03', '16:22:00', '1800.00');
@@ -674,7 +674,7 @@ INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES 
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (4, 12, 2, '1300.00');
 INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (5, 2, 1, '3800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (6, 5, 2, '800.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (7, 3, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (7, 3, 1, '4300.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (8, 3, 2, '1800.00');
 INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (9, 5, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (10, 20, 1, '4100.00');
@@ -683,12 +683,12 @@ INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (12,
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (13, 13, 2, '1400.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (14, 7, 2, '700.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (15, 2, 1, '1100.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (16, 10, 1, '4200.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (16, 10, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (17, 16, 1, '800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (18, 7, 2, '700.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (19, 3, 2, '1800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (20, 1, 1, '2800.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (21, 10, 1, '4200.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (21, 10, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (22, 7, 2, '700.00');
 INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (23, 12, 1, '3800.00');
 INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (24, 12, 1, '3800.00');
@@ -697,7 +697,7 @@ INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (26,
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (27, 14, 2, '900.00');
 INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (28, 14, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (29, 7, 1, '700.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (30, 15, 1, '4600.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (30, 15, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (31, 15, 3, '700.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (32, 8, 1, '1100.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (33, 11, 2, '900.00');
