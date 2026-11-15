@@ -23,6 +23,12 @@ CMakeLists.txt     proyecto de Qt Creator
 
 Requiere **MySQL Server 8.0** instalado en `C:/Program Files/MySQL/MySQL Server 8.0` (de ahí salen `mysql.h`, `libmysql.lib` y las DLL que CMake copia al lado del `.exe`). Usuario, contraseña y puerto de la conexión están en `app/basedatos.cpp`.
 
+En **Ubuntu** (laboratorio): instalar la librería de desarrollo de MySQL y abrir el mismo `CMakeLists.txt` en Qt Creator.
+
+```bash
+sudo apt install libmysqlclient-dev
+```
+
 Desde la terminal:
 
 ```bash
