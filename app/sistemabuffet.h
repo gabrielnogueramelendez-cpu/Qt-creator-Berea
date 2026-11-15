@@ -71,13 +71,13 @@ public:
     static QString menuHoyPlato;
     static QString menuHoyIncluye;
     static double menuHoyPrecio;
-    // Tabla Menu_Del_Dia (04_DatosSQL) y el producto que incluye cada menú (Detalle_Menu_Dia)
+    // Menú semanal fijo de Menu_Del_Dia (04_DatosSQL) y el producto que incluye cada menú (Detalle_Menu_Dia)
+    static QStringList menusDias;
     static QStringList menusPlatos;
     static QList<double> menusPrecios;
     static QList<int> menusStocks;
-    static QStringList menusFechas;
     static QStringList menusIncluye;
-    // Igual que sp_menu_del_dia: de lunes a viernes, y si hoy no tiene menú se repite el de hace 4 semanas
+    // Igual que sp_menu_del_dia: de lunes a viernes, cada día con su plato fijo
     static void cargarMenuDelDia();
 
     // Pedidos generados para Mostrador/Caja y Comprobantes
