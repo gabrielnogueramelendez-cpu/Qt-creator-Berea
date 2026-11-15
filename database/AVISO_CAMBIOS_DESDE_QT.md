@@ -93,3 +93,16 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
 3. Planilla: se rehizo desde una corrida real. Ahora tiene 28 pruebas y 112 casos; P01 a P27 no cambian.
 4. La app (Qt) usa sp_menu_del_dia para la pestaña "Menú del día" y sp_agregar_menu_carrito al pagar.
 5. El horario de retiro (recreo posterior a la compra) se controla en la app, no en sp_generar_retiro: si lo controlara el SP, P11 daría distinto según la hora a la que se corre 06.
+
+## Novena tanda: menú semanal fijo
+
+1. 03_ModeloSQL: Menu_Del_Dia suma la columna Dia_Semana ('Lunes' a 'Viernes', con CHECK ... IN). Fecha_menu se queda: cada fecha tiene su fila y su stock.
+2. 04_DatosSQL:
+   - Los 20 menús repiten 5 platos fijos: lunes Tarta de choclo con ensalada, martes Tortilla de papas con ensalada, miércoles Milanesa de pollo con puré, jueves Fideos con tuco y queso, viernes Ravioles con salsa fileto. Cada uno con su producto incluido.
+   - Cambia el precio de 4 ventas con menú para que coincida con el plato fijo: venta 7 (3900 -> 4300), ventas 16 y 21 (4200 -> 3900) y venta 30 (4600 -> 3900), en Venta y en Carrito.
+3. 05_Backend:
+   - sp_menu_del_dia(p_Fecha, p_Dia): ya no usa MOD ni DATEDIFF (no están en el material de la materia). El día de la semana lo manda la app. Si la fecha no tiene menú, copia el primero cargado para ese día (MIN + subconsulta + NOT EXISTS). Sábado, domingo o NULL: 0 filas. Devuelve también Dia_Semana y ya no usa GROUP_CONCAT.
+   - sp_alta_menu_dia suma el parámetro p_Dia (después de p_Fecha).
+4. 06_PruebasSQL: P07 y P28 pasan el día de la semana.
+5. Planilla: P07 y P28 con los parámetros nuevos; P13, P15 y P16 con los totales nuevos (139400 en vez de 140300).
+6. La app (Qt) calcula el día con QDate::dayOfWeek() y lo pasa a sp_menu_del_dia.
