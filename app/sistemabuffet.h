@@ -61,9 +61,24 @@ public:
     static int getCantidadTotalCarrito();
     static int getCantidadEnCarrito(int id);
 
-    // Stock de cada producto: la posición es el ProductoID de la BDD (la posición 0 no se usa)
+    // Stock de cada producto: la posición es el ProductoID de la BDD.
+    // La posición 0 (ningún producto la usa) es el menú del día: en el carrito va con id 0
     static QList<int> productosStock;
     static QList<double> productosPrecios;
+
+    // Menú del día de hoy (menuHoyID = Menu_Del_DiaID, 0 si hoy no hay menú)
+    static int menuHoyID;
+    static QString menuHoyPlato;
+    static QString menuHoyIncluye;
+    static double menuHoyPrecio;
+    // Tabla Menu_Del_Dia (04_DatosSQL) y el producto que incluye cada menú (Detalle_Menu_Dia)
+    static QStringList menusPlatos;
+    static QList<double> menusPrecios;
+    static QList<int> menusStocks;
+    static QStringList menusFechas;
+    static QStringList menusIncluye;
+    // Igual que sp_menu_del_dia: de lunes a viernes, y si hoy no tiene menú se repite el de hace 4 semanas
+    static void cargarMenuDelDia();
 
     // Pedidos generados para Mostrador/Caja y Comprobantes
     static QList<int> pedidosRetiroIds;
