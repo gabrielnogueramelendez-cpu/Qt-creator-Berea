@@ -85,7 +85,7 @@ QTabBar::tab:hover { color: #6B1B2A; }</string>
           <string>A</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -119,7 +119,7 @@ QTabBar::tab:hover { color: #6B1B2A; }</string>
        <item>
         <spacer name="espacioHeader">
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -213,7 +213,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
        <string>Tu mejor recreo empieza acá.</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignmentFlag::AlignCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -257,7 +257,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
            <property name="bottomMargin">
             <number>22</number>
            </property>
-           <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop">
+           <item row="0" column="0" alignment="Qt::AlignLeft|Qt::AlignTop">
             <widget class="QFrame" name="cardMenuDia">
              <property name="minimumSize">
               <size>
@@ -311,7 +311,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <string>Menú del día</string>
                 </property>
                 <property name="alignment">
-                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                 <set>Qt::AlignCenter</set>
                 </property>
                </widget>
               </item>
@@ -358,7 +358,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                 <item>
                  <spacer name="espacioCardMenuDia">
                   <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
+                   <enum>Qt::Vertical</enum>
                   </property>
                   <property name="sizeHint" stdset="0">
                    <size>
@@ -416,7 +416,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                     </item>
                    </layout>
                   </item>
-                  <item alignment="Qt::AlignmentFlag::AlignRight">
+                  <item alignment="Qt::AlignRight">
                    <widget class="QPushButton" name="btnVerMenu">
                     <property name="text">
                      <string>AGREGAR</string>
@@ -542,7 +542,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -592,7 +592,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardPolloPure">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -650,7 +650,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerPolloPure">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -718,7 +718,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -768,7 +768,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardCombo">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -826,7 +826,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerCombo">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -843,7 +843,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="0" column="3">
              <spacer name="derechaPlatos">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -856,7 +856,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="1" column="0">
              <spacer name="abajoPlatos">
               <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
+               <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -979,7 +979,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -1029,7 +1029,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardMilanesa">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1087,7 +1087,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerMilanesa">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -1155,7 +1155,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -1205,7 +1205,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardEmpanada">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1263,7 +1263,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerEmpanada">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -1331,7 +1331,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -1381,7 +1381,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardPizza">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1439,7 +1439,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerPizza">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -1507,7 +1507,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -1557,7 +1557,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardPebete">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1615,7 +1615,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerPebete">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -1632,7 +1632,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="0" column="3">
              <spacer name="derechaSalados">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1645,7 +1645,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="2" column="0">
              <spacer name="abajoSalados">
               <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
+               <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -1768,7 +1768,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -1818,7 +1818,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardEnsalada">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -1876,7 +1876,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerEnsalada">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -1944,7 +1944,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -1994,7 +1994,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardManzana">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2052,7 +2052,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerManzana">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -2120,7 +2120,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -2170,7 +2170,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardYogur">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2228,7 +2228,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerYogur">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -2296,7 +2296,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -2346,7 +2346,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardBarra">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2404,7 +2404,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerBarra">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -2472,7 +2472,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -2522,7 +2522,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardFrutosSecos">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2580,7 +2580,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerFrutosSecos">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -2597,7 +2597,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="0" column="3">
              <spacer name="derechaSaludables">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -2610,7 +2610,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="2" column="0">
              <spacer name="abajoSaludables">
               <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
+               <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -2733,7 +2733,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -2783,7 +2783,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardMedialuna">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -2841,7 +2841,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerMedialuna">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -2909,7 +2909,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -2959,7 +2959,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardGalletitas">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -3017,7 +3017,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerGalletitas">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -3085,7 +3085,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -3135,7 +3135,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardAlfajor">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -3193,7 +3193,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerAlfajor">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -3261,7 +3261,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -3311,7 +3311,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardTurron">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -3369,7 +3369,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerTurron">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -3386,7 +3386,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="0" column="3">
              <spacer name="derechaDulces">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -3399,7 +3399,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="2" column="0">
              <spacer name="abajoDulces">
               <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
+               <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -3522,7 +3522,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -3572,7 +3572,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardAgua">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -3630,7 +3630,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerAgua">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -3698,7 +3698,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -3748,7 +3748,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardJugo">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -3806,7 +3806,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerJugo">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -3874,7 +3874,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -3924,7 +3924,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardGaseosa">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -3982,7 +3982,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerGaseosa">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -4050,7 +4050,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -4100,7 +4100,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardCafe">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -4158,7 +4158,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerCafe">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -4226,7 +4226,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                   <string>Sin foto</string>
                  </property>
                  <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                  <set>Qt::AlignCenter</set>
                  </property>
                 </widget>
                </item>
@@ -4276,7 +4276,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                  <item>
                   <spacer name="espacioCardChocolatada">
                    <property name="orientation">
-                    <enum>Qt::Orientation::Vertical</enum>
+                    <enum>Qt::Vertical</enum>
                    </property>
                    <property name="sizeHint" stdset="0">
                     <size>
@@ -4334,7 +4334,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
                      </item>
                     </layout>
                    </item>
-                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <item alignment="Qt::AlignRight">
                     <widget class="QPushButton" name="btnVerChocolatada">
                      <property name="text">
                       <string>AGREGAR</string>
@@ -4351,7 +4351,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="0" column="3">
              <spacer name="derechaBebidas">
               <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
+               <enum>Qt::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -4364,7 +4364,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
             <item row="2" column="0">
              <spacer name="abajoBebidas">
               <property name="orientation">
-               <enum>Qt::Orientation::Vertical</enum>
+               <enum>Qt::Vertical</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -4421,7 +4421,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
           <string>A</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -4438,7 +4438,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
        <item>
         <spacer name="espacioPie1">
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -4461,7 +4461,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
        <item>
         <spacer name="espacioPie2">
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
