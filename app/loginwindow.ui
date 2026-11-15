@@ -239,7 +239,7 @@
       <item>
        <widget class="QLineEdit" name="txtUser">
         <property name="placeholderText">
-         <string>jorgedah09</string>
+         <string>davidmel09</string>
         </property>
        </widget>
       </item>
