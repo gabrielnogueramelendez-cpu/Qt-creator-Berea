@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QIntValidator>
 #include <QRandomGenerator>
+#include <QTime>
 
 PagoDialog::PagoDialog(QWidget *parent) :
     QDialog(parent),
@@ -109,6 +110,16 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
     // El primer ítem del combo es el texto "Seleccioná un horario..."
     if (ui->comboRecreo->currentIndex() == 0) {
         QMessageBox::warning(this, "Error", "Debe seleccionar un horario de retiro.");
+        return;
+    }
+
+    // Se retira de un recreo para el siguiente: el horario elegido tiene que empezar después de la compra.
+    // Mismas horas que Franja_Retiro.Hora_Retiro (ID_Franja 1 a 7, en el orden del combo)
+    QStringList horasFranja = {"07:45", "09:00", "10:35", "12:05", "14:50", "16:20", "17:50"};
+    QTime inicioFranja = QTime::fromString(horasFranja[ui->comboRecreo->currentIndex() - 1], "HH:mm");
+    if (inicioFranja <= QTime::currentTime()) {
+        QMessageBox::warning(this, "Horario no disponible",
+            "Ese horario ya empezó. Lo que comprás ahora se retira en un recreo posterior.");
         return;
     }
 
@@ -246,9 +257,13 @@ bool PagoDialog::guardarPedidoEnBDD(int metodoPagoID, int franjaID, QString &cod
         return false;
     }
 
-    // Paso 2: cada producto del carrito (el SP controla el stock y lo descuenta)
+    // Paso 2: cada producto del carrito (el SP controla el stock y lo descuenta). El id 0 es el menú del día
     for (int i = 0; i < SistemaBuffet::carritoIds.size(); ++i) {
-        result = agregar_producto_carrito(SistemaBuffet::conn, ventaID, SistemaBuffet::carritoIds[i], SistemaBuffet::carritoCantidades[i]);
+        if (SistemaBuffet::carritoIds[i] == 0) {
+            result = agregar_menu_carrito(SistemaBuffet::conn, ventaID, SistemaBuffet::menuHoyID, SistemaBuffet::carritoCantidades[i]);
+        } else {
+            result = agregar_producto_carrito(SistemaBuffet::conn, ventaID, SistemaBuffet::carritoIds[i], SistemaBuffet::carritoCantidades[i]);
+        }
         int agregados = 0;
         if (result != NULL && error_del_sp(result) == 0) {
             MYSQL_ROW fila = mysql_fetch_row(result);

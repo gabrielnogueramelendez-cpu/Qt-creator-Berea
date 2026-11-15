@@ -504,6 +504,64 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
+-- SP 11b: Menú del día de una fecha. Los menús se repiten cada 4 semanas
+-- (20 días hábiles): si un día hábil no tiene menú cargado, se copia el del mismo
+-- día del ciclo (el primero cargado hace 28, 56, ... días) con su stock inicial
+-- y su producto incluido. Sábado, domingo o fecha NULL sin menú cargado: 0 filas.
+-- ----------------------------------------------------------------------------
+DROP PROCEDURE IF EXISTS sp_menu_del_dia;
+DELIMITER //
+CREATE PROCEDURE sp_menu_del_dia(p_Fecha DATE)
+BEGIN
+    DECLARE codigo_error INT DEFAULT 0;
+    DECLARE mensaje_error VARCHAR(255) DEFAULT '';
+    DECLARE molde INT DEFAULT NULL;
+    DECLARE filas INT DEFAULT 0;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        GET DIAGNOSTICS CONDITION 1
+            codigo_error = MYSQL_ERRNO,
+            mensaje_error = MESSAGE_TEXT;
+        SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
+    END;
+
+    -- El menú que se repite: el primero cargado en el mismo día del ciclo de 28 días
+    SET molde = (SELECT Menu_Del_DiaID
+                 FROM Menu_Del_Dia
+                 WHERE Fecha_menu < p_Fecha
+                   AND MOD(DATEDIFF(p_Fecha, Fecha_menu), 28) = 0
+                 ORDER BY Fecha_menu, Menu_Del_DiaID
+                 LIMIT 1);
+
+    -- Se copia solo si es día hábil (WEEKDAY 0 a 4 = lunes a viernes) y ese día no tiene menú
+    INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu)
+    SELECT ID_Categoria, Plato_menu, Precio_menu, Stock_menu, p_Fecha
+    FROM Menu_Del_Dia
+    WHERE Menu_Del_DiaID = molde
+      AND WEEKDAY(p_Fecha) < 5
+      AND NOT EXISTS (SELECT 1 FROM Menu_Del_Dia WHERE Fecha_menu = p_Fecha);
+
+    SET filas = ROW_COUNT();
+
+    INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID)
+    SELECT (SELECT MAX(Menu_Del_DiaID) FROM Menu_Del_Dia), ProductoID
+    FROM Detalle_Menu_Dia
+    WHERE Menu_Del_DiaID = molde AND filas = 1;
+
+    SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Precio_menu, m.Stock_menu, m.Fecha_menu,
+           GROUP_CONCAT(p.Nombre_Producto SEPARATOR ', ') AS Incluye
+    FROM Menu_Del_Dia m
+    LEFT JOIN Detalle_Menu_Dia d ON m.Menu_Del_DiaID = d.Menu_Del_DiaID
+    LEFT JOIN Producto p ON d.ProductoID = p.ProductoID
+    WHERE m.Fecha_menu = p_Fecha
+    GROUP BY m.Menu_Del_DiaID
+    ORDER BY m.Menu_Del_DiaID DESC
+    LIMIT 1;
+END //
+DELIMITER ;
+
+-- ----------------------------------------------------------------------------
 -- SP 12: Generar el retiro (cierra la venta)
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_generar_retiro;

@@ -51,7 +51,7 @@ jobs:
             **Adjuntos**
             - `presentacion-el-buffet-de-alejandro.html`: la presentación (21 diapositivas). Se abre con doble clic y funciona sin internet. Flechas para avanzar, `S` para notas del orador, `F` pantalla completa.
             - `material-de-catedra.zip`: documentos del proyecto (investigación, requerimientos, métricas y riesgos, marco lógico, informe de mercado, validaciones) y la base de datos.
-            - `03` a `06` `.sql`: scripts MySQL (3 schemas, 27 tablas, 26 stored procedures y pruebas).
+            - `03` a `06` `.sql`: scripts MySQL (3 schemas, 27 tablas, 27 stored procedures y pruebas).
 
             **Código**: app de escritorio en C++ con Qt 6. Abrir `CMakeLists.txt` en Qt Creator.
 

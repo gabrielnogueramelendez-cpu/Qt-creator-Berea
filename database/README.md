@@ -1,6 +1,6 @@
 # Base de datos
 
-Scripts MySQL de El Buffet de Alejandro: **3 schemas y 27 tablas** en tercera forma normal (3FN), datos de ejemplo, 26 stored procedures y sus pruebas.
+Scripts MySQL de El Buffet de Alejandro: **3 schemas y 27 tablas** en tercera forma normal (3FN), datos de ejemplo, 27 stored procedures y sus pruebas.
 
 | Archivo | Contenido |
 |---|---|
