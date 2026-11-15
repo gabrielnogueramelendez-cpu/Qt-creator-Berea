@@ -172,7 +172,7 @@
              <item>
               <widget class="QLineEdit" name="txtRegApodo">
                <property name="placeholderText">
-                <string>jorgedah09</string>
+                <string>davidmel09</string>
                </property>
               </widget>
              </item>
