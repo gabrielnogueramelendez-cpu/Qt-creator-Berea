@@ -529,9 +529,10 @@ INSERT INTO Estado_Retiro (Estado) VALUES ('EN ESPERA DE CONFIRMACION');
 INSERT INTO Estado_Retiro (Estado) VALUES ('ARCHIVADO');
 
 -- ----------------------------------------------------------------------------
--- Franja_Retiro (7) - horario real de la ET N° 3. El buffet atiende de 07:45 a 20:00 hs
+-- Franja_Retiro (6) - horario real de la ET N° 3. A las 07:45 entran a clase, así que no hay retiro a esa hora.
+-- Los pedidos se hacen de un recreo para el siguiente: de 06:00 a 07:45 para el 1er recreo TM y durante cada
+-- recreo para el que sigue. En horario de clases la app no toma pedidos.
 -- ----------------------------------------------------------------------------
-INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Apertura e inicio de clases TM (07:45 hs)', '07:45:00');
 INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo TM (09:00 a 09:15 hs)', '09:00:00');
 INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo TM (10:35 a 10:45 hs)', '10:35:00');
 INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Receso Inter-Turno - Almuerzo (12:05 a 13:30 hs)', '12:05:00');
@@ -619,7 +620,7 @@ INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) 
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 15, 1, '2026-10-15', '10:40:00', '7600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 12, 3, '2026-10-15', '14:55:00', '2600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 5, 2, '2026-10-15', '16:25:00', '3800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-10-15', '18:10:00', '1600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-10-15', '07:20:00', '1600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-10-16', '09:10:00', '4300.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 2, 1, '2026-10-20', '12:20:00', '3600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (6, 5, 2, '2026-10-20', '16:25:00', '3900.00');
@@ -634,11 +635,11 @@ INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) 
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 3, 1, '2026-10-27', '12:15:00', '1400.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 20, 1, '2026-10-27', '14:52:00', '3600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 17, 1, '2026-10-27', '16:22:00', '2800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (5, 6, 1, '2026-10-27', '18:20:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (5, 6, 1, '2026-10-27', '07:30:00', '3900.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 2, '2026-10-28', '16:25:00', '1400.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 14, 2, '2026-10-29', '10:38:00', '3800.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 4, 1, '2026-10-29', '12:25:00', '3800.00');
-INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 1, '2026-10-29', '17:55:00', '2600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 1, '2026-10-29', '07:15:00', '2600.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 14, 2, '2026-10-30', '09:14:00', '2200.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 10, 1, '2026-10-30', '10:40:00', '1800.00');
 INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 18, 1, '2026-11-02', '09:05:00', '3900.00');
@@ -720,19 +721,19 @@ INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (49,
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (50, 1, 1, '2800.00');
 
 -- ----------------------------------------------------------------------------
--- Retiro (50 - uno por venta). La franja de retiro nunca termina antes de la hora de compra
+-- Retiro (50 - uno por venta). Se retira en el recreo siguiente a la hora de compra
 -- ----------------------------------------------------------------------------
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (1, 3, 2, 'SJX48');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (2, 2, 4, '8XACQ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (3, 2, 4, 'HTWBP');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (3, 2, 3, 'HTWBP');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (4, 2, 5, '7TZFN');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (5, 2, 6, 'AGKXQ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (6, 2, 7, '7PLVF');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (6, 2, 1, '7PLVF');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (7, 2, 2, '4JGBT');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (8, 2, 4, '4CMQ8');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (9, 2, 6, 'XXYW8');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (10, 2, 3, 'S9WSC');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (11, 2, 6, '9JB8Z');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (10, 2, 2, 'S9WSC');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (11, 2, 5, '9JB8Z');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (12, 3, 3, 'S7NZT');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (13, 2, 2, '3VPD4');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (14, 2, 4, 'EV8FW');
@@ -742,11 +743,11 @@ INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES 
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (18, 3, 4, '5JPT9');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (19, 2, 5, 'JWZ3N');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (20, 2, 6, 'KKKJD');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (21, 2, 7, 'CTVMJ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (22, 2, 7, 'TYJ7L');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (21, 2, 1, 'CTVMJ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (22, 2, 6, 'TYJ7L');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (23, 2, 3, 'MDMK4');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (24, 2, 4, '9BVQZ');
-INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (25, 2, 7, 'F74KW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (25, 2, 1, 'F74KW');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (26, 2, 2, 'KC8AD');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (27, 2, 3, 'GYSXB');
 INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (28, 2, 2, 'LNF55');

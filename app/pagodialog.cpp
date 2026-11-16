@@ -7,6 +7,21 @@
 #include <QRandomGenerator>
 #include <QTime>
 
+// Se pide de un recreo para el siguiente. Ventana de pedido de cada franja (ID_Franja 1 a 6 de Franja_Retiro):
+// el 1er recreo TM se pide antes de entrar (06:00 a 07:45) y los demás durante el recreo anterior.
+// En horario de clases no se toman pedidos (devuelve 0).
+static int franjaDisponible()
+{
+    const char *ventanas[6][2] = {{"06:00", "07:45"}, {"09:00", "09:15"}, {"10:35", "10:45"},
+                                  {"12:05", "13:30"}, {"14:50", "15:00"}, {"16:20", "16:30"}};
+    QTime ahora = QTime::currentTime();
+    for (int i = 0; i < 6; i++) {
+        if (ahora >= QTime::fromString(ventanas[i][0], "HH:mm") && ahora < QTime::fromString(ventanas[i][1], "HH:mm"))
+            return i + 1;
+    }
+    return 0;
+}
+
 PagoDialog::PagoDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PagoDialog),
@@ -31,6 +46,10 @@ PagoDialog::PagoDialog(QWidget *parent) :
 
     cargarDatosAlumno();
     habilitarCamposMetodo();
+
+    // El horario de retiro no se elige: es siempre el recreo que sigue
+    ui->comboRecreo->setEnabled(false);
+    ui->comboRecreo->setCurrentIndex(franjaDisponible());
 }
 
 PagoDialog::~PagoDialog()
@@ -107,19 +126,13 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
         return;
     }
 
-    // El primer ítem del combo es el texto "Seleccioná un horario..."
-    if (ui->comboRecreo->currentIndex() == 0) {
-        QMessageBox::warning(this, "Error", "Debe seleccionar un horario de retiro.");
-        return;
-    }
-
-    // Se retira de un recreo para el siguiente: el horario elegido tiene que empezar después de la compra.
-    // Mismas horas que Franja_Retiro.Hora_Retiro (ID_Franja 1 a 7, en el orden del combo)
-    QStringList horasFranja = {"07:45", "09:00", "10:35", "12:05", "14:50", "16:20", "17:50"};
-    QTime inicioFranja = QTime::fromString(horasFranja[ui->comboRecreo->currentIndex() - 1], "HH:mm");
-    if (inicioFranja <= QTime::currentTime()) {
-        QMessageBox::warning(this, "Horario no disponible",
-            "Ese horario ya empezó. Lo que comprás ahora se retira en un recreo posterior.");
+    // Se vuelve a calcular al confirmar, por si la ventana cerró con el diálogo abierto
+    int franja = franjaDisponible();
+    ui->comboRecreo->setCurrentIndex(franja);
+    if (franja == 0) {
+        QMessageBox::warning(this, "Horario de clases",
+            "Ahora no se toman pedidos. Podés pedir de 06:00 a 07:45 para el 1er recreo, "
+            "o durante cada recreo para el siguiente.");
         return;
     }
 
@@ -166,8 +179,8 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
     }
 
     QString recreo = ui->comboRecreo->currentText();
-    // El orden del combo es el de Franja_Retiro (ID_Franja 1 a 7) y los métodos son los ID 1, 2 y 21 de Metodo_Pago
-    int franjaID = ui->comboRecreo->currentIndex();
+    // El orden del combo es el de Franja_Retiro (ID_Franja 1 a 6) y los métodos son los ID 1, 2 y 21 de Metodo_Pago
+    int franjaID = franja;
     int metodoPagoID = 1;
     if (selectMetodo == 2) {
         metodoPagoID = 2;

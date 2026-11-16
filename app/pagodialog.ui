@@ -90,8 +90,7 @@ QGroupBox { background-color: #FFFDF8; }</string></property>
         <layout class="QVBoxLayout" name="layoutRetiro">
          <item>
           <widget class="QComboBox" name="comboRecreo">
-           <item><property name="text"><string>Seleccioná un horario...</string></property></item>
-           <item><property name="text"><string>Apertura e inicio de clases TM (07:45 hs)</string></property></item>
+           <item><property name="text"><string>Ahora no se toman pedidos</string></property></item>
            <item><property name="text"><string>1er Recreo TM (09:00 a 09:15 hs)</string></property></item>
            <item><property name="text"><string>2do Recreo TM (10:35 a 10:45 hs)</string></property></item>
            <item><property name="text"><string>Receso Inter-Turno - Almuerzo (12:05 a 13:30 hs)</string></property></item>
@@ -173,7 +172,7 @@ QGroupBox { background-color: #FFFDF8; }</string></property>
       </item>
       <item>
        <widget class="QCheckBox" name="chkConfirmarTerminos">
-        <property name="text"><string>Confirmo que los datos son correctos y retiro el pedido en el horario elegido.</string></property>
+        <property name="text"><string>Confirmo que los datos son correctos y retiro el pedido en el horario indicado.</string></property>
        </widget>
       </item>
       <item>
