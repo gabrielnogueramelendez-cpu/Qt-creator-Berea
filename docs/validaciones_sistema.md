@@ -57,12 +57,15 @@ Lista maestra de validaciones de la aplicación Qt. Cada código (por ejemplo `C
 --------------------------------------------------------------------------------
 3.1. Verificación de Datos del Alumno:
      [PAG-01] Verificación obligatoria de DNI, Nombre y Curso antes de procesar el pago.
-     [PAG-02] Selección obligatoria de Horario / Recreo de Retiro:
-              - 1er Recreo Turno Mañana (10:35 hs)
-              - 2do Recreo Turno Mañana (12:00 hs)
-              - Almuerzo Buffet Escolar (12:45 hs a 13:30 hs)
-              - 1er Recreo Turno Tarde (15:35 hs)
-              - Salida de Talleres Técnicos (17:45 hs)
+     [PAG-02] Horario de pedido y retiro (de un recreo para el siguiente):
+              - De 06:00 a 07:45 (antes de entrar)  -> retira en el 1er Recreo TM (09:00 a 09:15 hs)
+              - Durante el 1er Recreo TM            -> retira en el 2do Recreo TM (10:35 a 10:45 hs)
+              - Durante el 2do Recreo TM            -> retira en el Almuerzo (12:05 a 13:30 hs)
+              - Durante el Almuerzo                 -> retira en el 1er Recreo TT (14:50 a 15:00 hs)
+              - Durante el 1er Recreo TT            -> retira en el 2do Recreo TT (16:20 a 16:30 hs)
+              - Durante el 2do Recreo TT            -> retira en la Atención Post-Clases (17:50 a 20:00 hs)
+              - En horario de clases la app se puede usar, pero no confirma pedidos.
+              - A las 07:45 entran a clase: no hay retiro a esa hora.
 
 3.2. Métodos de Pago y Reglas Financieras:
      [PAG-03] Efectivo en Mostrador:

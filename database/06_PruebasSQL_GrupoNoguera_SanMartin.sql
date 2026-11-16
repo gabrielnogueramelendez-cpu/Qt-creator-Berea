@@ -144,12 +144,12 @@ SELECT v.Monto_Total, SUM(c.Cantidad * c.Precio_Unitario) AS Suma_Carrito,
 FROM Venta v INNER JOIN Carrito c ON v.VentaID = c.VentaID WHERE v.VentaID = 51 GROUP BY v.Monto_Total;
 
 -- ---------------- P11 sp_generar_retiro ----------------
--- i. Éxito: retiro en el receso del almuerzo (franja 4) con el código AB123
-CALL sp_generar_retiro(51, 4, 'AB123');
+-- i. Éxito: retiro en el receso del almuerzo (franja 3) con el código AB123
+CALL sp_generar_retiro(51, 3, 'AB123');
 -- ii. Venta inexistente: 0 filas (no se crea ningún retiro)
-CALL sp_generar_retiro(9999, 4, 'ZZ999');
+CALL sp_generar_retiro(9999, 3, 'ZZ999');
 -- iii. Límite: generar el retiro dos veces para la misma venta: ERROR 1062 (duplicado)
-CALL sp_generar_retiro(51, 4, 'CD456');
+CALL sp_generar_retiro(51, 3, 'CD456');
 -- iv. Consistencia: hay un solo retiro PENDIENTE para la venta 51, y ya no se le pueden agregar productos
 SELECT RetiroID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro FROM Retiro WHERE VentaID = 51;
 CALL sp_agregar_producto_carrito(51, 5, 1);
@@ -314,14 +314,14 @@ USE schema_comercial;
 CALL sp_registrar_venta(3, NULL, 21);
 SET @venta_saldo = (SELECT MAX(VentaID) FROM Venta WHERE UserID = 3);
 CALL sp_agregar_producto_carrito(@venta_saldo, 1, 1);
-CALL sp_generar_retiro(@venta_saldo, 4, 'SA001');
+CALL sp_generar_retiro(@venta_saldo, 3, 'SA001');
 SELECT u.Saldo, 5000 - v.Monto_Total AS Saldo_Esperado
 FROM schema_usuarios.Usuario u INNER JOIN Venta v ON v.UserID = u.UserID WHERE v.VentaID = @venta_saldo;
 -- ii. Límite: el saldo no alcanza. No se crea el retiro (0 filas) y el saldo no cambia
 CALL sp_registrar_venta(3, NULL, 21);
 SET @venta_sin_saldo = (SELECT MAX(VentaID) FROM Venta WHERE UserID = 3);
 CALL sp_agregar_producto_carrito(@venta_sin_saldo, 1, 2);
-CALL sp_generar_retiro(@venta_sin_saldo, 4, 'SA002');
+CALL sp_generar_retiro(@venta_sin_saldo, 3, 'SA002');
 -- iii. Cancelar el pedido pagado con saldo devuelve el saldo: vuelve a 5000
 SET @retiro_saldo = (SELECT RetiroID FROM Retiro WHERE VentaID = @venta_saldo);
 CALL sp_actualizar_estado_retiro(21, @retiro_saldo, 3);

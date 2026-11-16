@@ -106,3 +106,14 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
 4. 06_PruebasSQL: P07 y P28 pasan el día de la semana.
 5. Planilla: P07 y P28 con los parámetros nuevos; P13, P15 y P16 con los totales nuevos (139400 en vez de 140300).
 6. La app (Qt) calcula el día con QDate::dayOfWeek() y lo pasa a sp_menu_del_dia.
+
+## Décima tanda: horario de pedidos
+
+1. 04_DatosSQL:
+   - Franja_Retiro pasa de 7 a 6 filas: se borra "Apertura e inicio de clases TM (07:45 hs)", porque a las 07:45 entran a clase y no se puede retirar. Los ID quedan del 1 (1er Recreo TM) al 6 (Atención Post-Clases).
+   - Los pedidos se hacen de un recreo para el siguiente: de 06:00 a 07:45 para el 1er recreo TM, y durante cada recreo para el que sigue. En horario de clases no se toman pedidos.
+   - Las ventas 6, 21 y 25 eran de después de clase (18:10, 18:20 y 17:55): pasan a 07:20, 07:30 y 07:15, antes de entrar.
+   - Los 50 retiros usan la franja siguiente a la hora de su venta.
+2. 06_PruebasSQL: P11 y P25 generan el retiro en la franja 3 (almuerzo), que antes era la 4.
+3. Planilla: P11 y P25 con la franja 3; P19 da 13 filas y la primera ahora es 1er Recreo TM, ENTREGADO, 3 pedidos. El resto no cambia.
+4. 03 y 05 no cambian. La app (Qt) controla el horario: fuera de esas ventanas se puede navegar y armar el carrito, pero no confirmar el pedido.

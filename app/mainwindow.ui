@@ -4477,7 +4477,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
           <string>font-size: 11px; color: #7A6A60; font-weight: bold;</string>
          </property>
          <property name="text">
-          <string>LUN – VIE · 07:45 A 20:00</string>
+          <string>LUN – VIE · PEDIDOS DESDE 06:00 · RETIROS 09:00 A 20:00</string>
          </property>
         </widget>
        </item>
