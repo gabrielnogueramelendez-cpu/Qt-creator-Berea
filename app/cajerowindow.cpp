@@ -102,7 +102,9 @@ void CajeroWindow::on_btnBuscarCodigo_clicked()
 
     // Un renglón por producto (en la BDD: tabla Carrito de esa venta)
     ui->listDetalleItems->clear();
-    QStringList lineas = SistemaBuffet::pedidosDetalles[idx].split('\n', Qt::SkipEmptyParts);
+    // Qt 5.12 no tiene Qt::SkipEmptyParts: se separa y se quitan los renglones vacíos
+    QStringList lineas = SistemaBuffet::pedidosDetalles[idx].split('\n');
+    lineas.removeAll("");
     for (int i = 0; i < lineas.size(); ++i) {
         ui->listDetalleItems->addItem(lineas[i].trimmed());
     }
