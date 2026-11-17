@@ -37,7 +37,7 @@ Para la demostración están cargados estos usuarios (también aparecen en la pa
 
 # 3. Iniciar sesión
 
-![Pantalla de inicio de sesión](../presentacion/src/img/login.webp)
+![Pantalla de inicio de sesión](img/login.jpg)
 
 1. En **TIPO DE USUARIO**, elegí con qué perfil entrás: *Alumno o profesor*, *Personal de buffet (caja)*, *Administrador* o *Desarrollador*. Los campos cambian según el perfil.
 2. Escribí tu **apodo** y tu **contraseña**. Con el botón **MOSTRAR** ves lo que escribiste; con **OCULTAR** lo volvés a tapar.
@@ -53,6 +53,8 @@ Para la demostración están cargados estos usuarios (también aparecen en la pa
 # 4. Registrarse (estudiantes y profesores)
 
 Solo pueden registrarse personas que ya figuran en la escuela como estudiantes o profesores. El personal del buffet no se registra: su usuario lo carga la escuela.
+
+![Pantalla de registro](img/registro.jpg)
 
 1. En el inicio de sesión, con el perfil *Alumno o profesor*, tocá **REGISTRARME** (debajo de "¿Sos alumno o profesor y no tenés cuenta?"). La aplicación también te lo ofrece si tu apodo o contraseña no coinciden.
 2. Escribí tu **DNI** sin puntos (7 u 8 números).
@@ -71,7 +73,7 @@ Tu nombre y tu curso no se escriben: salen de tu DNI, como figura en la escuela.
 
 ## 5.1 El catálogo
 
-![Catálogo de productos](../presentacion/src/img/catalogo.webp)
+![Catálogo de productos](img/catalogo.jpg)
 
 Arriba ves tu nombre, tu curso y tu **saldo de cuenta escolar**. A la derecha, el círculo con tus iniciales abre tu perfil y **SALIR** cierra la sesión.
 
@@ -103,7 +105,7 @@ El botón de abajo, **TU PEDIDO · cantidad · $total**, muestra en todo momento
 
 ## 5.3 Revisar el carrito
 
-![Carrito de compras](../presentacion/src/img/carrito.webp)
+![Carrito de compras](img/carrito.jpg)
 
 Tocá **TU PEDIDO**. Si el carrito está vacío, la aplicación te avisa y no abre nada.
 
@@ -117,7 +119,7 @@ En la tabla ves cada producto con su precio, cantidad y subtotal. Desde acá pod
 
 ## 5.4 Pagar
 
-![Pantalla de pago](../presentacion/src/img/pago.webp)
+![Pantalla de pago](img/pago.jpg)
 
 1. Revisá tus datos (DNI, nombre y curso). Se completan solos.
 2. Mirá el **horario de retiro**. No se elige: siempre es el recreo que sigue (ver la tabla de abajo).
@@ -145,7 +147,7 @@ En **horario de clases** podés mirar el catálogo y armar el carrito, pero al c
 
 ## 5.5 El comprobante y el código de retiro
 
-![Comprobante con el código de retiro](../presentacion/src/img/comprobante.webp)
+![Comprobante con el código de retiro](img/comprobante.jpg)
 
 Al confirmar aparece el comprobante con el **código de 5 caracteres** en grande, el detalle del pedido, el recreo de retiro y el método de pago (si pagás en efectivo, también con cuánto pagás y el vuelto).
 
@@ -162,7 +164,7 @@ Tocá el círculo con tus iniciales.
 
 # 6. Personal de caja: entregar pedidos
 
-![Pantalla del mostrador](../presentacion/src/img/cajero.webp)
+![Pantalla del mostrador](img/cajero.jpg)
 
 A la derecha está la lista **Pedidos del día** con el código, el cliente, el recreo, el total y el estado de cada pedido.
 
@@ -180,7 +182,7 @@ Si hay que anular el pedido (por ejemplo, el estudiante no lo quiere o falta un 
 
 # 7. Administración: productos y auditoría
 
-![Pantalla de administración](../presentacion/src/img/admin.webp)
+![Pantalla de administración](img/admin.jpg)
 
 ## 7.1 Inventario
 
