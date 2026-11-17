@@ -314,26 +314,26 @@ IDs de catálogo que el código usa directamente (no cambiarlos sin cambiar el c
 
 ## 7.2 Stored procedures
 
-**Funcionalidades** (las marcadas con ✔ las llama la aplicación):
+**Funcionalidades** (la columna "App" indica si la llama alguna pantalla):
 
 | SP | Parámetros | App | Qué hace |
 |---|---|---|---|
-| `sp_registrar_usuario` | DNI, Apodo, Contraseña | ✔ | Crea el usuario con rol 1 o 2 según el DNI |
-| `sp_iniciar_sesion` | Apodo, Contraseña | ✔ | Valida y devuelve el usuario con su `Nombre_Rol`. Log 1 o 3 |
-| `sp_acceso_personal` | Apodo, Contraseña, PIN o token | ✔ | Igual, pidiendo además el PIN o el token del empleado |
-| `sp_cerrar_sesion` | UserID | ✔ | Log 2 |
-| `sp_cargar_saldo` | UserID, Monto | ✔ | Suma montos > 0 solo a usuarios con DNI. Log 21 |
-| `sp_alta_producto` | UserID, Categoría, Nombre, Descripción, Stock, Precio | ✔ | Log 13 |
-| `sp_modificar_stock` | UserID, ProductoID, Stock | ✔ | Log 15 |
-| `sp_modificar_precio` | UserID, ProductoID, Precio | ✔ | Log 22 |
-| `sp_baja_producto` | UserID, ProductoID | ✔ | Baja lógica (`Activo = FALSE`). Log 14 |
-| `sp_alta_menu_dia` | UserID, Categoría, Plato, Precio, Stock, Fecha, Día, … | | Carga un menú. Log 16 |
-| `sp_registrar_venta` | UserID, EmpleadoID, Metodo_PagoID | ✔ | Crea la venta y devuelve el `VentaID`. Log 6 |
-| `sp_agregar_producto_carrito` | VentaID, ProductoID, Cantidad | ✔ | Agrega y descuenta stock si alcanza. Log 7 |
-| `sp_agregar_menu_carrito` | VentaID, Menu_Del_DiaID, Cantidad | ✔ | Igual para el menú del día. Log 8 |
-| `sp_menu_del_dia` | Fecha, Día | ✔ | Devuelve el menú de la fecha y lo copia si falta |
-| `sp_generar_retiro` | VentaID, ID_Franja, Código | ✔ | Crea el retiro PENDIENTE; con método 21 descuenta el saldo. Log 9 |
-| `sp_actualizar_estado_retiro` | UserID, RetiroID, Estado | ✔ | Solo cambia retiros que no estén en 2 o 3. Al cancelar devuelve stock y saldo. Log 10, 11 o 12 |
+| `sp_registrar_usuario` | DNI, Apodo, Contraseña | Sí | Crea el usuario con rol 1 o 2 según el DNI |
+| `sp_iniciar_sesion` | Apodo, Contraseña | Sí | Valida y devuelve el usuario con su `Nombre_Rol`. Log 1 o 3 |
+| `sp_acceso_personal` | Apodo, Contraseña, PIN o token | Sí | Igual, pidiendo además el PIN o el token del empleado |
+| `sp_cerrar_sesion` | UserID | Sí | Log 2 |
+| `sp_cargar_saldo` | UserID, Monto | Sí | Suma montos > 0 solo a usuarios con DNI. Log 21 |
+| `sp_alta_producto` | UserID, Categoría, Nombre, Descripción, Stock, Precio | Sí | Log 13 |
+| `sp_modificar_stock` | UserID, ProductoID, Stock | Sí | Log 15 |
+| `sp_modificar_precio` | UserID, ProductoID, Precio | Sí | Log 22 |
+| `sp_baja_producto` | UserID, ProductoID | Sí | Baja lógica (`Activo = FALSE`). Log 14 |
+| `sp_alta_menu_dia` | UserID, Categoría, Plato, Precio, Stock, Fecha, Día, … | No | Carga un menú. Log 16 |
+| `sp_registrar_venta` | UserID, EmpleadoID, Metodo_PagoID | Sí | Crea la venta y devuelve el `VentaID`. Log 6 |
+| `sp_agregar_producto_carrito` | VentaID, ProductoID, Cantidad | Sí | Agrega y descuenta stock si alcanza. Log 7 |
+| `sp_agregar_menu_carrito` | VentaID, Menu_Del_DiaID, Cantidad | Sí | Igual para el menú del día. Log 8 |
+| `sp_menu_del_dia` | Fecha, Día | Sí | Devuelve el menú de la fecha y lo copia si falta |
+| `sp_generar_retiro` | VentaID, ID_Franja, Código | Sí | Crea el retiro PENDIENTE; con método 21 descuenta el saldo. Log 9 |
+| `sp_actualizar_estado_retiro` | UserID, RetiroID, Estado | Sí | Solo cambia retiros que no estén en 2 o 3. Al cancelar devuelve stock y saldo. Log 10, 11 o 12 |
 
 **Reportes** (no los llama ninguna pantalla; se ejecutan desde la consola de Desarrollo o desde Workbench, con un rango de fechas):
 
