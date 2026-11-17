@@ -16,18 +16,11 @@ static int franjaDisponible()
                                   {"12:05", "13:30"}, {"14:50", "15:00"}, {"16:20", "16:30"}};
     QTime ahora = QTime::currentTime();
     for (int i = 0; i < 6; i++) {
-        if (ahora >= QTime::fromString(ventanas[i][0], "HH:mm") && ahora < QTime::fromString(ventanas[i][1], "HH:mm"))
+        // VERSIÓN DEMO DAY: control de horario comentado (sin él, devuelve siempre la franja 1)
+        // if (ahora >= QTime::fromString(ventanas[i][0], "HH:mm") && ahora < QTime::fromString(ventanas[i][1], "HH:mm"))
             return i + 1;
     }
-    // VERSIÓN DEMO DAY: la exposición es en horario de clases, así que no se devuelve 0.
-    // return 0;
-    // Fuera de las ventanas de pedido se usa el próximo recreo (Hora_Retiro de Franja_Retiro).
-    const char *retiros[6] = {"09:00", "10:35", "12:05", "14:50", "16:20", "17:50"};
-    for (int i = 0; i < 6; i++) {
-        if (ahora < QTime::fromString(retiros[i], "HH:mm"))
-            return i + 1;
-    }
-    return 6;
+    return 0;
 }
 
 PagoDialog::PagoDialog(QWidget *parent) :

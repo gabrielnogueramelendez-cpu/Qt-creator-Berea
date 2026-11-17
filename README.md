@@ -1,6 +1,6 @@
 # El Buffet de Alejandro
 
-> **Versión Demo Day.** Esta rama es igual a `version-ubuntu`, pero con la restricción de horario comentada en `app/pagodialog.cpp`, para poder confirmar pedidos durante la exposición, que es en horario de clases. Fuera de las ventanas de pedido, el retiro queda asignado al próximo recreo. Para el uso real del buffet se usa `version-ubuntu`.
+> **Versión Demo Day.** Esta rama es igual a `version-ubuntu`, pero con la restricción de horario comentada en `app/pagodialog.cpp` (las líneas marcadas con `VERSIÓN DEMO DAY`), para poder confirmar pedidos durante la exposición, que es en horario de clases. Sin ese control, el retiro queda siempre en el 1er Recreo TM. Para el uso real del buffet se usa `version-ubuntu`.
 
 Sistema Click & Collect para el buffet escolar. El alumno elige del menú, paga y elige el recreo de retiro. Recibe un **código único de 5 caracteres** (por ejemplo `3C6MB`) que dicta en caja para retirar el pedido en menos de 30 segundos.
 
