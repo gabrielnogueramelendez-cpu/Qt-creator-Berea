@@ -67,6 +67,8 @@ El resultado es un solo archivo, `presentacion/dist/index.html`, que se abre con
 | [`docs/marco-logico.md`](docs/marco-logico.md) | Matriz de Marco Lógico |
 | [`docs/informe-mercado.md`](docs/informe-mercado.md) | Competencia, propuesta de valor y ventaja competitiva |
 | [`docs/validaciones_sistema.md`](docs/validaciones_sistema.md) | Lista maestra de validaciones de la app |
+| [`docs/manual-usuario.md`](docs/manual-usuario.md) ([PDF](docs/Manual_Usuario_ElBuffetDeAlejandro.pdf)) | Manual de usuario: uso de cada pantalla por perfil (semana 6) |
+| [`docs/manual-tecnico.md`](docs/manual-tecnico.md) ([PDF](docs/Manual_Tecnico_ElBuffetDeAlejandro.pdf)) | Manual técnico: arquitectura, instalación, BDD, pruebas y mantenimiento (semana 6) |
 
 ## Equipo
 
