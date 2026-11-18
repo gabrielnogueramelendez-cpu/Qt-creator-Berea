@@ -153,14 +153,14 @@ QList<Producto> SistemaBuffet::productos = {
     {20, "Combo Sándwich + Gaseosa", "Sándwich de milanesa + gaseosa 500 ml", "Combos Escolares", 4100, 40}
 };
 
-// Menú semanal fijo: los 5 primeros de Menu_Del_Dia (04_DatosSQL): {día, plato, precio, stock, incluye}
-// Las semanas siguientes de la BDD repiten estos mismos platos
+// Menú fijo (Menu_Del_Dia y Detalle_Menu_Dia de 04_DatosSQL): {día, plato, precio, stock, incluye}
+// La posición + 1 es el Menu_Del_DiaID: 1 = Lunes ... 5 = Viernes. Los fines de semana no hay menú
 QList<MenuSemanal> SistemaBuffet::menusSemana = {
+    {"Lunes", "Tarta de choclo con ensalada", 3900, 30, "Manzana"},
+    {"Martes", "Tortilla de papas con ensalada", 3900, 40, "Agua Mineral 500 ml"},
     {"Miércoles", "Milanesa de pollo con puré", 4200, 40, "Agua Mineral 500 ml"},
     {"Jueves", "Fideos con tuco y queso", 3800, 35, "Jugo en Caja 200 ml"},
-    {"Viernes", "Ravioles con salsa fileto", 4300, 35, "Jugo en Caja 200 ml"},
-    {"Lunes", "Tarta de choclo con ensalada", 3900, 30, "Manzana"},
-    {"Martes", "Tortilla de papas con ensalada", 3900, 40, "Agua Mineral 500 ml"}
+    {"Viernes", "Ravioles con salsa fileto", 4300, 35, "Jugo en Caja 200 ml"}
 };
 
 

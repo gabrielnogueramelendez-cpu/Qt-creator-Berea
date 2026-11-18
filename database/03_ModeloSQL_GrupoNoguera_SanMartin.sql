@@ -230,9 +230,8 @@ CREATE TABLE IF NOT EXISTS Menu_Del_Dia (
     Plato_menu VARCHAR(100) NOT NULL,
     Precio_menu DECIMAL(10,2) NOT NULL CHECK (Precio_menu >= 0),
     Stock_menu INT NOT NULL DEFAULT 0 CHECK (Stock_menu >= 0),
-    Fecha_menu DATE NOT NULL,
-    -- Menú semanal fijo: cada día hábil tiene siempre el mismo plato
-    Dia_Semana VARCHAR(10) NOT NULL CHECK (Dia_Semana IN ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes')),
+    -- Menú fijo: un solo menú por día hábil (los fines de semana no hay menú)
+    Dia_Semana VARCHAR(10) NOT NULL UNIQUE CHECK (Dia_Semana IN ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes')),
     CONSTRAINT fk_menudia_categoria FOREIGN KEY (ID_Categoria)
         REFERENCES Categoria(ID_Categoria) ON DELETE RESTRICT ON UPDATE CASCADE
 );

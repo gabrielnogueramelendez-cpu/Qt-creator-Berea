@@ -245,10 +245,10 @@ MYSQL_RES* agregar_producto_carrito(MYSQL *conexion, int ventaID, int productoID
     return ejecutar_consulta(conexion, sql);
 }
 
-// Devuelve el menú del día de hoy
+// Devuelve el menú fijo del día de la semana (Lunes a Viernes)
 MYSQL_RES* obtener_menu_del_dia(MYSQL *conexion, const QString &dia)
 {
-    std::string sql = "CALL schema_comercial.sp_menu_del_dia(CURDATE(), '" + texto_sql(conexion, dia) + "');";
+    std::string sql = "CALL schema_comercial.sp_menu_del_dia('" + texto_sql(conexion, dia) + "');";
     return ejecutar_consulta(conexion, sql);
 }
 
