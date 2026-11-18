@@ -598,7 +598,7 @@ button.causa.on { border-color: var(--bordo); background: #F3EADB; }
     </svg>
   </div>
   <footer class="ftr"><div class="marca"><div class="logo">A</div><b>El Buffet de Alejandro</b></div><span>Se pide de un recreo para el siguiente</span><span class="pag"></span></footer>
-  <aside class="nota">SAN MARTÍN, 40 s. El menú es fijo por día de la semana: la app calcula qué día es con QDate y se lo pasa a sp_menu_del_dia, que copia el plato de ese día. Lo hicimos solo con funciones vistas en clase (MIN, subconsultas y NOT EXISTS). Si hoy es día hábil, la tarjeta del día aparece marcada, igual que en la app. Abajo, los horarios: a las 07:45 entran a clase, así que no hay retiro a esa hora. De 06:00 a 07:45 se pide para el 1.er recreo, y durante cada recreo se pide para el siguiente. En horario de clases la app se puede usar, pero no confirma pedidos. Son 6 franjas de retiro.</aside>
+  <aside class="nota">SAN MARTÍN, 40 s. El menú es fijo por día de la semana: la app calcula qué día es con QDate y se lo pasa a sp_menu_del_dia, que devuelve el menú fijo de ese día: en la base hay solo 5 menús, uno por día hábil. Los fines de semana no se vende. Si hoy es día hábil, la tarjeta del día aparece marcada, igual que en la app. Abajo, los horarios: a las 07:45 entran a clase, así que no hay retiro a esa hora. De 06:00 a 07:45 se pide para el 1.er recreo, y durante cada recreo se pide para el siguiente. En horario de clases la app se puede usar, pero no confirma pedidos. Son 6 franjas de retiro.</aside>
 </section>
 
 <!-- =========================================== 15 · DEMO (galería interactiva) -->
