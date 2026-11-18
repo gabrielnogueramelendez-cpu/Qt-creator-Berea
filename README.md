@@ -4,6 +4,16 @@ Sistema Click & Collect para el buffet escolar. El alumno elige del menú, paga 
 
 Proyecto Informático I y Bases de Datos. Aplicación de escritorio en **C++ con Qt 6** y base de datos **MySQL**.
 
+## Versión simplificada (esta rama)
+
+Rama `version-ubuntu-simplificada`: misma aplicación y misma interfaz que `version-ubuntu` (Qt 6), con el código reescrito para leerlo y explicarlo fácil:
+
+- los datos en memoria están en **structs** (`Usuario`, `Producto`, `Pedido`, `ItemCarrito`…) en `app/sistemabuffet.h`;
+- las decisiones están escritas con **if / else**, sin `switch` ni operador ternario;
+- cada función tiene un comentario que dice qué hace, y el modo **con BDD** y **sin BDD** están separados en bloques.
+
+Se comparó contra la versión anterior con la misma secuencia de clics, sin BDD y con MySQL: los resultados son idénticos. Los manuales técnico y de usuario están en `docs/`.
+
 ## Estructura
 
 ```
