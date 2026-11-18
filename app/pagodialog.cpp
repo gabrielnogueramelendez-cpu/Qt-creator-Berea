@@ -92,6 +92,7 @@ PagoDialog::PagoDialog(QWidget *parent) :
     habilitarCamposMetodo();
 
     // El horario de retiro no se elige: es siempre el recreo que sigue
+    // INTERRUPTOR HORARIO (1 de 2): comentá esta línea para poder elegir el recreo a mano
     ui->comboRecreo->setEnabled(false);
     ui->comboRecreo->setCurrentIndex(franjaDisponible());
 }
@@ -200,11 +201,12 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
 
     // Se vuelve a calcular al confirmar, por si la ventana de pedidos cerró con esta pantalla abierta
     int franjaID = franjaDisponible();
-    ui->comboRecreo->setCurrentIndex(franjaID);
+    // INTERRUPTOR HORARIO (2 de 2): comentá la de arriba y descomentá la de abajo
+    // int franjaID = ui->comboRecreo->currentIndex();
     if (franjaID == 0) {
-        QMessageBox::warning(this, "Horario de clases",
-            "Ahora no se toman pedidos. Podés pedir de 06:00 a 07:45 para el 1er recreo, "
-            "o durante cada recreo para el siguiente.");
+        QMessageBox::warning(this, "Horario de retiro",
+            "No se puede pedir ahora (horario de clases) o falta elegir un recreo. "
+            "Podés pedir de 06:00 a 07:45 para el 1er recreo, o durante cada recreo para el siguiente.");
         return;
     }
 
@@ -227,6 +229,7 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
         // Efectivo: el monto con el que paga tiene que alcanzar
         metodoPagoID = 1;
         montoAbonado = ui->txtMontoAbonado->text().toDouble();
+        // INTERRUPTOR EFECTIVO: comentá este if completo (las 4 líneas) para desactivar
         if (ui->txtMontoAbonado->text().isEmpty() || montoAbonado < totalAPagar) {
             QMessageBox::warning(this, "Monto Insuficiente", "El monto ingresado no alcanza para cubrir el total.");
             return;
@@ -235,6 +238,7 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
     } else if (ui->rbMercadoPago->isChecked()) {
         // Mercado Pago: los 4 dígitos finales del comprobante
         metodoPagoID = 2;
+        // INTERRUPTOR MERCADO PAGO: comentá este if completo (las 4 líneas) para desactivar
         if (ui->txtComprobanteMP->text().length() != 4) {
             QMessageBox::warning(this, "Comprobante Inválido", "Ingresá los 4 dígitos finales del comprobante.");
             return;
@@ -242,6 +246,7 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
     } else {
         // Saldo de la cuenta escolar: tiene que alcanzar (el SP lo vuelve a controlar)
         metodoPagoID = 21;
+        // INTERRUPTOR SALDO: comentá este if completo (las 4 líneas) para desactivar (el SP igual lo controla en la BDD)
         if (SistemaBuffet::usuario.saldo < totalAPagar) {
             QMessageBox::warning(this, "Saldo Insuficiente", "El saldo de tu cuenta escolar no alcanza.");
             return;

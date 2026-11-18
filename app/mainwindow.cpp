@@ -151,6 +151,8 @@ void MainWindow::mostrarMenuDelDia()
 // =====================================================================
 void MainWindow::cargarFoto(QLabel *etiquetaFoto, QString nombreArchivo)
 {
+    // Mismo patrón que la guía "Catálogo de Productos" (VentanaDetalle::setProducto):
+    // QPixmap con la ruta del recurso y scaled(tamaño de la etiqueta, Qt::KeepAspectRatio)
     QPixmap foto(":/imagenes/imagenes/" + nombreArchivo + ".jpg");
 
     // Si todavía no hay foto, queda el texto "Sin foto" del .ui

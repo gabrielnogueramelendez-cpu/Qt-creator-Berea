@@ -13,6 +13,7 @@
 #include <QMessageBox>
 
 // [NEG-02] Máximo de unidades de un mismo producto por pedido
+// INTERRUPTOR LÍMITE 10 (1 de 3): para desactivarlo poné 99 en vez de 10 (y ver carritodialog.cpp, 2 y 3 de 3)
 const int LIMITE_POR_PEDIDO = 10;
 
 // =====================================================================
@@ -34,6 +35,8 @@ ProductDetailDialog::ProductDetailDialog(Producto productoElegido, QWidget *pare
     ui->lblCantidad->setText(QString::number(cantidadElegida));
 
     // Foto del producto (el archivo se llama igual que el producto)
+    // Mismo patrón que la guía "Catálogo de Productos" (VentanaDetalle::setProducto):
+    // QPixmap con la ruta del recurso y scaled(tamaño de la etiqueta, Qt::KeepAspectRatio)
     QPixmap foto(":/imagenes/imagenes/" + producto.nombre + ".jpg");
     if (!foto.isNull()) {
         foto = foto.scaled(ui->lblFotoProducto->size(), Qt::KeepAspectRatio);
@@ -54,11 +57,12 @@ ProductDetailDialog::~ProductDetailDialog()
 // =====================================================================
 int ProductDetailDialog::maximoPermitido()
 {
-    if (producto.stock < LIMITE_POR_PEDIDO) {
-        return producto.stock;
-    } else {
-        return LIMITE_POR_PEDIDO;
+    int maximo = LIMITE_POR_PEDIDO;
+    // INTERRUPTOR STOCK (1 de 2): comentá estas 3 líneas (el if) para no controlar el stock
+    if (producto.stock < maximo) {
+        maximo = producto.stock;
     }
+    return maximo;
 }
 
 // =====================================================================

@@ -56,6 +56,20 @@ Cada `.cpp` empieza con un bloque que dice lo mismo, para tenerlo a mano en Qt C
 
 Para varias filas se usa `mysql_fetch_row()` dentro de un `while`, como en `cargarProductos()`.
 
+## Interruptores
+
+Cada regla de negocio tiene un comentario `// INTERRUPTOR ...` en el código. Se busca con Ctrl+Shift+F (buscar `INTERRUPTOR`).
+
+| Regla | Archivo y función | Qué comentar |
+|---|---|---|
+| Horario de retiro (recreo automático) | `pagodialog.cpp`: constructor y `on_btnConfirmarPedido_clicked` | 1 de 2: `ui->comboRecreo->setEnabled(false);` (constructor). 2 de 2: comentar `int franjaID = franjaDisponible();` y descomentar la línea de abajo (`currentIndex()`). El `if (franjaID == 0)` queda activo: obliga a elegir un recreo |
+| Monto en efectivo insuficiente | `pagodialog.cpp`: `on_btnConfirmarPedido_clicked` | El `if` de "Monto Insuficiente" (4 líneas). Ojo: el vuelto puede dar negativo |
+| 4 dígitos de Mercado Pago | `pagodialog.cpp`: `on_btnConfirmarPedido_clicked` | El `if` de "Comprobante Inválido" (4 líneas) |
+| Saldo insuficiente | `pagodialog.cpp`: `on_btnConfirmarPedido_clicked` | El `if` de "Saldo Insuficiente" (4 líneas). El SP `sp_registrar_venta` igual lo controla en la BDD |
+| Control de stock | `productdetaildialog.cpp`: `maximoPermitido` y `carritodialog.cpp`: `on_btnModificarCantidad_clicked` | El `if` de 3 líneas en cada una. Los SP de la BDD igual rechazan si no hay stock |
+| Límite de 10 por producto | `productdetaildialog.cpp` (`LIMITE_POR_PEDIDO`) y `carritodialog.cpp` (constructor y `on_btnModificarCantidad_clicked`) | Comentar `setRange(1, 10)`; cambiar el 10 por 99 en `LIMITE_POR_PEDIDO` y en `int maximo = 10;` (no se puede solo comentando: es un valor) |
+| Sin menú el fin de semana | `sistemabuffet.cpp`: `cargarMenuDelDia` | No es un interruptor: lo decide `sp_menu_del_dia` en la BDD (no devuelve nada sábado y domingo) |
+
 ## Si la profe pide cambiar algo
 
 | Pedido | Dónde |

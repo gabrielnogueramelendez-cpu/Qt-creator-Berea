@@ -32,6 +32,7 @@ CarritoDialog::CarritoDialog(QWidget *parent) :
     ui->tableCarrito->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
     // Cantidad por producto: mínimo 1, máximo 10 (el stock se controla al actualizar)
+    // INTERRUPTOR LÍMITE 10 (2 de 3): comentá esta línea (queda el rango por defecto 0 a 99)
     ui->spinCantidad->setRange(1, 10);
 
     recargarTablaCarrito();
@@ -97,9 +98,11 @@ void CarritoDialog::on_btnModificarCantidad_clicked()
 
     // Máximo: 10 por pedido, o el stock si queda menos
     int productoID = SistemaBuffet::carrito[filaElegida].id;
-    int maximo = SistemaBuffet::productos[productoID].stock;
-    if (maximo > 10) {
-        maximo = 10;
+    // INTERRUPTOR LÍMITE 10 (3 de 3): cambiá este 10 por 99 (igual que el de arriba)
+    int maximo = 10;
+    // INTERRUPTOR STOCK (2 de 2): comentá estas 3 líneas (el if) para no controlar el stock
+    if (SistemaBuffet::productos[productoID].stock < maximo) {
+        maximo = SistemaBuffet::productos[productoID].stock;
     }
 
     if (nuevaCantidad > maximo) {
