@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>Pitch Buffet de Alejandro</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -505,11 +506,44 @@ button.causa.on { border-color: var(--bordo); background: #F3EADB; }
     </div>
     <div class="g2">
       <div class="card beige r" style="--i:5; padding:24px 32px"><h4 style="font-size:26px">Sin servidor, la app sigue abierta con los mismos datos en memoria.</h4></div>
-      <div class="card beige r" style="--i:6; padding:24px 32px"><h4 style="font-size:26px">Tres versiones: Windows, Ubuntu con Qt 6 y Ubuntu con Qt 5.</h4></div>
+      <div class="card beige r" style="--i:6; padding:24px 32px"><h4 style="font-size:26px">Cuatro versiones: Windows, Ubuntu con Qt 6, Ubuntu con Qt 5 y Ubuntu simplificada.</h4></div>
     </div>
   </div>
   <footer class="ftr"><div class="marca"><div class="logo">A</div><b>El Buffet de Alejandro</b></div><span>Proyecto 4° Año · Grupo Noguera - San Martín</span><span class="pag"></span></footer>
-  <aside class="nota">SAN MARTÍN, 50 s. Cuatro capas. 1: la interfaz en C++ con Qt Widgets. 2: basedatos.cpp habla con MySQL con la API de C, igual que en el material 006 del profesor Linares: una función por consulta. 3: la lógica vive en 27 stored procedures, con manejo de errores en cada uno. 4: MySQL 8.0 con tres schemas. Si el servidor no responde, la app no se cierra. Hay tres versiones: Windows, Ubuntu con Qt 6 y Ubuntu con Qt 5, para las compus del colegio.</aside>
+  <aside class="nota">SAN MARTÍN, 50 s. Cuatro capas. 1: la interfaz en C++ con Qt Widgets. 2: basedatos.cpp habla con MySQL con la API de C, igual que en el material 006 del profesor Linares: una función por consulta. 3: la lógica vive en 27 stored procedures, con manejo de errores en cada uno. 4: MySQL 8.0 con tres schemas. Si el servidor no responde, la app no se cierra. Hay cuatro versiones: Windows, Ubuntu con Qt 6, Ubuntu con Qt 5 y la simplificada en Ubuntu con Qt 6, que es la que explicamos en la próxima.</aside>
+</section>
+
+<!-- =========================================== 11b · CÓDIGO (versión simplificada) -->
+<section class="slide" data-titulo="Código">
+  <header class="hdr"><div class="marca"><div class="logo">A</div><div><b>El Buffet de Alejandro</b><small>Cómo está hecho</small></div></div><span class="etiqueta">Código</span></header>
+  <div class="cuerpo">
+    <div class="tit r" style="--i:0"><p class="eb">Versión simplificada · Qt 6 en Ubuntu</p><h2>Cómo está organizado el código</h2></div>
+    <div class="g3">
+      <div class="card r" style="--i:1; height:440px"><p class="eb">1 · Structs</p><p style="font-family:Consolas, 'Courier New', monospace; font-size:21px; color:var(--bordo); line-height:1.45; white-space:pre; margin:6px 0 10px">struct Producto {
+    int id;
+    QString nombre;
+    double precio;
+    int stock;
+};</p><h3 style="font-size:36px">Un struct por registro</h3><p class="chico">Mismos campos que la tabla. Se usa con punto: producto.stock.</p></div>
+      <div class="card r" style="--i:2; height:440px"><p class="eb">2 · SistemaBuffet</p><p style="font-family:Consolas, 'Courier New', monospace; font-size:21px; color:var(--bordo); line-height:1.45; white-space:pre; margin:6px 0 10px">QList&lt;Producto&gt; productos;
+QList&lt;ItemCarrito&gt; carrito;
+QList&lt;Pedido&gt; pedidos;
+
+buscarPedido(codigo)
+  → posición o -1</p><h3 style="font-size:36px">Listas compartidas</h3><p class="chico">Una sola copia para todas las ventanas.</p></div>
+      <div class="card bordo r" style="--i:3; height:440px"><p class="eb">3 · Dos modos</p><p style="font-family:Consolas, 'Courier New', monospace; font-size:21px; color:var(--bordo); line-height:1.45; white-space:pre; margin:6px 0 10px; color:#F3EADB">if (conexion != NULL) {
+    // MODO CON BDD
+} else {
+    // MODO SIN BDD
+}</p><h3 style="font-size:36px">Con o sin MySQL</h3><p style="font-size:24px; color:#F3EADB">Sin servidor usa los datos de ejemplo del 04_DatosSQL.</p></div>
+    </div>
+    <div class="g2">
+      <div class="card beige r" style="--i:4; padding:24px 32px"><h4 style="font-size:26px">if / else y un comentario en cada bloque. Sin switch ni ternarios.</h4></div>
+      <div class="card beige r" style="--i:5; padding:24px 32px"><h4 style="font-size:26px">Pocos punteros: ui, las ventanas que se abren y los de MySQL.</h4></div>
+    </div>
+  </div>
+  <footer class="ftr"><div class="marca"><div class="logo">A</div><b>El Buffet de Alejandro</b></div><span>Mismas funciones y mismas pantallas que la versión original</span><span class="pag"></span></footer>
+  <aside class="nota">SAN MARTÍN, 45 s. Para la expo armamos una versión simplificada, con las mismas funciones y las mismas pantallas. 1: cada registro de la base es un struct, como vimos en Archivos y Structs: Producto tiene id, nombre, precio y stock, igual que la tabla, y se usa con punto. 2: SistemaBuffet guarda las listas que comparten todas las ventanas: productos, carrito, pedidos. Las funciones buscar devuelven la posición en la lista, o -1 si no está. 3: el programa tiene dos modos. Si hay conexión, lee y guarda en MySQL; si no, usa los mismos datos de ejemplo del script 04 y no guarda nada. Todo está escrito con if y else, con un comentario en cada bloque. Quedan pocos punteros: el ui de cada ventana, las ventanas que se abren con new y los de la API de MySQL: MYSQL, MYSQL_RES y MYSQL_ROW.</aside>
 </section>
 
 <!-- =========================================== 12 · BASE DE DATOS -->
@@ -546,7 +580,7 @@ button.causa.on { border-color: var(--bordo); background: #F3EADB; }
     <div class="fila" style="gap:44px; align-items:stretch">
       <div class="g2" style="flex:1; gap:20px">
         <div class="card r" style="--i:1"><p class="num" style="font-size:80px">5</p><h4>Acceso y usuarios</h4><p class="chico">registrar, iniciar y cerrar sesión, acceso del personal, cargar saldo</p></div>
-        <div class="card r" style="--i:2"><p class="num" style="font-size:80px">5</p><h4>Productos y menú</h4><p class="chico">alta, baja, stock, precio y menú del día</p></div>
+        <div class="card r" style="--i:2"><p class="num" style="font-size:80px">5</p><h4>Productos y menú</h4><p class="chico">alta, baja, stock, precio y modificar el menú fijo</p></div>
         <div class="card r" style="--i:3"><p class="num" style="font-size:80px">6</p><h4>Venta y retiro</h4><p class="chico">venta, carrito, menú del día, código y estado del retiro</p></div>
         <div class="card r" style="--i:4"><p class="num" style="font-size:80px">11</p><h4>Reportes</h4><p class="chico">ventas, top productos y estudiantes, pagos, franjas, auditoría y 2 tuneados</p></div>
       </div>
@@ -567,14 +601,14 @@ button.causa.on { border-color: var(--bordo); background: #F3EADB; }
     </div>
   </div>
   <footer class="ftr"><div class="marca"><div class="logo">A</div><b>El Buffet de Alejandro</b></div><span>DELIMITER y DECLARE EXIT HANDLER FOR SQLEXCEPTION en los 27</span><span class="pag"></span></footer>
-  <aside class="nota">NOGUERA, 50 s. La consigna de BDD pide que Log_Auditoria no se llene a mano: en el script 04 no hay ningún INSERT en Log_Auditoria; los registros los escriben los procedimientos, que tienen 19 INSERT en Log_Auditoria en el 05. A la derecha, qué tipo de evento queda registrado con cada llamada (nombres reales de la tabla Tipo_Evento). Los dos "tuneados" son versiones optimizadas de reportes, para comparar el plan de ejecución.</aside>
+  <aside class="nota">NOGUERA, 50 s. La consigna de BDD pide que Log_Auditoria no se llene a mano: en el script 04 no hay ningún INSERT en Log_Auditoria; los registros los escriben los procedimientos, que tienen 18 INSERT en Log_Auditoria en el 05. A la derecha, qué tipo de evento queda registrado con cada llamada (nombres reales de la tabla Tipo_Evento). Los dos "tuneados" son versiones optimizadas de reportes, para comparar el plan de ejecución.</aside>
 </section>
 
 <!-- =========================================== 14 · MENÚ SEMANAL Y FRANJAS -->
 <section class="slide" data-titulo="Menú semanal">
   <header class="hdr"><div class="marca"><div class="logo">A</div><div><b>El Buffet de Alejandro</b><small>Cómo está hecho</small></div></div><span class="etiqueta">Menú del día</span></header>
   <div class="cuerpo" style="gap:44px">
-    <div class="tit r" style="--i:0"><p class="eb">La app calcula el día y se lo pasa a sp_menu_del_dia</p><h2>Menú semanal fijo y horarios de pedido</h2></div>
+    <div class="tit r" style="--i:0"><p class="eb">La app calcula el día y se lo pasa a sp_menu_del_dia · Sábado y domingo no hay menú</p><h2>Menú semanal fijo y horarios de pedido</h2></div>
     <div class="g5" id="semana">
       <div class="dia r" style="--i:1" data-dia="1"><span class="boton hoy-tag">Hoy</span><h4>Lunes</h4><p class="plato">Tarta de choclo con ensalada</p><p class="precio">$3.900</p></div>
       <div class="dia r" style="--i:2" data-dia="2"><span class="boton hoy-tag">Hoy</span><h4>Martes</h4><p class="plato">Tortilla de papas con ensalada</p><p class="precio">$3.900</p></div>
