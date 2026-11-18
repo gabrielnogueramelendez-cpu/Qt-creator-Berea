@@ -56,13 +56,13 @@ QString SistemaBuffet::menuHoyPlato = "";
 QString SistemaBuffet::menuHoyIncluye = "";
 double SistemaBuffet::menuHoyPrecio = 0;
 
-// Menú semanal fijo: los 5 primeros menús de Menu_Del_Dia y Detalle_Menu_Dia (04_DatosSQL), en orden de Menu_Del_DiaID.
-// Las semanas siguientes de la BDD repiten estos mismos platos
-QStringList SistemaBuffet::menusDias = {"Miércoles", "Jueves", "Viernes", "Lunes", "Martes"};
-QStringList SistemaBuffet::menusPlatos = {"Milanesa de pollo con puré", "Fideos con tuco y queso", "Ravioles con salsa fileto", "Tarta de choclo con ensalada", "Tortilla de papas con ensalada"};
-QList<double> SistemaBuffet::menusPrecios = {4200, 3800, 4300, 3900, 3900};
-QList<int> SistemaBuffet::menusStocks = {40, 35, 35, 30, 40};
-QStringList SistemaBuffet::menusIncluye = {"Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Jugo en Caja 200 ml", "Manzana", "Agua Mineral 500 ml"};
+// Menú fijo (Menu_Del_Dia y Detalle_Menu_Dia de 04_DatosSQL), en orden de Menu_Del_DiaID: 1 = Lunes ... 5 = Viernes.
+// Los fines de semana no hay menú
+QStringList SistemaBuffet::menusDias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes"};
+QStringList SistemaBuffet::menusPlatos = {"Tarta de choclo con ensalada", "Tortilla de papas con ensalada", "Milanesa de pollo con puré", "Fideos con tuco y queso", "Ravioles con salsa fileto"};
+QList<double> SistemaBuffet::menusPrecios = {3900, 3900, 4200, 3800, 4300};
+QList<int> SistemaBuffet::menusStocks = {30, 40, 40, 35, 35};
+QStringList SistemaBuffet::menusIncluye = {"Manzana", "Agua Mineral 500 ml", "Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Jugo en Caja 200 ml"};
 
 QList<int> SistemaBuffet::pedidosRetiroIds;
 QStringList SistemaBuffet::pedidosCodigos;
@@ -146,7 +146,7 @@ void SistemaBuffet::cargarMenuDelDia()
     QString hoy = dias[QDate::currentDate().dayOfWeek() - 1];
 
     if (conn != NULL) {
-        // Con BDD: sp_menu_del_dia devuelve el menú de hoy (y copia el menú fijo de ese día si no estaba cargado)
+        // Con BDD: sp_menu_del_dia devuelve el menú fijo de ese día de la semana
         MYSQL_RES *result = obtener_menu_del_dia(conn, hoy);
         if (result == NULL) return;
         MYSQL_ROW fila = NULL;

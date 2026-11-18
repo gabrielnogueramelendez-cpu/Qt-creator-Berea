@@ -77,7 +77,7 @@ public:
     static QList<double> menusPrecios;
     static QList<int> menusStocks;
     static QStringList menusIncluye;
-    // Igual que sp_menu_del_dia: de lunes a viernes, cada día con su plato fijo
+    // Igual que sp_menu_del_dia: menú fijo de lunes a viernes (los fines de semana no hay)
     static void cargarMenuDelDia();
 
     // Pedidos generados para Mostrador/Caja y Comprobantes
