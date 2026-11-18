@@ -94,18 +94,20 @@ CALL sp_baja_producto(27, 21);
 -- iv. Consistencia: Activo = 0 y la fila sigue existiendo
 SELECT ProductoID, Activo FROM Producto WHERE ProductoID = 21;
 
--- ---------------- P07 sp_alta_menu_dia ----------------
--- i. Éxito: menú de HOY que incluye un agua (producto 10). Menu_Del_DiaID 21
--- (el día de la semana lo manda Qt; en la prueba va uno fijo)
-CALL sp_alta_menu_dia(27, 19, 'Milanesa con ensalada', 4500.00, 30, CURDATE(), 'Lunes', 10);
--- ii. Categoría inexistente: ERROR 1452 (clave foránea)
-CALL sp_alta_menu_dia(27, 999, 'Plato X', 4000.00, 10, CURDATE(), 'Lunes', NULL);
--- iii. Fecha NULL: ERROR 1048 (la columna no acepta NULL)
-CALL sp_alta_menu_dia(27, 19, 'Plato X', 4000.00, 10, NULL, 'Lunes', NULL);
--- iv. Consistencia: el menú y su producto incluido existen
-SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Fecha_menu, d.ProductoID
-FROM Menu_Del_Dia m INNER JOIN Detalle_Menu_Dia d ON m.Menu_Del_DiaID = d.Menu_Del_DiaID
-WHERE m.Menu_Del_DiaID = 21;
+-- ---------------- P07 sp_modificar_menu_dia ----------------
+-- El menú es fijo (un menú por día hábil). Estas pruebas se corren de lunes a viernes:
+-- el menú de HOY pasa a ser 'Milanesa con ensalada', $4500, stock 30 (lo usa P10)
+SET @dia_hoy = ELT(WEEKDAY(CURDATE()) + 1, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes');
+-- i. Éxito: Filas_Actualizadas = 1
+CALL sp_modificar_menu_dia(27, @dia_hoy, 'Milanesa con ensalada', 4500.00, 30);
+-- ii. Sábado (no hay menú): no modifica nada y devuelve 0 filas
+CALL sp_modificar_menu_dia(27, 'Sábado', 'Plato X', 4000.00, 10);
+-- iii. Precio NULL: ERROR 1048 (la columna no acepta NULL)
+CALL sp_modificar_menu_dia(27, @dia_hoy, 'Plato X', NULL, 10);
+-- iv. Consistencia: siguen siendo 5 menús, uno por día, y el de hoy quedó modificado
+SELECT COUNT(*) AS Menus, COUNT(DISTINCT Dia_Semana) AS Dias,
+       (SELECT Plato_menu FROM Menu_Del_Dia WHERE Dia_Semana = @dia_hoy) AS Plato_De_Hoy
+FROM Menu_Del_Dia;
 
 -- ---------------- P08 sp_registrar_venta ----------------
 -- i. Éxito: el alumno 3 compra en mostrador con la cajera 1. Devuelve VentaID 51
@@ -132,15 +134,17 @@ SELECT v.Monto_Total, SUM(c.Cantidad * c.Precio_Unitario) AS Suma_Carrito,
 FROM Venta v INNER JOIN Carrito c ON v.VentaID = c.VentaID WHERE v.VentaID = 51 GROUP BY v.Monto_Total;
 
 -- ---------------- P10 sp_agregar_menu_carrito ----------------
--- i. Éxito: 1 menú de hoy (21, $4500). Filas_Agregadas = 1, Monto_Total 6100
-CALL sp_agregar_menu_carrito(51, 21, 1);
--- ii. Menú de otro día (el menú 1 es del 14/10): Filas_Agregadas = 0
-CALL sp_agregar_menu_carrito(51, 1, 1);
+SET @menu_hoy = (SELECT Menu_Del_DiaID FROM Menu_Del_Dia WHERE Dia_Semana = @dia_hoy);
+SET @menu_otro = (SELECT MIN(Menu_Del_DiaID) FROM Menu_Del_Dia WHERE Dia_Semana <> @dia_hoy);
+-- i. Éxito: 1 menú de hoy ($4500, P07). Filas_Agregadas = 1, Monto_Total 6100
+CALL sp_agregar_menu_carrito(51, @menu_hoy, 1);
+-- ii. Menú de otro día de la semana: Filas_Agregadas = 0
+CALL sp_agregar_menu_carrito(51, @menu_otro, 1);
 -- iii. Cantidad NULL: Filas_Agregadas = 0
-CALL sp_agregar_menu_carrito(51, 21, NULL);
--- iv. Consistencia: monto = suma del carrito; stock del menú 30 -> 29
+CALL sp_agregar_menu_carrito(51, @menu_hoy, NULL);
+-- iv. Consistencia: monto = suma del carrito; stock del menú de hoy 30 -> 29
 SELECT v.Monto_Total, SUM(c.Cantidad * c.Precio_Unitario) AS Suma_Carrito,
-       (SELECT Stock_menu FROM Menu_Del_Dia WHERE Menu_Del_DiaID = 21) AS Stock_Menu
+       (SELECT Stock_menu FROM Menu_Del_Dia WHERE Menu_Del_DiaID = @menu_hoy) AS Stock_Menu
 FROM Venta v INNER JOIN Carrito c ON v.VentaID = c.VentaID WHERE v.VentaID = 51 GROUP BY v.Monto_Total;
 
 -- ---------------- P11 sp_generar_retiro ----------------
@@ -245,9 +249,9 @@ CALL sp_reporte_demanda_menu_dia('2020-01-01', '2020-12-31');       -- ii: 0 fil
 CALL sp_reporte_demanda_menu_dia(NULL, NULL);                       -- iii: 0 filas
 -- iv
 SELECT c.Menu_Del_DiaID, SUM(c.Cantidad) AS Vendidos
-FROM Carrito c INNER JOIN Menu_Del_Dia m ON c.Menu_Del_DiaID = m.Menu_Del_DiaID
+FROM Carrito c INNER JOIN Venta v ON c.VentaID = v.VentaID
 INNER JOIN Retiro r ON c.VentaID = r.VentaID
-WHERE m.Fecha_menu BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
+WHERE c.Menu_Del_DiaID IS NOT NULL AND v.Fecha BETWEEN '2026-10-14' AND '2026-11-10' AND r.Estado_Retiro_ID <> 3
 GROUP BY c.Menu_Del_DiaID ORDER BY Vendidos DESC, c.Menu_Del_DiaID;
 
 
@@ -371,17 +375,13 @@ FROM Producto WHERE ProductoID = 1;
 USE schema_comercial;
 
 -- ---------------- P28 sp_menu_del_dia ----------------
--- i. Éxito: miércoles 03/03/2027 sin menú cargado: copia el menú 1 (el primer miércoles cargado)
-CALL sp_menu_del_dia('2027-03-03', 'Miércoles');
--- ii. Sábado 06/03/2027: 0 filas (los fines de semana no hay menú)
-CALL sp_menu_del_dia('2027-03-06', 'Sábado');
--- iii. Fecha NULL: 0 filas
-CALL sp_menu_del_dia(NULL, NULL);
--- iii-bis. Día que ya tiene menú (14/10/2026): devuelve el menú 1 sin copiar nada
-CALL sp_menu_del_dia('2026-10-14', 'Miércoles');
--- iv. Consistencia: pedirlo otra vez no lo duplica (1 menú y 1 producto incluido el 03/03/2027)
-CALL sp_menu_del_dia('2027-03-03', 'Miércoles');
-SELECT COUNT(*) AS Menus,
-       (SELECT COUNT(*) FROM Detalle_Menu_Dia d INNER JOIN Menu_Del_Dia m ON d.Menu_Del_DiaID = m.Menu_Del_DiaID
-        WHERE m.Fecha_menu = '2027-03-03') AS Productos_Incluidos
-FROM Menu_Del_Dia WHERE Fecha_menu = '2027-03-03';
+-- i. Éxito: el menú fijo del miércoles (Menu_Del_DiaID 3) con el producto que incluye
+CALL sp_menu_del_dia('Miércoles');
+-- ii. Sábado: 0 filas (los fines de semana no hay menú)
+CALL sp_menu_del_dia('Sábado');
+-- iii. Día NULL: 0 filas
+CALL sp_menu_del_dia(NULL);
+-- iv. Consistencia: hay un solo menú por día hábil (5 menús, 5 días) y cada uno incluye un producto
+SELECT COUNT(*) AS Menus, COUNT(DISTINCT Dia_Semana) AS Dias,
+       (SELECT COUNT(*) FROM Detalle_Menu_Dia) AS Productos_Incluidos
+FROM Menu_Del_Dia;
