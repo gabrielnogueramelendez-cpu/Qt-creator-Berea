@@ -1,3 +1,10 @@
+// =====================================================================
+// ARCHIVO: main.cpp
+// QUÉ ES: lo primero que se ejecuta al abrir el programa.
+// PASOS:  estilo de las ventanas -> conexión a MySQL -> ventana de login.
+//         Sin conexión muestra un error y se cierra.
+// =====================================================================
+
 #include "loginwindow.h"
 #include "sistemabuffet.h"
 #include "basedatos.h"
@@ -9,8 +16,10 @@
 // =====================================================================
 // main: punto de entrada del programa
 // 1. Crea la aplicación y le pone los colores (crema y bordó)
-// 2. Se conecta a MySQL
+// 2. Se conecta a MySQL. VERSIÓN SOLO BDD: si no se conecta, avisa y
+//    el programa se cierra (no hay datos de ejemplo)
 // 3. Abre la ventana de login
+// 4. Al salir, cierra la conexión
 // =====================================================================
 int main(int argc, char *argv[])
 {
@@ -93,11 +102,16 @@ int main(int argc, char *argv[])
     );
 
     // ----- 2. Conexión a MySQL -----
-    // Si falla, el programa sigue igual con los datos de ejemplo (modo sin BDD)
+    // Todos los datos están en la BDD: sin conexión el programa no puede funcionar.
+    // Causas comunes: el servicio MySQL está apagado, la contraseña de BDD_CLAVE
+    // (basedatos.cpp) no es la de esta compu, o no se corrieron los scripts 03 a 06
     SistemaBuffet::conexion = conectar_bdd();
     if (SistemaBuffet::conexion == NULL) {
-        QMessageBox::warning(NULL, "Sin conexión",
-            "No se pudo conectar con MySQL.\nLa aplicación va a usar los datos de ejemplo, sin guardar cambios en la BDD.");
+        QMessageBox::critical(NULL, "Sin conexión",
+            "No se pudo conectar con MySQL.\n\n"
+            "Revisá que el servicio de MySQL esté encendido, que la contraseña de BDD_CLAVE "
+            "en basedatos.cpp sea la de esta computadora y que estén cargados los scripts 03 a 06.");
+        return 1;
     }
 
     // ----- 3. Ventana de login -----
@@ -107,9 +121,7 @@ int main(int argc, char *argv[])
     // exec() deja el programa funcionando hasta que se cierra la última ventana
     int codigoSalida = aplicacion.exec();
 
-    // Al salir se cierra la conexión con MySQL
-    if (SistemaBuffet::conexion != NULL) {
-        mysql_close(SistemaBuffet::conexion);
-    }
+    // ----- 4. Al salir se cierra la conexión con MySQL -----
+    mysql_close(SistemaBuffet::conexion);
     return codigoSalida;
 }

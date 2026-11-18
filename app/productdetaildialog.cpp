@@ -1,3 +1,13 @@
+// =====================================================================
+// ARCHIVO: productdetaildialog.cpp (DETALLE DE PRODUCTO)
+// QUÉ HACE: muestra nombre, descripción, precio y foto; elige la cantidad
+//           con + y - y lo agrega al carrito.
+// REGLAS:   mínimo 1 unidad [NEG-01], máximo 10 por pedido [NEG-02] y nunca
+//           más que el stock [NEG-03], sumando lo que ya está en el carrito.
+// BDD:      no consulta: usa el Producto que le pasa el catálogo, que ya
+//           viene leído de la BDD.
+// =====================================================================
+
 #include "productdetaildialog.h"
 #include "ui_productdetaildialog.h"
 #include <QMessageBox>

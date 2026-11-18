@@ -1,3 +1,12 @@
+// =====================================================================
+// ARCHIVO: cajerowindow.cpp (MOSTRADOR / CAJA)
+// QUÉ HACE: tabla con todos los pedidos; buscar por código de retiro y
+//           marcarlo ENTREGADO o CANCELADO.
+// SE LLEGA: login de "Personal de caja" (con PIN).
+// BDD:      SistemaBuffet::cargarDesdeBDD() (pedidos) y
+//           sp_actualizar_estado_retiro (solo cambia pedidos PENDIENTES).
+// =====================================================================
+
 #include "cajerowindow.h"
 #include "ui_cajerowindow.h"
 #include "loginwindow.h"
@@ -44,7 +53,7 @@ CajeroWindow::~CajeroWindow()
 // =====================================================================
 void CajeroWindow::cargarPedidosDelSistema()
 {
-    // Con BDD: los pedidos se vuelven a leer de Retiro + Venta + Carrito
+    // Los pedidos se vuelven a leer de Retiro + Venta + Carrito
     SistemaBuffet::cargarDesdeBDD();
 
     ui->tableColasPedidos->setRowCount(0);
@@ -128,16 +137,11 @@ void CajeroWindow::on_btnBuscarCodigo_clicked()
         ui->listDetalleItems->addItem(renglones[i].trimmed());
     }
 
-    QString textoTotal = "Total: $" + QString::number(pedido.monto, 'f', 0);
-    if (pedido.metodo.contains("Efectivo") && pedido.vuelto > 0) {
-        textoTotal = textoTotal + "\nPaga con $" + QString::number(pedido.abonado, 'f', 0)
-                   + " · Vuelto $" + QString::number(pedido.vuelto, 'f', 0);
-    }
-    ui->lblTotalMonto->setText(textoTotal);
+    ui->lblTotalMonto->setText("Total: $" + QString::number(pedido.monto, 'f', 0));
 }
 
 // =====================================================================
-// Botón ENTREGAR: el pedido pasa a ENTREGADO
+// Botón ENTREGAR: el pedido pasa a ENTREGADO (sp_actualizar_estado_retiro)
 // =====================================================================
 void CajeroWindow::on_btnEntregarPedido_clicked()
 {
@@ -146,19 +150,16 @@ void CajeroWindow::on_btnEntregarPedido_clicked()
         return;
     }
 
-    if (SistemaBuffet::conexion != NULL) {
-        cambiarEstadoEnBDD(posicionPedido, ESTADO_ENTREGADO);
-    } else {
-        SistemaBuffet::pedidos[posicionPedido].estado = "ENTREGADO";
-    }
+    cambiarEstadoEnBDD(posicionPedido, ESTADO_ENTREGADO);
 
+    // Se vuelve a leer la tabla y se muestra el pedido con su estado nuevo
     cargarPedidosDelSistema();
     on_btnBuscarCodigo_clicked();
 }
 
 // =====================================================================
-// Botón CANCELAR: el pedido pasa a CANCELADO
-// Con BDD el SP devuelve el stock y el saldo
+// Botón CANCELAR: el pedido pasa a CANCELADO (sp_actualizar_estado_retiro)
+// El SP deja el cambio en Log_Auditoria
 // =====================================================================
 void CajeroWindow::on_btnCancelarPedido_clicked()
 {
@@ -167,24 +168,16 @@ void CajeroWindow::on_btnCancelarPedido_clicked()
         return;
     }
 
-    if (SistemaBuffet::conexion != NULL) {
-        cambiarEstadoEnBDD(posicionPedido, ESTADO_CANCELADO);
-    } else {
-        Pedido pedido = SistemaBuffet::pedidos[posicionPedido];
-        SistemaBuffet::pedidos[posicionPedido].estado = "CANCELADO";
+    cambiarEstadoEnBDD(posicionPedido, ESTADO_CANCELADO);
 
-        // shortcut: sin BDD no se devuelve el stock y el saldo solo existe para el estudiante logueado; con BDD lo hace el SP
-        if (pedido.metodo == "Saldo de Cuenta Escolar" && pedido.dni == SistemaBuffet::usuario.dni) {
-            SistemaBuffet::usuario.saldo = SistemaBuffet::usuario.saldo + pedido.monto;
-        }
-    }
-
+    // Se vuelve a leer la tabla y se muestra el pedido con su estado nuevo
     cargarPedidosDelSistema();
     on_btnBuscarCodigo_clicked();
 }
 
 // =====================================================================
-// cambiarEstadoEnBDD (MODO CON BDD): ENTREGADO (2) o CANCELADO (3)
+// cambiarEstadoEnBDD: ENTREGADO (2) o CANCELADO (3)
+// El SP solo cambia pedidos PENDIENTES (Estado_Retiro_ID = 1)
 // =====================================================================
 void CajeroWindow::cambiarEstadoEnBDD(int posicionPedido, int estadoID)
 {

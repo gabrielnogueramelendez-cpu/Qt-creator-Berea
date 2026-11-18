@@ -2,7 +2,21 @@
 #include <iostream>
 
 // =====================================================================
-// DATOS DEL SERVIDOR MYSQL
+// basedatos.cpp: TODO lo que habla con MySQL está en este archivo
+// Como en el material 006: una función por consulta. Cada función arma
+// el texto SQL (casi siempre un CALL a un stored procedure), lo manda
+// con ejecutar_consulta() y devuelve la tabla de resultados (MYSQL_RES).
+// Quien la llama la lee con leer_primera_fila() o con mysql_fetch_row().
+//
+// Orden del archivo:
+//   1. Datos del servidor y conexión
+//   2. Funciones de ayuda (ejecutar, escapar textos, leer filas)
+//   3. Consultas del schema_usuarios
+//   4. Consultas del schema_comercial
+// =====================================================================
+
+// =====================================================================
+// 1. DATOS DEL SERVIDOR MYSQL
 // Cambiar la contraseña por la del usuario root de cada computadora
 // =====================================================================
 #ifndef BDD_SERVIDOR
@@ -38,6 +52,10 @@ MYSQL* conectar_bdd()
         return NULL;
     }
 }
+
+// =====================================================================
+// 2. FUNCIONES DE AYUDA
+// =====================================================================
 
 // =====================================================================
 // ejecutar_consulta: manda una consulta (SELECT o CALL) a MySQL
@@ -125,7 +143,9 @@ QStringList leer_primera_fila(MYSQL_RES *resultado)
     return datos;
 }
 
-// ---------------------------------------------------------------- Schema usuarios
+// =====================================================================
+// 3. SCHEMA_USUARIOS: registro, login, sesión y saldo
+// =====================================================================
 
 // Crea la cuenta de un estudiante o profesor (sp_registrar_usuario)
 MYSQL_RES* registrar_usuario(MYSQL *conexion, const QString &dni, const QString &apodo, const QString &clave)
@@ -190,7 +210,9 @@ MYSQL_RES* obtener_datos_usuario(MYSQL *conexion, int userID)
     return ejecutar_consulta(conexion, sql);
 }
 
-// ---------------------------------------------------------------- Schema comercial
+// =====================================================================
+// 4. SCHEMA_COMERCIAL: productos, ventas, menú, retiros y logs
+// =====================================================================
 
 // Agrega un producto nuevo al catálogo
 MYSQL_RES* alta_producto(MYSQL *conexion, int userID, int categoriaID, const QString &nombre, const QString &descripcion, int stock, int precio)
@@ -277,10 +299,12 @@ MYSQL_RES* actualizar_estado_retiro(MYSQL *conexion, int userID, int retiroID, i
 }
 
 // Lista de todos los productos con su categoría
+// Columnas: 0 ID, 1 nombre, 2 categoría, 3 precio, 4 stock, 5 Activo/Inactivo, 6 descripción
+// (la tabla de administración muestra de la 0 a la 5; el catálogo usa también la 6)
 MYSQL_RES* obtener_productos(MYSQL *conexion)
 {
     std::string sql = "SELECT p.ProductoID, p.Nombre_Producto, c.Categoria, p.Precio_Producto, p.Stock_Producto, "
-                      "IF(p.Activo, 'Activo', 'Inactivo') "
+                      "IF(p.Activo, 'Activo', 'Inactivo'), p.Descripcion_Producto "
                       "FROM schema_comercial.Producto p "
                       "INNER JOIN schema_comercial.Categoria c ON p.ID_Categoria = c.ID_Categoria "
                       "ORDER BY p.ProductoID;";

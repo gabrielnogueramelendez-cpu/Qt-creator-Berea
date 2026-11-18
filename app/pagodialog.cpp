@@ -1,3 +1,15 @@
+// =====================================================================
+// ARCHIVO: pagodialog.cpp (PAGO)
+// QUÉ HACE: datos del alumno, método de pago (efectivo, Mercado Pago o
+//           saldo), recreo de retiro y confirmación del pedido.
+// REGLAS:   solo se pide en los horarios de franjaDisponible(); el efectivo
+//           tiene que alcanzar; Mercado Pago pide 4 dígitos; el saldo tiene
+//           que alcanzar.
+// BDD:      una TRANSACCIÓN con sp_registrar_venta + sp_agregar_producto_carrito
+//           / sp_agregar_menu_carrito + sp_generar_retiro. Si un paso falla,
+//           ROLLBACK deshace todo.
+// =====================================================================
+
 #include "pagodialog.h"
 #include "ui_pagodialog.h"
 #include "sistemabuffet.h"
@@ -72,6 +84,8 @@ PagoDialog::PagoDialog(QWidget *parent) :
     ui->txtComprobanteMP->setMaxLength(4);
 
     totalAPagar = SistemaBuffet::getTotalCarrito();
+    montoAbonado = 0;
+    vuelto = 0;
     ui->lblResumenTotal->setText("Total: $" + QString::number(totalAPagar, 'f', 0));
 
     cargarDatosAlumno();
@@ -169,7 +183,8 @@ void PagoDialog::on_btnCancelarPago_clicked()
 // Botón CONFIRMAR PEDIDO
 // 1. Controla los datos, el horario y el método de pago
 // 2. Genera el código de retiro
-// 3. Guarda el pedido (en la BDD o en las listas)
+// 3. Guarda el pedido en la BDD (venta + carrito + retiro)
+// 4. Vuelve a leer el saldo, el stock y los pedidos
 // =====================================================================
 void PagoDialog::on_btnConfirmarPedido_clicked()
 {
@@ -206,13 +221,10 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
 
     // Controles de cada método de pago.
     // metodoPagoID es el ID de la tabla Metodo_Pago: 1 = Efectivo, 2 = Mercado Pago, 21 = Saldo
-    QString metodo;
     int metodoPagoID = 0;
-    double montoAbonado = totalAPagar;
-    double vuelto = 0.0;
 
     if (ui->rbEfectivo->isChecked()) {
-        metodo = ui->rbEfectivo->text();
+        // Efectivo: el monto con el que paga tiene que alcanzar
         metodoPagoID = 1;
         montoAbonado = ui->txtMontoAbonado->text().toDouble();
         if (ui->txtMontoAbonado->text().isEmpty() || montoAbonado < totalAPagar) {
@@ -221,14 +233,14 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
         }
         vuelto = montoAbonado - totalAPagar;
     } else if (ui->rbMercadoPago->isChecked()) {
-        metodo = ui->rbMercadoPago->text();
+        // Mercado Pago: los 4 dígitos finales del comprobante
         metodoPagoID = 2;
         if (ui->txtComprobanteMP->text().length() != 4) {
             QMessageBox::warning(this, "Comprobante Inválido", "Ingresá los 4 dígitos finales del comprobante.");
             return;
         }
     } else {
-        metodo = ui->rbSaldo->text();
+        // Saldo de la cuenta escolar: tiene que alcanzar (el SP lo vuelve a controlar)
         metodoPagoID = 21;
         if (SistemaBuffet::usuario.saldo < totalAPagar) {
             QMessageBox::warning(this, "Saldo Insuficiente", "El saldo de tu cuenta escolar no alcanza.");
@@ -242,68 +254,22 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
         codigoGenerado = generarCodigoRetiro();
     }
 
-    // ----- 3. Guardar el pedido -----
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD -----
-        if (!guardarPedidoEnBDD(metodoPagoID, franjaID)) {
-            return;
-        }
-        SistemaBuffet::vaciarCarrito();
-        SistemaBuffet::cargarUsuarioDesdeBDD(SistemaBuffet::usuario.id); // el SP ya descontó el saldo
-        SistemaBuffet::cargarDesdeBDD();
-    } else {
-        // ----- MODO SIN BDD -----
-        guardarPedidoSinBDD(metodo, franjaID, montoAbonado, vuelto);
+    // ----- 3. Guardar el pedido en la BDD -----
+    if (!guardarPedidoEnBDD(metodoPagoID, franjaID)) {
+        return;
     }
+
+    // ----- 4. Volver a leer lo que cambió -----
+    // Los SP ya descontaron el stock y (si pagó con saldo) el saldo
+    SistemaBuffet::vaciarCarrito();
+    SistemaBuffet::cargarUsuarioDesdeBDD(SistemaBuffet::usuario.id);
+    SistemaBuffet::cargarDesdeBDD();
 
     accept();
 }
 
 // =====================================================================
-// guardarPedidoSinBDD (MODO SIN BDD)
-// Arma el pedido, lo agrega a la lista, descuenta saldo y stock
-// =====================================================================
-void PagoDialog::guardarPedidoSinBDD(QString metodo, int franjaID, double montoAbonado, double vuelto)
-{
-    if (ui->rbSaldo->isChecked()) {
-        SistemaBuffet::usuario.saldo = SistemaBuffet::usuario.saldo - totalAPagar;
-    }
-
-    // Detalle: un renglón por producto, ej. "2 x Alfajor de Maicena ($1600)"
-    QString detalle = "";
-    for (int i = 0; i < SistemaBuffet::carrito.size(); i++) {
-        ItemCarrito item = SistemaBuffet::carrito[i];
-        double subtotal = item.precio * item.cantidad;
-        detalle = detalle + QString::number(item.cantidad) + " x " + item.nombre
-                  + " ($" + QString::number(subtotal, 'f', 0) + ")\n";
-    }
-
-    Pedido nuevo;
-    nuevo.retiroID = 0;
-    nuevo.codigo = codigoGenerado;
-    nuevo.cliente = ui->txtPagoNombre->text().trimmed();
-    nuevo.curso = ui->txtPagoCurso->text().trimmed();
-    nuevo.dni = ui->txtPagoDni->text().trimmed();
-    nuevo.recreo = ui->comboRecreo->itemText(franjaID);
-    nuevo.metodo = metodo;
-    nuevo.monto = totalAPagar;
-    nuevo.abonado = montoAbonado;
-    nuevo.vuelto = vuelto;
-    nuevo.estado = "PENDIENTE";
-    nuevo.detalle = detalle;
-    SistemaBuffet::pedidos.append(nuevo);
-
-    // Se resta del stock lo vendido
-    for (int i = 0; i < SistemaBuffet::carrito.size(); i++) {
-        int productoID = SistemaBuffet::carrito[i].id;
-        SistemaBuffet::productos[productoID].stock = SistemaBuffet::productos[productoID].stock - SistemaBuffet::carrito[i].cantidad;
-    }
-
-    SistemaBuffet::vaciarCarrito();
-}
-
-// =====================================================================
-// guardarPedidoEnBDD (MODO CON BDD)
+// guardarPedidoEnBDD
 // Son 3 pasos que van juntos (una TRANSACCIÓN): si uno falla, ROLLBACK
 // deshace todo (la venta y el stock descontado). Si todo sale bien, COMMIT.
 // Devuelve true si el pedido quedó guardado.

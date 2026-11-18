@@ -16,8 +16,10 @@ public:
     explicit PagoDialog(QWidget *parent = nullptr);
     ~PagoDialog();
 
-    // El código de retiro del pedido confirmado (lo usa el comprobante)
+    // Datos del pedido confirmado que usa el comprobante
     QString getCodigoGenerado() { return codigoGenerado; }
+    double getMontoAbonado() { return montoAbonado; }   // con cuánto pagó en efectivo
+    double getVuelto() { return vuelto; }
 
 private slots:
     void on_rbEfectivo_clicked();
@@ -31,10 +33,11 @@ private:
     Ui::PagoDialog *ui;
     double totalAPagar;
     QString codigoGenerado;
+    double montoAbonado;   // la BDD no lo guarda: solo se muestra en el comprobante
+    double vuelto;
     void cargarDatosAlumno();
     void habilitarCamposMetodo();
     bool guardarPedidoEnBDD(int metodoPagoID, int franjaID);
-    void guardarPedidoSinBDD(QString metodo, int franjaID, double montoAbonado, double vuelto);
 };
 
 #endif // PAGODIALOG_H

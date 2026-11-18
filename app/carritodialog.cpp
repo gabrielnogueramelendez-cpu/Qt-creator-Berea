@@ -1,3 +1,11 @@
+// =====================================================================
+// ARCHIVO: carritodialog.cpp (MI CARRITO)
+// QUÉ HACE: tabla con lo elegido; cambiar cantidades, sacar un producto,
+//           vaciar el carrito o ir a pagar.
+// BDD:      no consulta: el carrito vive en SistemaBuffet::carrito hasta
+//           que se paga (ahí se guarda en la tabla Carrito).
+// =====================================================================
+
 #include "carritodialog.h"
 #include "ui_carritodialog.h"
 #include "sistemabuffet.h"

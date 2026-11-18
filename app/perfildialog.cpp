@@ -1,3 +1,10 @@
+// =====================================================================
+// ARCHIVO: perfildialog.cpp (MI PERFIL)
+// QUÉ HACE: datos del usuario, saldo de la cuenta escolar, carga de saldo
+//           y el historial de sus pedidos.
+// BDD:      sp_cargar_saldo y SistemaBuffet::cargarDesdeBDD() (pedidos).
+// =====================================================================
+
 #include "perfildialog.h"
 #include "ui_perfildialog.h"
 #include "sistemabuffet.h"
@@ -49,7 +56,7 @@ void PerfilDialog::mostrarSaldo()
 // =====================================================================
 void PerfilDialog::cargarHistorial()
 {
-    // Con BDD: se vuelven a leer los pedidos
+    // Se vuelven a leer los pedidos de la BDD (puede haber uno recién entregado)
     SistemaBuffet::cargarDesdeBDD();
     ui->listPedidos->clear();
 
@@ -71,7 +78,8 @@ void PerfilDialog::cargarHistorial()
 }
 
 // =====================================================================
-// Botón CARGAR SALDO (con un comprobante de Mercado Pago)
+// Botón CARGAR SALDO (con un comprobante de Mercado Pago): sp_cargar_saldo
+// El SP suma el monto a Usuario.Saldo y devuelve el saldo nuevo
 // =====================================================================
 void PerfilDialog::on_btnCargarSaldo_clicked()
 {
@@ -87,20 +95,14 @@ void PerfilDialog::on_btnCargarSaldo_clicked()
         return;
     }
 
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD -----
-        // El SP devuelve: filas actualizadas (1 si cargó) y el saldo nuevo
-        QStringList respuesta = leer_primera_fila(cargar_saldo(SistemaBuffet::conexion, SistemaBuffet::usuario.id, monto));
+    // Columnas de la respuesta: 0 filas actualizadas (1 si cargó), 1 saldo nuevo
+    QStringList respuesta = leer_primera_fila(cargar_saldo(SistemaBuffet::conexion, SistemaBuffet::usuario.id, monto));
 
-        if (respuesta.size() > 1 && respuesta[0] == "1") {
-            SistemaBuffet::usuario.saldo = respuesta[1].toDouble();
-        } else {
-            QMessageBox::warning(this, "Error", "No se pudo cargar el saldo en la base de datos.");
-            return;
-        }
+    if (respuesta.size() > 1 && respuesta[0] == "1") {
+        SistemaBuffet::usuario.saldo = respuesta[1].toDouble();
     } else {
-        // ----- MODO SIN BDD -----
-        SistemaBuffet::usuario.saldo = SistemaBuffet::usuario.saldo + monto;
+        QMessageBox::warning(this, "Error", "No se pudo cargar el saldo en la base de datos.");
+        return;
     }
 
     ui->txtMontoCarga->clear();

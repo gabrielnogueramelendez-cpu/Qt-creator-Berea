@@ -1,11 +1,19 @@
+// =====================================================================
+// ARCHIVO: comprobantedialog.cpp (COMPROBANTE)
+// QUÉ HACE: muestra el código de retiro y el resumen del pedido recién pagado.
+// BDD:      no consulta: busca el pedido en SistemaBuffet::pedidos, que el
+//           pago acaba de volver a leer de la BDD.
+// =====================================================================
+
 #include "comprobantedialog.h"
 #include "ui_comprobantedialog.h"
 #include "sistemabuffet.h"
 
 // =====================================================================
-// Constructor: recibe el código de retiro y muestra el comprobante
+// Constructor: recibe del pago el código de retiro, con cuánto pagó y
+// el vuelto, y muestra el comprobante
 // =====================================================================
-ComprobanteDialog::ComprobanteDialog(const QString &codigoRetiro, QWidget *parent) :
+ComprobanteDialog::ComprobanteDialog(const QString &codigoRetiro, double montoPagado, double vueltoPedido, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ComprobanteDialog)
 {
@@ -13,6 +21,8 @@ ComprobanteDialog::ComprobanteDialog(const QString &codigoRetiro, QWidget *paren
     setWindowTitle("Comprobante de Pedido - El Buffet de Alejandro");
 
     codigo = codigoRetiro;
+    montoAbonado = montoPagado;
+    vuelto = vueltoPedido;
     cargarDatosComprobante();
 }
 
@@ -23,6 +33,8 @@ ComprobanteDialog::~ComprobanteDialog()
 
 // =====================================================================
 // cargarDatosComprobante: busca el pedido por su código y muestra los datos
+// El pedido ya está en SistemaBuffet::pedidos porque el pago, después de
+// guardarlo, volvió a leer los pedidos de la BDD
 // =====================================================================
 void ComprobanteDialog::cargarDatosComprobante()
 {
@@ -44,8 +56,8 @@ void ComprobanteDialog::cargarDatosComprobante()
 
     // Si pagó en efectivo, se agrega con cuánto paga y el vuelto
     if (pedido.metodo.contains("Efectivo", Qt::CaseInsensitive)) {
-        resumen = resumen + "\nPagás con $" + QString::number(pedido.abonado, 'f', 0)
-                + " · Vuelto $" + QString::number(pedido.vuelto, 'f', 0);
+        resumen = resumen + "\nPagás con $" + QString::number(montoAbonado, 'f', 0)
+                + " · Vuelto $" + QString::number(vuelto, 'f', 0);
     }
 
     ui->lblDetails->setText(resumen);

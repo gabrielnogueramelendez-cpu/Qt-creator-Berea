@@ -1,3 +1,13 @@
+// =====================================================================
+// ARCHIVO: adminwindow.cpp (ADMINISTRACIÓN)
+// QUÉ HACE: inventario (alta, cambio de precio y stock, baja) y la tabla
+//           de movimientos de Log_Auditoria.
+// SE LLEGA: login de "Administración".
+// BDD:      obtener_productos, sp_alta_producto, sp_modificar_stock,
+//           sp_modificar_precio, sp_baja_producto y obtener_logs.
+//           Los SP escriben el log; la app solo lo muestra.
+// =====================================================================
+
 #include "adminwindow.h"
 #include "ui_adminwindow.h"
 #include "loginwindow.h"
@@ -26,9 +36,10 @@ AdminWindow::AdminWindow(QWidget *parent) :
     ui->tableProductosAdmin->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableProductosAdmin->setSelectionMode(QAbstractItemView::SingleSelection);
 
+    // Las dos tablas de la pantalla se llenan con datos de la BDD
     cargarInventario();
     prepararTablaLogs();
-    registrarLog("Inicio de Sesión Exitoso", "Ingreso al panel de administración");
+    cargarLogsDesdeBDD();
 }
 
 AdminWindow::~AdminWindow()
@@ -37,8 +48,9 @@ AdminWindow::~AdminWindow()
 }
 
 // =====================================================================
-// cargarInventario: llena la tabla de productos
-// Columnas: ID, Producto, Categoría, Precio, Stock, Estado
+// cargarInventario: llena la tabla de productos con la tabla Producto
+// (consulta obtener_productos en basedatos.cpp)
+// Columnas de la pantalla: ID, Producto, Categoría, Precio, Stock, Estado
 // =====================================================================
 void AdminWindow::cargarInventario()
 {
@@ -49,43 +61,27 @@ void AdminWindow::cargarInventario()
     ui->tableProductosAdmin->setHorizontalHeaderLabels(titulos);
     ui->tableProductosAdmin->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
 
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD: Producto + Categoria -----
-        MYSQL_RES *resultado = obtener_productos(SistemaBuffet::conexion);
-        if (resultado == NULL) {
-            return;
-        }
-
-        int numeroFila = 0;
-        MYSQL_ROW fila = mysql_fetch_row(resultado);
-        while (fila != NULL) {
-            ui->tableProductosAdmin->insertRow(numeroFila);
-            for (int columna = 0; columna < 6; columna++) {
-                QString texto = valor_fila(fila, columna);
-                if (columna == 3) {
-                    texto = QString::number(texto.toDouble(), 'f', 0); // el precio sin los ,00
-                }
-                ui->tableProductosAdmin->setItem(numeroFila, columna, new QTableWidgetItem(texto));
-            }
-            numeroFila++;
-            fila = mysql_fetch_row(resultado);
-        }
-        mysql_free_result(resultado);
-    } else {
-        // ----- MODO SIN BDD: la lista de productos (la posición 0 es el menú, se saltea) -----
-        for (int id = 1; id < SistemaBuffet::productos.size(); id++) {
-            Producto producto = SistemaBuffet::productos[id];
-            int numeroFila = id - 1;
-
-            ui->tableProductosAdmin->insertRow(numeroFila);
-            ui->tableProductosAdmin->setItem(numeroFila, 0, new QTableWidgetItem(QString::number(producto.id)));
-            ui->tableProductosAdmin->setItem(numeroFila, 1, new QTableWidgetItem(producto.nombre));
-            ui->tableProductosAdmin->setItem(numeroFila, 2, new QTableWidgetItem(producto.categoria));
-            ui->tableProductosAdmin->setItem(numeroFila, 3, new QTableWidgetItem(QString::number(producto.precio, 'f', 0)));
-            ui->tableProductosAdmin->setItem(numeroFila, 4, new QTableWidgetItem(QString::number(producto.stock)));
-            ui->tableProductosAdmin->setItem(numeroFila, 5, new QTableWidgetItem("Activo"));
-        }
+    MYSQL_RES *resultado = obtener_productos(SistemaBuffet::conexion);
+    if (resultado == NULL) {
+        return;
     }
+
+    // Una fila de la pantalla por cada fila que devolvió MySQL
+    int numeroFila = 0;
+    MYSQL_ROW fila = mysql_fetch_row(resultado);
+    while (fila != NULL) {
+        ui->tableProductosAdmin->insertRow(numeroFila);
+        for (int columna = 0; columna < 6; columna++) {
+            QString texto = valor_fila(fila, columna);
+            if (columna == 3) {
+                texto = QString::number(texto.toDouble(), 'f', 0); // el precio sin los ,00
+            }
+            ui->tableProductosAdmin->setItem(numeroFila, columna, new QTableWidgetItem(texto));
+        }
+        numeroFila++;
+        fila = mysql_fetch_row(resultado);
+    }
+    mysql_free_result(resultado);
 }
 
 // =====================================================================
@@ -103,8 +99,9 @@ void AdminWindow::prepararTablaLogs()
 }
 
 // =====================================================================
-// cargarLogsDesdeBDD (MODO CON BDD)
-// Los movimientos los escriben los SP; acá solo se muestran los últimos
+// cargarLogsDesdeBDD: los últimos 50 movimientos de Log_Auditoria
+// Los movimientos los escriben los SP (alta, stock, precio, baja...);
+// la app nunca hace un INSERT en Log_Auditoria, solo los muestra
 // =====================================================================
 void AdminWindow::cargarLogsDesdeBDD()
 {
@@ -126,25 +123,6 @@ void AdminWindow::cargarLogsDesdeBDD()
         fila = mysql_fetch_row(resultado);
     }
     mysql_free_result(resultado);
-}
-
-// =====================================================================
-// registrarLog: agrega un movimiento a la tabla de logs
-// Con BDD el SP ya lo guardó: solo se recarga la tabla
-// =====================================================================
-void AdminWindow::registrarLog(QString evento, QString detalle)
-{
-    if (SistemaBuffet::conexion != NULL) {
-        cargarLogsDesdeBDD();
-        return;
-    }
-
-    // Sin BDD: se agrega una fila (los nombres de evento son los de la tabla Tipo_Evento)
-    int numeroFila = ui->tableLogsAdmin->rowCount();
-    ui->tableLogsAdmin->insertRow(numeroFila);
-    ui->tableLogsAdmin->setItem(numeroFila, 0, new QTableWidgetItem("alejandro.funes")); // el encargado (UserID 27)
-    ui->tableLogsAdmin->setItem(numeroFila, 1, new QTableWidgetItem(evento));
-    ui->tableLogsAdmin->setItem(numeroFila, 2, new QTableWidgetItem(detalle));
 }
 
 // =====================================================================
@@ -175,7 +153,8 @@ void AdminWindow::limpiarFormulario()
 }
 
 // =====================================================================
-// Botón AGREGAR PRODUCTO
+// Botón AGREGAR PRODUCTO: sp_alta_producto
+// El ProductoID lo da AUTO_INCREMENT y el SP deja el alta en Log_Auditoria
 // =====================================================================
 void AdminWindow::on_btnAgregarProd_clicked()
 {
@@ -194,28 +173,16 @@ void AdminWindow::on_btnAgregarProd_clicked()
         return;
     }
 
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD: el ProductoID lo da AUTO_INCREMENT -----
-        QStringList respuesta = leer_primera_fila(alta_producto(SistemaBuffet::conexion, SistemaBuffet::usuario.id,
-                                                                categoriaID, nombre, descripcion, stock.toInt(), precio.toInt()));
-        if (!respuestaCorrecta(respuesta)) {
-            QMessageBox::warning(this, "Error", "No se pudo dar de alta el producto en la base de datos.");
-            return;
-        }
-        cargarInventario();
-        cargarLogsDesdeBDD();
-    } else {
-        // ----- MODO SIN BDD: se agrega una fila a la tabla -----
-        int numeroFila = ui->tableProductosAdmin->rowCount();
-        ui->tableProductosAdmin->insertRow(numeroFila);
-        ui->tableProductosAdmin->setItem(numeroFila, 0, new QTableWidgetItem(QString::number(numeroFila + 1)));
-        ui->tableProductosAdmin->setItem(numeroFila, 1, new QTableWidgetItem(nombre));
-        ui->tableProductosAdmin->setItem(numeroFila, 2, new QTableWidgetItem(ui->comboCategoria->currentText()));
-        ui->tableProductosAdmin->setItem(numeroFila, 3, new QTableWidgetItem(precio));
-        ui->tableProductosAdmin->setItem(numeroFila, 4, new QTableWidgetItem(stock));
-        ui->tableProductosAdmin->setItem(numeroFila, 5, new QTableWidgetItem("Activo"));
-        registrarLog("Alta de Producto", "Alta de producto: " + nombre);
+    QStringList respuesta = leer_primera_fila(alta_producto(SistemaBuffet::conexion, SistemaBuffet::usuario.id,
+                                                            categoriaID, nombre, descripcion, stock.toInt(), precio.toInt()));
+    if (!respuestaCorrecta(respuesta)) {
+        QMessageBox::warning(this, "Error", "No se pudo dar de alta el producto en la base de datos.");
+        return;
     }
+
+    // Se vuelven a leer las dos tablas para ver el producto nuevo y su log
+    cargarInventario();
+    cargarLogsDesdeBDD();
 
     ui->lblEstadoAdmin->setText("Se agregó " + nombre + ".");
     limpiarFormulario();
@@ -223,7 +190,7 @@ void AdminWindow::on_btnAgregarProd_clicked()
 
 // =====================================================================
 // Botón GUARDAR CAMBIOS: guarda el precio y el stock que se editaron
-// directamente en la tabla
+// directamente en la tabla (sp_modificar_stock y sp_modificar_precio)
 // =====================================================================
 void AdminWindow::on_btnGuardarEdit_clicked()
 {
@@ -254,29 +221,23 @@ void AdminWindow::on_btnGuardarEdit_clicked()
         return;
     }
 
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD: un SP para el stock y otro para el precio -----
-        bool stockGuardado = respuestaCorrecta(leer_primera_fila(modificar_stock(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, stock)));
-        bool precioGuardado = respuestaCorrecta(leer_primera_fila(modificar_precio(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, precio)));
-        if (!stockGuardado || !precioGuardado) {
-            QMessageBox::warning(this, "Error", "No se pudieron guardar los cambios en la base de datos.");
-        }
-        cargarInventario();
-        cargarLogsDesdeBDD();
-    } else {
-        // ----- MODO SIN BDD: el catálogo usa este mismo stock -----
-        if (productoID < SistemaBuffet::productos.size()) {
-            SistemaBuffet::productos[productoID].stock = stock;
-        }
-        registrarLog("Modificación de Stock de Producto", "Producto " + QString::number(productoID) + ": stock " + QString::number(stock));
-        registrarLog("Modificación de Precio de Producto", "Producto " + QString::number(productoID) + ": precio " + QString::number(precio));
+    // Un SP para el stock y otro para el precio. Cada uno deja su log.
+    // Ojo: si el precio no cambió, MySQL no cuenta la fila como modificada
+    // y sp_modificar_precio devuelve 0, así que sale el aviso aunque el stock sí se guardó
+    bool stockGuardado = respuestaCorrecta(leer_primera_fila(modificar_stock(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, stock)));
+    bool precioGuardado = respuestaCorrecta(leer_primera_fila(modificar_precio(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, precio)));
+    if (!stockGuardado || !precioGuardado) {
+        QMessageBox::warning(this, "Error", "No se pudieron guardar los cambios en la base de datos.");
     }
+    cargarInventario();
+    cargarLogsDesdeBDD();
 
     ui->lblEstadoAdmin->setText("Se guardaron los cambios de " + nombre + ".");
 }
 
 // =====================================================================
-// Botón DAR DE BAJA: el producto queda inactivo (no se borra)
+// Botón DAR DE BAJA: sp_baja_producto. Es una baja lógica: el producto
+// queda con Activo = FALSE (no se borra, porque hay ventas que lo usan)
 // =====================================================================
 void AdminWindow::on_btnEliminarProd_clicked()
 {
@@ -289,20 +250,13 @@ void AdminWindow::on_btnEliminarProd_clicked()
     QString productoID = ui->tableProductosAdmin->item(filaElegida, 0)->text();
     QString nombre = ui->tableProductosAdmin->item(filaElegida, 1)->text();
 
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD -----
-        QStringList respuesta = leer_primera_fila(baja_producto(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID.toInt()));
-        if (!respuestaCorrecta(respuesta)) {
-            QMessageBox::warning(this, "Error", nombre + " ya estaba inactivo o no se pudo dar de baja.");
-            return;
-        }
-        cargarInventario();
-        cargarLogsDesdeBDD();
-    } else {
-        // ----- MODO SIN BDD: baja lógica, como sp_baja_producto (Activo = FALSE) -----
-        ui->tableProductosAdmin->item(filaElegida, 5)->setText("Inactivo");
-        registrarLog("Baja de Producto", "Producto " + productoID + ": " + nombre);
+    QStringList respuesta = leer_primera_fila(baja_producto(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID.toInt()));
+    if (!respuestaCorrecta(respuesta)) {
+        QMessageBox::warning(this, "Error", nombre + " ya estaba inactivo o no se pudo dar de baja.");
+        return;
     }
+    cargarInventario();
+    cargarLogsDesdeBDD();
 
     ui->lblEstadoAdmin->setText(nombre + " quedó inactivo.");
 }

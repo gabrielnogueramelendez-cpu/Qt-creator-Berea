@@ -1,3 +1,12 @@
+// =====================================================================
+// ARCHIVO: devwindow.cpp (DESARROLLADOR)
+// QUÉ HACE: lista los 27 SP (leídos de 05_Backend.sql) y las pruebas de
+//           06_Pruebas.sql; permite ejecutar un SP con parámetros y ver
+//           lo que devuelve; abre las vistas de alumno, caja y admin.
+// SE LLEGA: login de "Desarrollador" (con token).
+// BDD:      ejecutar_consulta con el CALL que se arma en pantalla.
+// =====================================================================
+
 #include "devwindow.h"
 #include "ui_devwindow.h"
 #include "mainwindow.h"
@@ -164,11 +173,6 @@ void DevWindow::on_btnEjecutarSP_clicked()
 
     ProcedimientoSQL elegido = procedimientos[filaElegida];
     QString llamada = "CALL " + elegido.schema + "." + elegido.nombre + "(" + ui->txtParametros->text().trimmed() + ");";
-
-    if (SistemaBuffet::conexion == NULL) {
-        ui->lblSalidaSP->setText(llamada + "\n(sin conexión con MySQL: no se ejecutó)");
-        return;
-    }
 
     MYSQL_RES *resultado = ejecutar_consulta(SistemaBuffet::conexion, llamada.toStdString());
     if (resultado == NULL) {

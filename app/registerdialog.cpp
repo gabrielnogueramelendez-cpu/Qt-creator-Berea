@@ -1,3 +1,11 @@
+// =====================================================================
+// ARCHIVO: registerdialog.cpp (ventana CREAR CUENTA)
+// QUÉ HACE: crea el usuario de un estudiante o profesor de la escuela.
+// SE LLEGA: botón "Crear cuenta" del login.
+// BDD:      sp_registrar_usuario. La BDD rechaza un DNI que no es de la
+//           escuela (error 1452) o un DNI/apodo repetido (error 1062).
+// =====================================================================
+
 #include "registerdialog.h"
 #include "ui_registerdialog.h"
 #include "sistemabuffet.h"
@@ -38,8 +46,9 @@ void RegisterDialog::aplicarValidadores()
 // =====================================================================
 // Botón CREAR CUENTA
 // 1. Controla los campos
-// 2. Crea el usuario (en la BDD o en las listas)
-// Solo se pueden registrar DNIs de estudiantes o profesores de la escuela
+// 2. Crea el usuario con sp_registrar_usuario
+// Solo se pueden registrar DNIs de estudiantes o profesores de la escuela:
+// lo controla la BDD con las claves foráneas de la tabla Usuario
 // =====================================================================
 void RegisterDialog::on_btnRegisterConfirm_clicked()
 {
@@ -63,65 +72,32 @@ void RegisterDialog::on_btnRegisterConfirm_clicked()
         return;
     }
 
-    // ----- 2. Crear el usuario -----
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD -----
-        // Si algo está mal, el SP devuelve "ERROR", el código de MySQL y la descripción:
-        //   1452 = el DNI no es de ningún estudiante ni profesor (clave foránea)
-        //   1062 = el DNI o el apodo ya existen (UNIQUE)
-        QStringList respuesta = leer_primera_fila(registrar_usuario(SistemaBuffet::conexion, dni, apodo, clave));
+    // ----- 2. Crear el usuario en la BDD -----
+    // El SP decide si es Estudiante o Profesor según en qué tabla esté el DNI.
+    // Si algo está mal, devuelve "ERROR", el código de MySQL y la descripción:
+    //   1452 = el DNI no es de ningún estudiante ni profesor (clave foránea)
+    //   1062 = el DNI o el apodo ya existen (UNIQUE)
+    QStringList respuesta = leer_primera_fila(registrar_usuario(SistemaBuffet::conexion, dni, apodo, clave));
 
-        if (respuesta.size() == 0) {
-            QMessageBox::warning(this, "Error", "No se pudo crear la cuenta.");
-            return;
-        }
+    if (respuesta.size() == 0) {
+        QMessageBox::warning(this, "Error", "No se pudo crear la cuenta.");
+        return;
+    }
 
-        if (respuesta[0] == "ERROR") {
-            QString codigoError = respuesta[1];
-            QString descripcion = respuesta[2];
+    if (respuesta[0] == "ERROR") {
+        QString codigoError = respuesta[1];
+        QString descripcion = respuesta[2];
 
-            if (codigoError == "1452") {
-                QMessageBox::warning(this, "DNI Inválido", "Ese DNI no corresponde a un estudiante ni a un profesor de la escuela.");
-            } else if (codigoError == "1062" && descripcion.contains("Apodo")) {
-                QMessageBox::warning(this, "Apodo Ocupado", "Ese apodo ya existe. Elegí otro.");
-            } else if (codigoError == "1062") {
-                QMessageBox::warning(this, "DNI Registrado", "Ese DNI ya tiene una cuenta. Iniciá sesión con tu apodo.");
-            } else {
-                QMessageBox::warning(this, "Error", "No se pudo crear la cuenta: " + descripcion);
-            }
-            return;
-        }
-    } else {
-        // ----- MODO SIN BDD -----
-        // Las mismas reglas que pone la BDD (clave foránea y UNIQUE)
-        bool esEstudiante = SistemaBuffet::buscarEstudiante(dni) != -1;
-        bool esProfesor = SistemaBuffet::buscarProfesor(dni) != -1;
-
-        if (!esEstudiante && !esProfesor) {
+        if (codigoError == "1452") {
             QMessageBox::warning(this, "DNI Inválido", "Ese DNI no corresponde a un estudiante ni a un profesor de la escuela.");
-            return;
-        }
-        if (SistemaBuffet::buscarDniRegistrado(dni) != -1) {
-            QMessageBox::warning(this, "DNI Registrado", "Ese DNI ya tiene una cuenta. Iniciá sesión con tu apodo.");
-            return;
-        }
-        if (SistemaBuffet::buscarUsuario(apodo) != -1) {
+        } else if (codigoError == "1062" && descripcion.contains("Apodo")) {
             QMessageBox::warning(this, "Apodo Ocupado", "Ese apodo ya existe. Elegí otro.");
-            return;
-        }
-
-        // Se arma el usuario nuevo y se agrega a la lista
-        Usuario nuevo;
-        nuevo.dni = dni;
-        nuevo.apodo = apodo;
-        nuevo.contrasena = clave;
-        nuevo.saldo = 0.0;   // igual que en la BDD: Usuario.Saldo arranca en 0
-        if (esProfesor) {
-            nuevo.rol = "Profesor";
+        } else if (codigoError == "1062") {
+            QMessageBox::warning(this, "DNI Registrado", "Ese DNI ya tiene una cuenta. Iniciá sesión con tu apodo.");
         } else {
-            nuevo.rol = "Estudiante";
+            QMessageBox::warning(this, "Error", "No se pudo crear la cuenta: " + descripcion);
         }
-        SistemaBuffet::usuarios.append(nuevo);
+        return;
     }
 
     QMessageBox::information(this, "Registro Exitoso",

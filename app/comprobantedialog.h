@@ -13,7 +13,8 @@ class ComprobanteDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ComprobanteDialog(const QString &codigoRetiro = "3C6MB", QWidget *parent = nullptr);
+    // montoAbonado y vuelto solo se usan si pagó en efectivo
+    explicit ComprobanteDialog(const QString &codigoRetiro, double montoAbonado, double vuelto, QWidget *parent = nullptr);
     ~ComprobanteDialog();
 
 private slots:
@@ -22,6 +23,8 @@ private slots:
 private:
     Ui::ComprobanteDialog *ui;
     QString codigo;
+    double montoAbonado;
+    double vuelto;
     void cargarDatosComprobante();
 };
 

@@ -1,3 +1,15 @@
+// =====================================================================
+// ARCHIVO: loginwindow.cpp (pantalla de INICIO DE SESIÓN)
+// QUÉ HACE: pide apodo y clave (más PIN para caja o token para desarrollador),
+//           los revisa en la BDD y abre la ventana que corresponde al rol.
+// SE LLEGA: al abrir el programa, o con el botón SALIR de cualquier ventana.
+// BDD:      sp_iniciar_sesion, sp_acceso_personal (los dos dejan el intento
+//           en Log_Auditoria) y la consulta obtener_datos_usuario.
+// ABRE:     MainWindow (estudiante/profesor), CajeroWindow (caja),
+//           AdminWindow (administración), DevWindow (desarrollador),
+//           RegisterDialog (crear cuenta).
+// =====================================================================
+
 #include "loginwindow.h"
 #include "ui_loginwindow.h"
 #include "registerdialog.h"
@@ -25,10 +37,8 @@ LoginWindow::LoginWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle("El Buffet de Alejandro - Iniciar Sesión");
 
+    // Contador para bloquear después de 3 intentos fallidos
     intentosFallidos = 0;
-
-    // Pedidos de ejemplo y menú del día (para el modo sin BDD)
-    SistemaBuffet::inicializarDatos();
 
     // Mismos largos que la BDD: Usuario.Contrasena, Empleado.PIN y Empleado.Token_Acceso
     ui->txtPass->setMaxLength(50);
@@ -126,7 +136,8 @@ void LoginWindow::actualizarCamposSegunRol(int opcionElegida)
 // =====================================================================
 // Botón INICIAR SESIÓN
 // 1. Controla que los campos estén bien escritos
-// 2. Revisa apodo, clave y PIN o token (en la BDD o en las listas)
+// 2. Le pide a la BDD que revise apodo, clave y PIN o token
+//    (sp_iniciar_sesion o sp_acceso_personal)
 // 3. Si el rol coincide con la opción elegida, abre la ventana que va
 // =====================================================================
 void LoginWindow::on_btnLogin_clicked()
@@ -165,55 +176,32 @@ void LoginWindow::on_btnLogin_clicked()
         return;
     }
 
-    // ----- 2. Revisión del acceso -----
+    // ----- 2. Revisión del acceso en la BDD -----
     // accesoCorrecto: true si apodo, clave y (si hace falta) PIN o token son correctos
     // rolDelUsuario: el rol que tiene ese usuario en la BDD ("Estudiante", "Personal de caja", ...)
     bool accesoCorrecto = false;
     QString rolDelUsuario = "";
-    int posicionUsuario = SistemaBuffet::buscarUsuario(apodo);
 
-    if (SistemaBuffet::conexion != NULL) {
-        // ----- MODO CON BDD -----
-        // El SP revisa los datos y deja el intento (bien o mal) en Log_Auditoria.
-        // Si los datos son correctos, devuelve el UserID en la primera columna
-        QStringList respuesta;
-        if (opcionElegida == OPCION_CAJA) {
-            respuesta = leer_primera_fila(acceso_personal(SistemaBuffet::conexion, apodo, clave, pin));
-        } else if (opcionElegida == OPCION_DESARROLLADOR) {
-            respuesta = leer_primera_fila(acceso_personal(SistemaBuffet::conexion, apodo, clave, token));
-        } else {
-            respuesta = leer_primera_fila(iniciar_sesion(SistemaBuffet::conexion, apodo, clave));
-        }
-
-        if (respuesta.size() > 0 && respuesta[0] != "ERROR") {
-            int userID = respuesta[0].toInt();
-            accesoCorrecto = SistemaBuffet::cargarUsuarioDesdeBDD(userID);
-            rolDelUsuario = SistemaBuffet::usuario.rol;
-        }
+    // El SP revisa los datos contra las tablas Usuario y Empleado, y deja el
+    // intento (bien o mal) en Log_Auditoria. Si los datos son correctos,
+    // devuelve el UserID en la primera columna
+    //   - Caja:          sp_acceso_personal(apodo, clave, PIN)
+    //   - Desarrollador: sp_acceso_personal(apodo, clave, token)
+    //   - Los demás:     sp_iniciar_sesion(apodo, clave)
+    QStringList respuesta;
+    if (opcionElegida == OPCION_CAJA) {
+        respuesta = leer_primera_fila(acceso_personal(SistemaBuffet::conexion, apodo, clave, pin));
+    } else if (opcionElegida == OPCION_DESARROLLADOR) {
+        respuesta = leer_primera_fila(acceso_personal(SistemaBuffet::conexion, apodo, clave, token));
     } else {
-        // ----- MODO SIN BDD -----
-        // Las mismas reglas, buscando en las listas de SistemaBuffet
-        if (posicionUsuario != -1) {
-            Usuario encontrado = SistemaBuffet::usuarios[posicionUsuario];
-            rolDelUsuario = encontrado.rol;
+        respuesta = leer_primera_fila(iniciar_sesion(SistemaBuffet::conexion, apodo, clave));
+    }
 
-            if (encontrado.contrasena == clave) {
-                accesoCorrecto = true;
-            }
-
-            // Caja y desarrollador además tienen que estar en la lista de empleados
-            int posicionEmpleado = SistemaBuffet::buscarEmpleado(apodo);
-            if (opcionElegida == OPCION_CAJA) {
-                if (posicionEmpleado == -1 || SistemaBuffet::empleados[posicionEmpleado].pin != pin) {
-                    accesoCorrecto = false;
-                }
-            }
-            if (opcionElegida == OPCION_DESARROLLADOR) {
-                if (posicionEmpleado == -1 || SistemaBuffet::empleados[posicionEmpleado].token != token) {
-                    accesoCorrecto = false;
-                }
-            }
-        }
+    // Con el UserID se leen nombre, curso, saldo y rol (SistemaBuffet::usuario)
+    if (respuesta.size() > 0 && respuesta[0] != "ERROR") {
+        int userID = respuesta[0].toInt();
+        accesoCorrecto = SistemaBuffet::cargarUsuarioDesdeBDD(userID);
+        rolDelUsuario = SistemaBuffet::usuario.rol;
     }
 
     // ----- 3. Abrir la ventana que corresponde -----
@@ -223,9 +211,6 @@ void LoginWindow::on_btnLogin_clicked()
     if (opcionElegida == OPCION_ESTUDIANTE) {
         if (accesoCorrecto && (rolDelUsuario == "Estudiante" || rolDelUsuario == "Profesor")) {
             intentosFallidos = 0;
-            if (SistemaBuffet::conexion == NULL) {
-                SistemaBuffet::cargarUsuarioActivo(posicionUsuario);
-            }
             MainWindow *ventanaCatalogo = new MainWindow();
             ventanaCatalogo->show();
             this->close();

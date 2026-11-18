@@ -4,7 +4,15 @@ Sistema Click & Collect para el buffet escolar. El alumno elige del menú, paga 
 
 Proyecto Informático I y Bases de Datos. Aplicación de escritorio en **C++ con Qt 6** y base de datos **MySQL**.
 
-## Versión simplificada (esta rama)
+## Versión solo BDD (esta rama)
+
+Rama `version-ubuntu-solo-bdd`: parte de la versión simplificada y funciona **únicamente con MySQL**. No tiene datos de ejemplo escritos en el código: productos (con su descripción), usuarios, pedidos y menú se leen de la BDD. Si no se puede conectar, el programa avisa y se cierra.
+
+Antes de compilar, poné la contraseña de root de MySQL de esa compu en `BDD_CLAVE` (`app/basedatos.cpp`) y corré los scripts `database/03` a `06`.
+
+La guía para explicar el código en la expo está en [`GUIA_CODIGO_EXPO.md`](GUIA_CODIGO_EXPO.md).
+
+## Versión simplificada
 
 Rama `version-ubuntu-simplificada`: misma aplicación y misma interfaz que `version-ubuntu` (Qt 6), con el código reescrito para leerlo y explicarlo fácil:
 

@@ -28,7 +28,6 @@ private:
     void cargarInventario();
     void prepararTablaLogs();
     void cargarLogsDesdeBDD();
-    void registrarLog(QString evento, QString detalle);
     void limpiarFormulario();
     bool respuestaCorrecta(QStringList respuesta);
 };

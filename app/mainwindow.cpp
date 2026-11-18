@@ -1,3 +1,13 @@
+// =====================================================================
+// ARCHIVO: mainwindow.cpp (CATÁLOGO del alumno)
+// QUÉ HACE: muestra los 20 productos con su precio y foto, el menú del día
+//           y el botón TU PEDIDO con el total del carrito.
+// SE LLEGA: login de estudiante o profesor.
+// BDD:      SistemaBuffet::cargarDesdeBDD() (productos, pedidos y menú).
+// ABRE:     ProductDetailDialog (VER), CarritoDialog -> PagoDialog ->
+//           ComprobanteDialog (TU PEDIDO), PerfilDialog (círculo con iniciales).
+// =====================================================================
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "productdetaildialog.h"
@@ -18,8 +28,9 @@ static QString textoPrecio(int productoID)
 
 // =====================================================================
 // Constructor: arma el catálogo
-// 1. Trae de la BDD los precios y el stock (si hay conexión)
+// 1. Trae de la BDD los productos, los pedidos y el menú de hoy
 // 2. Pone los precios y las fotos de cada producto
+//    (las 20 tarjetas están fijas en mainwindow.ui: la tarjeta N es el ProductoID N)
 // 3. Muestra el menú del día y el botón del carrito
 // =====================================================================
 MainWindow::MainWindow(QWidget *parent) :
@@ -216,12 +227,13 @@ void MainWindow::on_btnCheckout_clicked()
         if (ventanaPago.exec() == QDialog::Accepted) {
 
             // 3. Comprobante con el código de retiro
-            ComprobanteDialog ventanaComprobante(ventanaPago.getCodigoGenerado(), this);
+            ComprobanteDialog ventanaComprobante(ventanaPago.getCodigoGenerado(), ventanaPago.getMontoAbonado(),
+                                                 ventanaPago.getVuelto(), this);
             ventanaComprobante.exec();
         }
     }
 
-    // Con BDD: stock y menú actualizados después de la compra
+    // Stock y menú actualizados después de la compra (o del carrito cancelado)
     SistemaBuffet::cargarDesdeBDD();
     mostrarMenuDelDia();
     actualizarBotonCarrito();
