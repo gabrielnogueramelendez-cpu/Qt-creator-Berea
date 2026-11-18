@@ -261,7 +261,7 @@ INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Cambio de Estado de Pedido');  
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Alta de Producto');  -- 13
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Baja de Producto');  -- 14
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Modificación de Stock de Producto');  -- 15
-INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Alta de Menú del Día');  -- 16
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Modificación de Menú del Día');  -- 16
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Actualización de Perfil');  -- 17
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Apertura de Caja');  -- 18
 INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Cierre de Caja');  -- 19
@@ -505,28 +505,11 @@ INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Billetera Santander');
 INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Saldo de Cuenta Escolar');  -- 21
 
 -- ----------------------------------------------------------------------------
--- Estado_Retiro (20) - 1 PENDIENTE, 2 ENTREGADO, 3 CANCELADO (los usan los SPs)
+-- Estado_Retiro (3) - los únicos estados que usa el sistema
 -- ----------------------------------------------------------------------------
-INSERT INTO Estado_Retiro (Estado) VALUES ('PENDIENTE');
-INSERT INTO Estado_Retiro (Estado) VALUES ('ENTREGADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('CANCELADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('PAGO PENDIENTE');
-INSERT INTO Estado_Retiro (Estado) VALUES ('PAGO ACREDITADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('PAGO RECHAZADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('EN PREPARACION');
-INSERT INTO Estado_Retiro (Estado) VALUES ('LISTO PARA RETIRAR');
-INSERT INTO Estado_Retiro (Estado) VALUES ('DEMORADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('SIN STOCK');
-INSERT INTO Estado_Retiro (Estado) VALUES ('REPROGRAMADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('NO RETIRADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('VENCIDO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('RECLAMADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('REEMBOLSADO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('ENTREGADO PARCIAL');
-INSERT INTO Estado_Retiro (Estado) VALUES ('CANCELADO POR EL BUFFET');
-INSERT INTO Estado_Retiro (Estado) VALUES ('CANCELADO POR EL ALUMNO');
-INSERT INTO Estado_Retiro (Estado) VALUES ('EN ESPERA DE CONFIRMACION');
-INSERT INTO Estado_Retiro (Estado) VALUES ('ARCHIVADO');
+INSERT INTO Estado_Retiro (Estado) VALUES ('PENDIENTE');  -- 1
+INSERT INTO Estado_Retiro (Estado) VALUES ('ENTREGADO');  -- 2
+INSERT INTO Estado_Retiro (Estado) VALUES ('CANCELADO');  -- 3
 
 -- ----------------------------------------------------------------------------
 -- Franja_Retiro (6) - horario real de la ET N° 3. A las 07:45 entran a clase, así que no hay retiro a esa hora.
@@ -565,52 +548,22 @@ INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock
 INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (20, 'Combo Sándwich + Gaseosa', 'Sándwich de milanesa + gaseosa 500 ml', 40, '4100.00');
 
 -- ----------------------------------------------------------------------------
--- Menu_Del_Dia (20 - menú semanal fijo: cada día hábil repite su plato)
+-- Menu_Del_Dia (5) - menú fijo: un plato por día hábil. Los fines de semana no hay menú
 -- ----------------------------------------------------------------------------
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-10-14', 'Miércoles');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-10-15', 'Jueves');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-10-16', 'Viernes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-10-19', 'Lunes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-10-20', 'Martes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-10-21', 'Miércoles');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-10-22', 'Jueves');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-10-23', 'Viernes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-10-26', 'Lunes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-10-27', 'Martes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-10-28', 'Miércoles');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-10-29', 'Jueves');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-10-30', 'Viernes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-11-02', 'Lunes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-11-03', 'Martes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, '2026-11-04', 'Miércoles');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, '2026-11-05', 'Jueves');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, '2026-11-06', 'Viernes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, '2026-11-09', 'Lunes');
-INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, '2026-11-10', 'Martes');
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, 'Lunes');  -- 1
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, 'Martes');  -- 2
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, 'Miércoles');  -- 3
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, 'Jueves');  -- 4
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, 'Viernes');  -- 5
 
 -- ----------------------------------------------------------------------------
--- Detalle_Menu_Dia (20 - producto que incluye cada menú: bebida, fruta o postre)
+-- Detalle_Menu_Dia (5) - producto que incluye cada menú
 -- ----------------------------------------------------------------------------
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (1, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (2, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (3, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (4, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (5, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (6, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (7, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (8, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (9, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (10, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (11, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (12, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (13, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (14, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (15, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (16, 10);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (17, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (18, 11);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (19, 7);
-INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (20, 10);
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (1, 7);   -- Lunes: manzana
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (2, 10);  -- Martes: agua
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (3, 10);  -- Miércoles: agua
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (4, 11);  -- Jueves: jugo
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (5, 11);  -- Viernes: jugo
 
 -- ----------------------------------------------------------------------------
 -- Venta (50 - TABLA PRINCIPAL). Monto_Total = suma de sus renglones de Carrito
@@ -669,36 +622,36 @@ INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) 
 -- ----------------------------------------------------------------------------
 -- Carrito (50 - renglones de las ventas: producto O menú del día)
 -- ----------------------------------------------------------------------------
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (1, 1, 1, '4200.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (1, 3, 1, '4200.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (2, 9, 2, '1200.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (3, 2, 2, '3800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (3, 4, 2, '3800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (4, 12, 2, '1300.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (5, 2, 1, '3800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (5, 4, 1, '3800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (6, 5, 2, '800.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (7, 3, 1, '4300.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (7, 5, 1, '4300.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (8, 3, 2, '1800.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (9, 5, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (9, 2, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (10, 20, 1, '4100.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (11, 1, 2, '2800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (12, 8, 1, '1100.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (13, 13, 2, '1400.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (14, 7, 2, '700.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (15, 2, 1, '1100.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (16, 10, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (16, 2, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (17, 16, 1, '800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (18, 7, 2, '700.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (19, 3, 2, '1800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (20, 1, 1, '2800.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (21, 10, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (21, 2, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (22, 7, 2, '700.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (23, 12, 1, '3800.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (24, 12, 1, '3800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (23, 4, 1, '3800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (24, 4, 1, '3800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (25, 12, 2, '1300.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (26, 2, 2, '1100.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (27, 14, 2, '900.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (28, 14, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (28, 1, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (29, 7, 1, '700.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (30, 15, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (30, 2, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (31, 15, 3, '700.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (32, 8, 1, '1100.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (33, 11, 2, '900.00');
@@ -707,15 +660,15 @@ INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (35,
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (36, 8, 3, '1100.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (37, 9, 1, '1200.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (38, 8, 1, '1100.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (39, 18, 2, '4300.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (39, 5, 2, '4300.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (40, 14, 2, '900.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (41, 18, 1, '4300.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (42, 19, 1, '3900.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (43, 19, 1, '3900.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (44, 19, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (41, 5, 1, '4300.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (42, 1, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (43, 1, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (44, 1, 1, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (45, 5, 1, '800.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (46, 7, 3, '700.00');
-INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (47, 20, 2, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (47, 2, 2, '3900.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (48, 4, 2, '1600.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (49, 20, 1, '4100.00');
 INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (50, 1, 1, '2800.00');

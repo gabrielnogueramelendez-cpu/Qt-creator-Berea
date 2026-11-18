@@ -66,6 +66,7 @@ CREATE PROCEDURE sp_iniciar_sesion(p_Apodo VARCHAR(50), p_Contrasena VARCHAR(50)
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
+    DECLARE filas INT DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -75,16 +76,20 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
+    -- Si el apodo y la contraseña son correctos, se registra el inicio de sesión
     INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
     SELECT UserID, 1, CURDATE(), CURTIME(), 'Inicio de sesión'
     FROM Usuario
     WHERE Apodo = p_Apodo AND Contrasena = p_Contrasena;
 
-    INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-    SELECT (SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
-           CONCAT('Intento fallido con el apodo: ', COALESCE(p_Apodo, '(vacío)'))
-    FROM DUAL
-    WHERE NOT EXISTS (SELECT 1 FROM Usuario WHERE Apodo = p_Apodo AND Contrasena = p_Contrasena);
+    SET filas = ROW_COUNT();
+
+    -- Si no, se registra el intento fallido (UserID queda NULL si el apodo no existe)
+    IF filas = 0 THEN
+        INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+        VALUES ((SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
+                CONCAT('Intento fallido con el apodo: ', COALESCE(p_Apodo, '(vacío)')));
+    END IF;
 
     SELECT u.UserID, u.Apodo, r.Nombre_Rol AS Tipo_Usuario
     FROM Usuario u
@@ -102,6 +107,7 @@ CREATE PROCEDURE sp_acceso_personal(p_Apodo VARCHAR(50), p_Contrasena VARCHAR(50
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
+    DECLARE filas INT DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -111,6 +117,7 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
+    -- Si apodo, contraseña y PIN (o token) son correctos, se registra el inicio de sesión
     INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
     SELECT u.UserID, 1, CURDATE(), CURTIME(), 'Inicio de sesión del personal'
     FROM Usuario u
@@ -118,13 +125,14 @@ BEGIN
     WHERE u.Apodo = p_Apodo AND u.Contrasena = p_Contrasena
       AND (e.PIN = p_Clave OR e.Token_Acceso = p_Clave);
 
-    INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-    SELECT (SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
-           CONCAT('Intento fallido del personal con el apodo: ', COALESCE(p_Apodo, '(vacío)'))
-    FROM DUAL
-    WHERE NOT EXISTS (SELECT 1 FROM Usuario u INNER JOIN Empleado e ON u.UserID = e.UserID
-                      WHERE u.Apodo = p_Apodo AND u.Contrasena = p_Contrasena
-                        AND (e.PIN = p_Clave OR e.Token_Acceso = p_Clave));
+    SET filas = ROW_COUNT();
+
+    -- Si no, se registra el intento fallido
+    IF filas = 0 THEN
+        INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+        VALUES ((SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
+                CONCAT('Intento fallido del personal con el apodo: ', COALESCE(p_Apodo, '(vacío)')));
+    END IF;
 
     SELECT u.UserID, u.Apodo, e.Nombre_Empleado, e.Apellido_Empleado, p.Nombre_Puesto
     FROM Usuario u
@@ -338,16 +346,18 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
--- SP 8: Alta del menú del día con el producto que incluye (por ej: la bebida)
+-- SP 8: Modificar el menú fijo de un día (plato, precio y stock).
+-- El menú es fijo: hay un solo menú por día hábil, cargado en 04_DatosSQL.
+-- Sábado, domingo o un día que no existe: no modifica nada y devuelve 0 filas
 -- ----------------------------------------------------------------------------
-DROP PROCEDURE IF EXISTS sp_alta_menu_dia;
+DROP PROCEDURE IF EXISTS sp_modificar_menu_dia;
 DELIMITER //
-CREATE PROCEDURE sp_alta_menu_dia(p_UserID INT, p_ID_Categoria INT, p_Plato VARCHAR(100),
-                                  p_Precio DECIMAL(10,2), p_Stock INT, p_Fecha DATE,
-                                  p_Dia VARCHAR(10), p_ProductoIncluido INT)
+CREATE PROCEDURE sp_modificar_menu_dia(p_UserID INT, p_Dia VARCHAR(10), p_Plato VARCHAR(100),
+                                       p_Precio DECIMAL(10,2), p_Stock INT)
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
+    DECLARE filas INT DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -357,21 +367,20 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
-    INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana)
-    VALUES (p_ID_Categoria, p_Plato, p_Precio, p_Stock, p_Fecha, p_Dia);
+    UPDATE Menu_Del_Dia
+    SET Plato_menu = p_Plato, Precio_menu = p_Precio, Stock_menu = p_Stock
+    WHERE Dia_Semana = p_Dia;
 
-    INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID)
-    SELECT (SELECT MAX(Menu_Del_DiaID) FROM Menu_Del_Dia), ProductoID
-    FROM Producto
-    WHERE ProductoID = p_ProductoIncluido;
+    SET filas = ROW_COUNT();
 
-    INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-    VALUES (p_UserID, 16, CURDATE(), CURTIME(), CONCAT('Menú del ', p_Fecha, ': ', p_Plato));
+    IF filas = 1 THEN
+        INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+        VALUES (p_UserID, 16, CURDATE(), CURTIME(), CONCAT('Menú del ', p_Dia, ': ', p_Plato));
+    END IF;
 
-    SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Fecha_menu, m.Dia_Semana, d.ProductoID AS Producto_Incluido
-    FROM Menu_Del_Dia m
-    LEFT JOIN Detalle_Menu_Dia d ON m.Menu_Del_DiaID = d.Menu_Del_DiaID
-    WHERE m.Menu_Del_DiaID = (SELECT MAX(Menu_Del_DiaID) FROM Menu_Del_Dia);
+    SELECT filas AS Filas_Actualizadas, Menu_Del_DiaID, Plato_menu, Precio_menu, Stock_menu, Dia_Semana
+    FROM Menu_Del_Dia
+    WHERE Dia_Semana = p_Dia;
 END //
 DELIMITER ;
 
@@ -479,7 +488,9 @@ BEGIN
     FROM Menu_Del_Dia
     WHERE Menu_Del_DiaID = p_Menu_Del_DiaID
       AND Stock_menu >= p_Cantidad
-      AND Fecha_menu = (SELECT Fecha FROM Venta WHERE VentaID = p_VentaID)
+      -- Solo el menú del día de hoy. WEEKDAY da 0 = lunes ... 6 = domingo; el sábado y el
+      -- domingo ELT devuelve NULL y no coincide con ningún menú: el fin de semana no se vende
+      AND Dia_Semana = ELT(WEEKDAY(CURDATE()) + 1, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes')
       AND NOT EXISTS (SELECT 1 FROM Retiro WHERE VentaID = p_VentaID);
 
     SET filas = ROW_COUNT();
@@ -504,20 +515,15 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
--- SP 11b: Menú del día de una fecha. El menú es semanal y fijo: cada día hábil
--- (Dia_Semana) repite siempre el mismo plato. Si la fecha todavía no tiene menú,
--- se copia el primero cargado para ese día de la semana, con su stock inicial
--- y su producto incluido. El día de la semana lo calcula la aplicación (Qt).
--- Sábado, domingo o fecha NULL: 0 filas.
+-- SP 11b: Menú del día. Devuelve el menú fijo del día de la semana que manda la
+-- aplicación (Qt calcula el día). Sábado, domingo o NULL: 0 filas.
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_menu_del_dia;
 DELIMITER //
-CREATE PROCEDURE sp_menu_del_dia(p_Fecha DATE, p_Dia VARCHAR(10))
+CREATE PROCEDURE sp_menu_del_dia(p_Dia VARCHAR(10))
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
-    DECLARE molde INT DEFAULT NULL;
-    DECLARE filas INT DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -527,31 +533,12 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
-    -- El menú fijo de ese día de la semana: el primero que se cargó
-    SET molde = (SELECT MIN(Menu_Del_DiaID) FROM Menu_Del_Dia WHERE Dia_Semana = p_Dia);
-
-    -- Se copia solo si la fecha todavía no tiene menú
-    INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Fecha_menu, Dia_Semana)
-    SELECT ID_Categoria, Plato_menu, Precio_menu, Stock_menu, p_Fecha, Dia_Semana
-    FROM Menu_Del_Dia
-    WHERE Menu_Del_DiaID = molde
-      AND p_Fecha IS NOT NULL
-      AND NOT EXISTS (SELECT 1 FROM Menu_Del_Dia WHERE Fecha_menu = p_Fecha);
-
-    SET filas = ROW_COUNT();
-
-    INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID)
-    SELECT (SELECT MAX(Menu_Del_DiaID) FROM Menu_Del_Dia), ProductoID
-    FROM Detalle_Menu_Dia
-    WHERE Menu_Del_DiaID = molde AND filas = 1;
-
-    SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Precio_menu, m.Stock_menu, m.Fecha_menu,
-           p.Nombre_Producto AS Incluye, m.Dia_Semana
+    SELECT m.Menu_Del_DiaID, m.Plato_menu, m.Precio_menu, m.Stock_menu, m.Dia_Semana,
+           p.Nombre_Producto AS Incluye
     FROM Menu_Del_Dia m
     LEFT JOIN Detalle_Menu_Dia d ON m.Menu_Del_DiaID = d.Menu_Del_DiaID
     LEFT JOIN Producto p ON d.ProductoID = p.ProductoID
-    WHERE m.Fecha_menu = p_Fecha
-    ORDER BY m.Menu_Del_DiaID DESC;
+    WHERE m.Dia_Semana = p_Dia;
 END //
 DELIMITER ;
 
@@ -602,7 +589,7 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
--- SP 13: Cambiar el estado de un retiro (lo usa el cajero)
+-- SP 13: Cambiar el estado de un retiro (lo usa el cajero): ENTREGADO (2) o CANCELADO (3)
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_actualizar_estado_retiro;
 DELIMITER //
@@ -622,7 +609,8 @@ BEGIN
 
     UPDATE Retiro
     SET Estado_Retiro_ID = p_Nuevo_EstadoID
-    WHERE RetiroID = p_RetiroID AND Estado_Retiro_ID NOT IN (2, 3);
+    -- Solo un pedido PENDIENTE (1) puede pasar a ENTREGADO (2) o CANCELADO (3)
+    WHERE RetiroID = p_RetiroID AND Estado_Retiro_ID = 1 AND p_Nuevo_EstadoID IN (2, 3);
 
     SET filas = ROW_COUNT();
 
@@ -642,18 +630,14 @@ BEGIN
     WHERE r.RetiroID = p_RetiroID AND v.Metodo_PagoID = 21
       AND p_Nuevo_EstadoID = 3 AND filas = 1;
 
-    -- Log: entrega (10), cancelación (11) u otro cambio de estado (12)
-    INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-    SELECT p_UserID, 10, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' entregado')
-    FROM DUAL WHERE p_Nuevo_EstadoID = 2 AND filas = 1;
-
-    INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-    SELECT p_UserID, 11, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' cancelado')
-    FROM DUAL WHERE p_Nuevo_EstadoID = 3 AND filas = 1;
-
-    INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-    SELECT p_UserID, 12, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ': nuevo estado ', p_Nuevo_EstadoID)
-    FROM DUAL WHERE p_Nuevo_EstadoID NOT IN (2, 3) AND filas = 1;
+    -- Log: entrega (10) o cancelación (11)
+    IF filas = 1 AND p_Nuevo_EstadoID = 2 THEN
+        INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+        VALUES (p_UserID, 10, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' entregado'));
+    ELSEIF filas = 1 AND p_Nuevo_EstadoID = 3 THEN
+        INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+        VALUES (p_UserID, 11, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' cancelado'));
+    END IF;
 
     SELECT filas AS Filas_Actualizadas, r.RetiroID, er.Estado
     FROM Retiro r
@@ -917,7 +901,7 @@ END //
 DELIMITER ;
 
 -- ----------------------------------------------------------------------------
--- Reporte 8: Demanda del menú del día (vendidos y cuántos quedaron)
+-- Reporte 8: Demanda del menú del día (vendidos por día de la semana y stock actual)
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_reporte_demanda_menu_dia;
 DELIMITER //
@@ -934,20 +918,22 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
+    -- El menú es fijo: se agrupa por día de la semana y el período se toma de la fecha de la venta
     SELECT
         m.Menu_Del_DiaID,
+        m.Dia_Semana,
         m.Plato_menu,
-        m.Fecha_menu,
         SUM(c.Cantidad) AS Cantidad_Vendida,
-        m.Stock_menu AS Quedaron_Sin_Vender,
+        m.Stock_menu AS Stock_Actual,
         SUM(c.Cantidad * c.Precio_Unitario) AS Recaudacion_Menu
     FROM Menu_Del_Dia m
     INNER JOIN Carrito c ON m.Menu_Del_DiaID = c.Menu_Del_DiaID
+    INNER JOIN Venta v ON c.VentaID = v.VentaID
     INNER JOIN Retiro r ON c.VentaID = r.VentaID
-    WHERE m.Fecha_menu BETWEEN fechaInicio AND fechaFin
+    WHERE v.Fecha BETWEEN fechaInicio AND fechaFin
       AND r.Estado_Retiro_ID <> 3
-    GROUP BY m.Menu_Del_DiaID, m.Plato_menu, m.Fecha_menu, m.Stock_menu
-    ORDER BY Cantidad_Vendida DESC, m.Fecha_menu;
+    GROUP BY m.Menu_Del_DiaID, m.Dia_Semana, m.Plato_menu, m.Stock_menu
+    ORDER BY Cantidad_Vendida DESC, m.Menu_Del_DiaID;
 END //
 DELIMITER ;
 

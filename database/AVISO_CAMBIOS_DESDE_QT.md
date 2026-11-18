@@ -117,3 +117,22 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
 2. 06_PruebasSQL: P11 y P25 generan el retiro en la franja 3 (almuerzo), que antes era la 4.
 3. Planilla: P11 y P25 con la franja 3; P19 da 13 filas y la primera ahora es 1er Recreo TM, ENTREGADO, 3 pedidos. El resto no cambia.
 4. 03 y 05 no cambian. La app (Qt) controla el horario: fuera de esas ventanas se puede navegar y armar el carrito, pero no confirmar el pedido.
+
+## Undécima tanda: menú fijo, 3 estados y SP sin DUAL
+
+1. 03_ModeloSQL: Menu_Del_Dia ya no tiene Fecha_menu. Hay un solo menú por día hábil: Dia_Semana pasa a ser UNIQUE ('Lunes' a 'Viernes'). Los fines de semana no hay menú.
+2. 04_DatosSQL:
+   - Menu_Del_Dia pasa de 20 a 5 filas, una por día: 1 Lunes Tarta de choclo con ensalada, 2 Martes Tortilla de papas con ensalada, 3 Miércoles Milanesa de pollo con puré, 4 Jueves Fideos con tuco y queso, 5 Viernes Ravioles con salsa fileto. Detalle_Menu_Dia pasa de 20 a 5 (el mismo producto incluido de antes).
+   - Los menús vendidos en Carrito apuntan al menú fijo de su día (por ejemplo, el viejo menú 6, de un miércoles, ahora es el 3).
+   - Estado_Retiro pasa de 20 a 3 filas: PENDIENTE (1), ENTREGADO (2) y CANCELADO (3), los únicos que usa el sistema.
+   - Tipo_Evento 16 se llama "Modificación de Menú del Día".
+3. 05_Backend:
+   - sp_alta_menu_dia pasa a ser sp_modificar_menu_dia(UserID, Día, Plato, Precio, Stock): cambia el menú fijo de un día. Siguen siendo 27 SP.
+   - sp_menu_del_dia recibe solo el día: sp_menu_del_dia('Lunes'). Devuelve el menú fijo de ese día; sábado, domingo o NULL dan 0 filas. Ya no copia menús por fecha.
+   - sp_agregar_menu_carrito solo acepta el menú del día de hoy (WEEKDAY de CURDATE). El sábado y el domingo no acepta ninguno.
+   - sp_iniciar_sesion, sp_acceso_personal y sp_actualizar_estado_retiro ya no usan FROM DUAL: el log del intento fallido y el de entrega o cancelación se escriben con IF ... END IF.
+   - sp_actualizar_estado_retiro solo pasa un pedido PENDIENTE a ENTREGADO o CANCELADO.
+   - sp_reporte_demanda_menu_dia agrupa por día de la semana y toma el período de la fecha de la venta.
+4. 06_PruebasSQL: P07 (sp_modificar_menu_dia), P10, P20 y P28 cambian. Las pruebas del menú se corren de lunes a viernes.
+5. Planilla: P07, P10, P20 y P28 con los resultados nuevos. El resto no cambia.
+6. Qt: obtener_menu_del_dia llama a sp_menu_del_dia solo con el día, y el menú de ejemplo (modo sin BDD) queda en el orden de la BDD (1 = Lunes ... 5 = Viernes).
