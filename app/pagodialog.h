@@ -2,12 +2,12 @@
 #define PAGODIALOG_H
 
 #include <QDialog>
-#include <QButtonGroup>
 
 namespace Ui {
 class PagoDialog;
 }
 
+// Ventana de pago: datos del alumno, método de pago y confirmación del pedido
 class PagoDialog : public QDialog
 {
     Q_OBJECT
@@ -16,24 +16,25 @@ public:
     explicit PagoDialog(QWidget *parent = nullptr);
     ~PagoDialog();
 
-    QString getCodigoGenerado() const { return m_codigoGenerado; }
+    // El código de retiro del pedido confirmado (lo usa el comprobante)
+    QString getCodigoGenerado() { return codigoGenerado; }
 
 private slots:
     void on_rbEfectivo_clicked();
     void on_rbMercadoPago_clicked();
     void on_rbSaldo_clicked();
-    void on_txtMontoAbonado_textChanged(const QString &text);
+    void on_txtMontoAbonado_textChanged(const QString &textoMonto);
     void on_btnCancelarPago_clicked();
     void on_btnConfirmarPedido_clicked();
 
 private:
-    bool guardarPedidoEnBDD(int metodoPagoID, int franjaID, QString &codigo);
     Ui::PagoDialog *ui;
-    QButtonGroup *grupoMetodo;
-    double m_totalPagar;
-    QString m_codigoGenerado;
+    double totalAPagar;
+    QString codigoGenerado;
     void cargarDatosAlumno();
     void habilitarCamposMetodo();
+    bool guardarPedidoEnBDD(int metodoPagoID, int franjaID);
+    void guardarPedidoSinBDD(QString metodo, int franjaID, double montoAbonado, double vuelto);
 };
 
 #endif // PAGODIALOG_H

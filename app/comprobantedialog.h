@@ -7,6 +7,7 @@ namespace Ui {
 class ComprobanteDialog;
 }
 
+// Comprobante final: código de retiro y resumen del pedido
 class ComprobanteDialog : public QDialog
 {
     Q_OBJECT
@@ -20,7 +21,7 @@ private slots:
 
 private:
     Ui::ComprobanteDialog *ui;
-    QString m_codigo;
+    QString codigo;
     void cargarDatosComprobante();
 };
 

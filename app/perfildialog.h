@@ -7,6 +7,7 @@ namespace Ui {
 class PerfilDialog;
 }
 
+// Perfil del estudiante: datos, saldo, carga de saldo e historial de pedidos
 class PerfilDialog : public QDialog
 {
     Q_OBJECT

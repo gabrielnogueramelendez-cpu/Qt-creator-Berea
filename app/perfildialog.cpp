@@ -5,6 +5,9 @@
 #include <QMessageBox>
 #include <QIntValidator>
 
+// =====================================================================
+// Constructor: datos del usuario, saldo e historial de pedidos
+// =====================================================================
 PerfilDialog::PerfilDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::PerfilDialog)
@@ -12,12 +15,12 @@ PerfilDialog::PerfilDialog(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle("Mi perfil - El Buffet de Alejandro");
 
-    // Círculo con las iniciales del estudiante
-    ui->lblAvatar->setText(SistemaBuffet::usuarioNombre.left(1) + SistemaBuffet::usuarioApellido.left(1));
-    ui->lblNombrePerfil->setText(SistemaBuffet::usuarioNombre + " " + SistemaBuffet::usuarioApellido);
-    ui->lblDatosPerfil->setText(QString("DNI %1 · %2")
-        .arg(SistemaBuffet::usuarioDni)
-        .arg(SistemaBuffet::usuarioCurso));
+    UsuarioActivo usuario = SistemaBuffet::usuario;
+
+    // Círculo con las iniciales, nombre completo, DNI y curso
+    ui->lblAvatar->setText(usuario.nombre.left(1) + usuario.apellido.left(1));
+    ui->lblNombrePerfil->setText(usuario.nombre + " " + usuario.apellido);
+    ui->lblDatosPerfil->setText("DNI " + usuario.dni + " · " + usuario.curso);
 
     // Solo números (guía Gestor de Inventario)
     ui->txtMontoCarga->setValidator(new QIntValidator(1, 50000, this));
@@ -33,26 +36,33 @@ PerfilDialog::~PerfilDialog()
     delete ui;
 }
 
+// =====================================================================
+// mostrarSaldo: saldo actual de la cuenta escolar
+// =====================================================================
 void PerfilDialog::mostrarSaldo()
 {
-    ui->lblSaldoActual->setText("$" + QString::number(SistemaBuffet::usuarioSaldo, 'f', 0));
+    ui->lblSaldoActual->setText("$" + QString::number(SistemaBuffet::usuario.saldo, 'f', 0));
 }
 
+// =====================================================================
+// cargarHistorial: los pedidos de este usuario, del más nuevo al más viejo
+// =====================================================================
 void PerfilDialog::cargarHistorial()
 {
-    // Con BDD: los pedidos se leen de nuevo de la BDD y se filtran por el DNI del usuario
+    // Con BDD: se vuelven a leer los pedidos
     SistemaBuffet::cargarDesdeBDD();
     ui->listPedidos->clear();
-    for (int i = SistemaBuffet::pedidosCodigos.size() - 1; i >= 0; --i) {
-        if (SistemaBuffet::pedidosDnis[i] != SistemaBuffet::usuarioDni) {
-            continue;
+
+    // Se recorre la lista de atrás para adelante para que el último pedido quede arriba
+    for (int i = SistemaBuffet::pedidos.size() - 1; i >= 0; i--) {
+        Pedido pedido = SistemaBuffet::pedidos[i];
+
+        // Solo los pedidos con el DNI del usuario
+        if (pedido.dni == SistemaBuffet::usuario.dni) {
+            ui->listPedidos->addItem(pedido.codigo + "  ·  " + pedido.estado + "  ·  $" + QString::number(pedido.monto, 'f', 0)
+                                     + "\nRetiro: " + pedido.recreo
+                                     + "\nPago: " + pedido.metodo);
         }
-        ui->listPedidos->addItem(QString("%1  ·  %2  ·  $%3\nRetiro: %4\nPago: %5")
-            .arg(SistemaBuffet::pedidosCodigos[i])
-            .arg(SistemaBuffet::pedidosEstados[i])
-            .arg(QString::number(SistemaBuffet::pedidosMontos[i], 'f', 0))
-            .arg(SistemaBuffet::pedidosRecreos[i])
-            .arg(SistemaBuffet::pedidosMetodos[i]));
     }
 
     if (ui->listPedidos->count() == 0) {
@@ -60,11 +70,15 @@ void PerfilDialog::cargarHistorial()
     }
 }
 
+// =====================================================================
+// Botón CARGAR SALDO (con un comprobante de Mercado Pago)
+// =====================================================================
 void PerfilDialog::on_btnCargarSaldo_clicked()
 {
     QString textoMonto = ui->txtMontoCarga->text();
+    int monto = textoMonto.toInt();
 
-    if (textoMonto.isEmpty() || textoMonto.toInt() <= 0) {
+    if (textoMonto.isEmpty() || monto <= 0) {
         QMessageBox::warning(this, "Monto Inválido", "Ingresá el monto que querés cargar.");
         return;
     }
@@ -73,33 +87,31 @@ void PerfilDialog::on_btnCargarSaldo_clicked()
         return;
     }
 
-    if (SistemaBuffet::conn != NULL) {
-        MYSQL_RES *result = cargar_saldo(SistemaBuffet::conn, SistemaBuffet::usuarioID, textoMonto.toInt());
-        bool cargado = false;
-        if (result != NULL && error_del_sp(result) == 0) {
-            MYSQL_ROW fila = mysql_fetch_row(result);
-            if (fila != NULL && valor_fila(fila, 0) == "1") {
-                cargado = true;
-                SistemaBuffet::usuarioSaldo = valor_fila(fila, 1).toDouble(); // el saldo nuevo que devuelve el SP
-            }
-        }
-        if (result != NULL) {
-            mysql_free_result(result);
-        }
-        if (!cargado) {
+    if (SistemaBuffet::conexion != NULL) {
+        // ----- MODO CON BDD -----
+        // El SP devuelve: filas actualizadas (1 si cargó) y el saldo nuevo
+        QStringList respuesta = leer_primera_fila(cargar_saldo(SistemaBuffet::conexion, SistemaBuffet::usuario.id, monto));
+
+        if (respuesta.size() > 1 && respuesta[0] == "1") {
+            SistemaBuffet::usuario.saldo = respuesta[1].toDouble();
+        } else {
             QMessageBox::warning(this, "Error", "No se pudo cargar el saldo en la base de datos.");
             return;
         }
     } else {
-        SistemaBuffet::usuarioSaldo += textoMonto.toInt();
+        // ----- MODO SIN BDD -----
+        SistemaBuffet::usuario.saldo = SistemaBuffet::usuario.saldo + monto;
     }
 
     ui->txtMontoCarga->clear();
     ui->txtComprobanteCarga->clear();
     mostrarSaldo();
-    ui->lblEstadoCarga->setText(QString("Se cargaron $%1 en tu cuenta escolar.").arg(textoMonto));
+    ui->lblEstadoCarga->setText("Se cargaron $" + textoMonto + " en tu cuenta escolar.");
 }
 
+// =====================================================================
+// Botón CERRAR
+// =====================================================================
 void PerfilDialog::on_btnCerrar_clicked()
 {
     accept();

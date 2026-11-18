@@ -7,6 +7,7 @@ namespace Ui {
 class RegisterDialog;
 }
 
+// Ventana para crear una cuenta (estudiantes y profesores de la escuela)
 class RegisterDialog : public QDialog
 {
     Q_OBJECT

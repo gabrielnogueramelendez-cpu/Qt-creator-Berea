@@ -2,23 +2,20 @@
 #define PRODUCTDETAILDIALOG_H
 
 #include <QDialog>
+#include "sistemabuffet.h"
 
 namespace Ui {
 class ProductDetailDialog;
 }
 
+// Ventana de detalle: foto, descripción, precio y cuántas unidades llevar
 class ProductDetailDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ProductDetailDialog(int productoId, const QString &nombre, const QString &desc, double precio, int stockDisponible = 15, QWidget *parent = nullptr);
+    explicit ProductDetailDialog(Producto productoElegido, QWidget *parent = nullptr);
     ~ProductDetailDialog();
-
-    int getProductoId() const { return m_productoId; }
-    QString getNombre() const { return m_nombre; }
-    int getCantidad() const { return m_cantidad; }
-    double getSubtotal() const { return m_precioUnitario * m_cantidad; }
 
 private slots:
     void on_btnPlus_clicked();
@@ -27,12 +24,10 @@ private slots:
 
 private:
     Ui::ProductDetailDialog *ui;
-    int m_productoId;
-    QString m_nombre;
-    double m_precioUnitario;
-    int m_cantidad;
-    int m_stockDisponible;
+    Producto producto;      // el producto que se está mirando
+    int cantidadElegida;    // cuántas unidades quiere llevar
     void actualizarTotal();
+    int maximoPermitido();
 };
 
 #endif // PRODUCTDETAILDIALOG_H

@@ -7,6 +7,7 @@ namespace Ui {
 class CajeroWindow;
 }
 
+// Mostrador: fila de pedidos, búsqueda por código, entregar o cancelar
 class CajeroWindow : public QWidget
 {
     Q_OBJECT
@@ -19,14 +20,14 @@ private slots:
     void on_btnBuscarCodigo_clicked();
     void on_btnEntregarPedido_clicked();
     void on_btnCancelarPedido_clicked();
-    void on_tableColasPedidos_cellClicked(int row, int column);
+    void on_tableColasPedidos_cellClicked(int fila, int columna);
     void on_btnLogout_clicked();
 
 private:
-    void cambiarEstadoEnBDD(int idx, int estadoID);
     Ui::CajeroWindow *ui;
-    QString m_codigoActual;
+    QString codigoSeleccionado;   // código del pedido que se está mirando
     void cargarPedidosDelSistema();
+    void cambiarEstadoEnBDD(int posicionPedido, int estadoID);
 };
 
 #endif // CAJEROWINDOW_H

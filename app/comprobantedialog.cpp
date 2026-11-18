@@ -2,13 +2,17 @@
 #include "ui_comprobantedialog.h"
 #include "sistemabuffet.h"
 
+// =====================================================================
+// Constructor: recibe el código de retiro y muestra el comprobante
+// =====================================================================
 ComprobanteDialog::ComprobanteDialog(const QString &codigoRetiro, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ComprobanteDialog),
-    m_codigo(codigoRetiro)
+    ui(new Ui::ComprobanteDialog)
 {
     ui->setupUi(this);
     setWindowTitle("Comprobante de Pedido - El Buffet de Alejandro");
+
+    codigo = codigoRetiro;
     cargarDatosComprobante();
 }
 
@@ -17,41 +21,40 @@ ComprobanteDialog::~ComprobanteDialog()
     delete ui;
 }
 
+// =====================================================================
+// cargarDatosComprobante: busca el pedido por su código y muestra los datos
+// =====================================================================
 void ComprobanteDialog::cargarDatosComprobante()
 {
-    ui->lblCode->setText(m_codigo);
+    ui->lblCode->setText(codigo);
 
-    int idx = SistemaBuffet::pedidosCodigos.indexOf(m_codigo);
-    if (idx != -1) {
-        QString itemsTexto = SistemaBuffet::pedidosDetalles[idx];
-
-        QString resumen = QString(
-            "Cliente: %1 (DNI %2 · %3)\n"
-            "Retiro: %4\n"
-            "Pago: %5\n"
-            "Estado: %6\n\n"
-            "%7\n"
-            "Total: $%8"
-        ).arg(SistemaBuffet::pedidosAlumnos[idx])
-         .arg(SistemaBuffet::pedidosDnis[idx])
-         .arg(SistemaBuffet::pedidosCursos[idx])
-         .arg(SistemaBuffet::pedidosRecreos[idx])
-         .arg(SistemaBuffet::pedidosMetodos[idx])
-         .arg(SistemaBuffet::pedidosEstados[idx])
-         .arg(itemsTexto)
-         .arg(QString::number(SistemaBuffet::pedidosMontos[idx], 'f', 0));
-
-        if (SistemaBuffet::pedidosMetodos[idx].contains("Efectivo", Qt::CaseInsensitive)) {
-            resumen += QString("\nPagás con $%1 · Vuelto $%2")
-                .arg(QString::number(SistemaBuffet::pedidosAbonados[idx], 'f', 0))
-                .arg(QString::number(SistemaBuffet::pedidosVueltos[idx], 'f', 0));
-        }
-
-        ui->lblDetails->setText(resumen);
-        ui->lblRuleNotice->setText("Dictá este código o mostrá esta pantalla en el mostrador para retirar tu pedido.");
+    int posicionPedido = SistemaBuffet::buscarPedido(codigo);
+    if (posicionPedido == -1) {
+        return;
     }
+
+    Pedido pedido = SistemaBuffet::pedidos[posicionPedido];
+
+    QString resumen = "Cliente: " + pedido.cliente + " (DNI " + pedido.dni + " · " + pedido.curso + ")\n"
+                    + "Retiro: " + pedido.recreo + "\n"
+                    + "Pago: " + pedido.metodo + "\n"
+                    + "Estado: " + pedido.estado + "\n\n"
+                    + pedido.detalle + "\n"
+                    + "Total: $" + QString::number(pedido.monto, 'f', 0);
+
+    // Si pagó en efectivo, se agrega con cuánto paga y el vuelto
+    if (pedido.metodo.contains("Efectivo", Qt::CaseInsensitive)) {
+        resumen = resumen + "\nPagás con $" + QString::number(pedido.abonado, 'f', 0)
+                + " · Vuelto $" + QString::number(pedido.vuelto, 'f', 0);
+    }
+
+    ui->lblDetails->setText(resumen);
+    ui->lblRuleNotice->setText("Dictá este código o mostrá esta pantalla en el mostrador para retirar tu pedido.");
 }
 
+// =====================================================================
+// Botón CERRAR
+// =====================================================================
 void ComprobanteDialog::on_btnClose_clicked()
 {
     accept();

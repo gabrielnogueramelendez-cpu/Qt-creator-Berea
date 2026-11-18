@@ -1,318 +1,531 @@
 #include "sistemabuffet.h"
 #include "basedatos.h"
 #include <QDate>
+#include <QStringList>
 
-// Definición e inicialización de variables estáticas
-MYSQL *SistemaBuffet::conn = NULL;
-int SistemaBuffet::usuarioID = 1;
-QString SistemaBuffet::usuarioRol = "Estudiante";
-QString SistemaBuffet::usuarioNombre = "David";
-QString SistemaBuffet::usuarioApellido = "Melendez";
-QString SistemaBuffet::usuarioCurso = "6° Año 1ra";
-QString SistemaBuffet::usuarioDni = "12345678";
-double SistemaBuffet::usuarioSaldo = 10000.0;
+// =====================================================================
+// VALORES INICIALES DE LAS VARIABLES COMPARTIDAS
+// Son los mismos datos que carga 04_DatosSQL en la BDD. Se usan cuando
+// no hay conexión con MySQL (modo "datos de ejemplo").
+// Cada {...} es un struct, con los campos en el mismo orden que en
+// sistemabuffet.h
+// =====================================================================
 
-// Estudiante (04_DatosSQL); los 2 últimos no tienen usuario y sirven para probar el registro. Con BDD: SELECT de Estudiante y Curso
-QStringList SistemaBuffet::estudiantesDnis = {"12345678", "45987654", "48499250", "51715407", "52929091", "49373046", "52303055", "52420093", "49512712", "52652318", "48428925", "48322516", "47596375", "53199127", "49263492", "49609844", "50491680", "51808284", "50355436", "52176234", "95671088", "50283716"};
-QStringList SistemaBuffet::estudiantesNombres = {"David", "Lucía", "Mateo", "Valentina", "Santiago", "Camila", "Benjamín", "Martina", "Thiago", "Sofía", "Joaquín", "Julieta", "Bautista", "Agustina", "Lautaro", "Micaela", "Facundo", "Florencia", "Nicolás", "Rocío", "Gabriel", "Tomás"};
-QStringList SistemaBuffet::estudiantesApellidos = {"Melendez", "Gómez", "Fernández", "Rodríguez", "López", "Martínez", "García", "Pérez", "Sánchez", "Romero", "Díaz", "Álvarez", "Torres", "Ruiz", "Acosta", "Benítez", "Medina", "Herrera", "Suárez", "Aguirre", "Noguera", "San Martín"};
-QStringList SistemaBuffet::estudiantesCursos = {"6° Año 1ra", "6° Año 2da", "3° Año 3ra", "1° Año 4ta", "5° Año 1ra", "2° Año 2da", "1° Año 3ra", "1° Año 4ta", "6° Año 1ra", "5° Año 2da", "3° Año 3ra", "1° Año 4ta", "1° Año 1ra", "3° Año 2da", "2° Año 3ra", "2° Año 4ta", "2° Año 1ra", "5° Año 2da", "5° Año 3ra", "3° Año 4ta", "4° Año 2da", "4° Año 2da"};
+// Conexión con MySQL: empieza en NULL y main.cpp la abre al arrancar
+MYSQL *SistemaBuffet::conexion = NULL;
+bool SistemaBuffet::datosInicializados = false;
 
-// Profesor (04_DatosSQL); ninguno tiene usuario todavía. Con BDD: SELECT de Profesor
-QStringList SistemaBuffet::profesoresDnis = {"25418763", "27904512", "29387104", "26150938", "23716485", "22058391", "33842017", "30217649", "20574836", "21863270", "28640195", "34129057", "31406782", "32791546", "35268014", "33015479", "36482910", "31957320", "29801643", "24360871", "27512398"};
-QStringList SistemaBuffet::profesoresNombres = {"Pablo", "Cynthya", "Cristian", "Gabriela", "Sergio", "Julio", "Facundo", "Mariana", "Norma", "Néstor", "Miguel", "Victoria", "Cecilia", "Andrés", "Josefina", "Yamil", "Luz", "Bárbara", "Natalia", "Rossana", "Francisco"};
-QStringList SistemaBuffet::profesoresApellidos = {"Linares", "Berea", "Dávalos", "Tamer", "Ipolo", "Toni", "Scally", "Milano", "Aloma", "Quiñones", "Riños", "Erramuspe", "Garabato", "Diz", "Maldonado", "Decastelli", "Retamazo", "Saldaño", "Guerrero", "Fortunatti", "Anselmi"};
+// Usuario activo: {UserID, rol, nombre, apellido, curso, DNI, saldo}. Empieza con un estudiante de prueba
+UsuarioActivo SistemaBuffet::usuario = {1, "Estudiante", "David", "Melendez", "6° Año 1ra", "12345678", 10000.0};
 
-// Rol (04_DatosSQL)
-QStringList SistemaBuffet::roles = {"Estudiante", "Profesor", "Personal de caja", "Administración", "Desarrollador"};
+// Menú de hoy: {id, plato, incluye, precio}. Lo completa cargarMenuDelDia()
+MenuDelDia SistemaBuffet::menuHoy = {0, "", "", 0};
 
-// Usuario (04_DatosSQL): la posición + 1 es el UserID. El personal no tiene DNI; el de un profesor es su DNI_Profesor
-QStringList SistemaBuffet::usuariosDnis = {"12345678", "45987654", "48499250", "51715407", "52929091", "49373046", "52303055", "52420093", "49512712", "52652318", "48428925", "48322516", "47596375", "53199127", "49263492", "49609844", "50491680", "51808284", "50355436", "52176234", "", "", "", "", "", "", "", "", "", "", ""};
-QStringList SistemaBuffet::usuariosApodos = {"davidmel09", "luciagom08", "mateofer11", "valentinarod13", "santiagolop09", "camilamar12", "benjamingar13", "martinaper13", "thiagosan08", "sofiarom09", "joaquindia11", "julietaalv13", "bautistator13", "agustinarui11", "lautaroaco12", "micaelaben12", "facundomed12", "florenciaher09", "nicolassua09", "rocioagu11", "marcela.ibanez", "diego.paz", "karina.luna", "sergio.ledesma", "paola.vega", "hector.maldonado", "alejandro.funes", "silvia.arce", "ramiro.sosa", "veronica.campos", "soporte.dev"};
-QStringList SistemaBuffet::usuariosContrasenas = {"Davidmel#2026", "Luciagom#2026", "Mateofer#2026", "Valentinarod#2026", "Santiagolop#2026", "Camilamar#2026", "Benjamingar#2026", "Martinaper#2026", "Thiagosan#2026", "Sofiarom#2026", "Joaquindia#2026", "Julietaalv#2026", "Bautistator#2026", "Agustinarui#2026", "Lautaroaco#2026", "Micaelaben#2026", "Facundomed#2026", "Florenciaher#2026", "Nicolassua#2026", "Rocioagu#2026", "MarcelaBuffet#2026", "DiegoBuffet#2026", "KarinaBuffet#2026", "SergioBuffet#2026", "PaolaBuffet#2026", "HectorBuffet#2026", "AlejandroBuffet#2026", "SilviaBuffet#2026", "RamiroBuffet#2026", "VeronicaBuffet#2026", "SoporteDev#2026"};
-QStringList SistemaBuffet::usuariosRoles = {"Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Estudiante", "Personal de caja", "Personal de caja", "Personal de caja", "Personal de caja", "Personal de caja", "Personal de caja", "Administración", "Personal de caja", "Personal de caja", "Administración", "Desarrollador"};
-QList<double> SistemaBuffet::usuariosSaldos = {10000, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+// Carrito y pedidos: empiezan vacíos
+QList<ItemCarrito> SistemaBuffet::carrito;
+QList<Pedido> SistemaBuffet::pedidos;
 
-// Empleado con usuario (04_DatosSQL): PIN para el mostrador, token para el desarrollador
-QStringList SistemaBuffet::personalApodos = {"marcela.ibanez", "diego.paz", "karina.luna", "sergio.ledesma", "paola.vega", "hector.maldonado", "alejandro.funes", "silvia.arce", "ramiro.sosa", "veronica.campos", "soporte.dev"};
-QStringList SistemaBuffet::personalNombres = {"Marcela Ibáñez", "Diego Paz", "Karina Luna", "Sergio Ledesma", "Paola Vega", "Héctor Maldonado", "Alejandro Funes", "Silvia Arce", "Ramiro Sosa", "Verónica Campos", "Soporte Técnico"};
-QStringList SistemaBuffet::personalPuestos = {"Cajera Turno Mañana", "Cajero Turno Mañana", "Cajera Turno Mañana", "Cajero Turno Tarde", "Cajera Turno Tarde", "Cajero Turno Tarde", "Encargado General de Buffet", "Atención al Mostrador Turno Mañana", "Atención al Mostrador Turno Tarde", "Administrativa Contable", "Desarrollador de Sistemas"};
-QStringList SistemaBuffet::personalPines = {"1234", "2580", "3691", "4702", "5813", "6924", "", "7035", "8146", "", ""};
-QStringList SistemaBuffet::personalTokens = {"", "", "", "", "", "", "", "", "", "", "DEV-BEREA-2026"};
+// Estudiante (04_DatosSQL): {dni, nombre, apellido, curso}
+// Los 2 últimos no tienen usuario y sirven para probar el registro
+QList<Estudiante> SistemaBuffet::estudiantes = {
+    {"12345678", "David", "Melendez", "6° Año 1ra"},
+    {"45987654", "Lucía", "Gómez", "6° Año 2da"},
+    {"48499250", "Mateo", "Fernández", "3° Año 3ra"},
+    {"51715407", "Valentina", "Rodríguez", "1° Año 4ta"},
+    {"52929091", "Santiago", "López", "5° Año 1ra"},
+    {"49373046", "Camila", "Martínez", "2° Año 2da"},
+    {"52303055", "Benjamín", "García", "1° Año 3ra"},
+    {"52420093", "Martina", "Pérez", "1° Año 4ta"},
+    {"49512712", "Thiago", "Sánchez", "6° Año 1ra"},
+    {"52652318", "Sofía", "Romero", "5° Año 2da"},
+    {"48428925", "Joaquín", "Díaz", "3° Año 3ra"},
+    {"48322516", "Julieta", "Álvarez", "1° Año 4ta"},
+    {"47596375", "Bautista", "Torres", "1° Año 1ra"},
+    {"53199127", "Agustina", "Ruiz", "3° Año 2da"},
+    {"49263492", "Lautaro", "Acosta", "2° Año 3ra"},
+    {"49609844", "Micaela", "Benítez", "2° Año 4ta"},
+    {"50491680", "Facundo", "Medina", "2° Año 1ra"},
+    {"51808284", "Florencia", "Herrera", "5° Año 2da"},
+    {"50355436", "Nicolás", "Suárez", "5° Año 3ra"},
+    {"52176234", "Rocío", "Aguirre", "3° Año 4ta"},
+    {"95671088", "Gabriel", "Noguera", "4° Año 2da"},
+    {"50283716", "Tomás", "San Martín", "4° Año 2da"}
+};
 
-QList<int> SistemaBuffet::carritoIds;
-QStringList SistemaBuffet::carritoNombres;
-QList<double> SistemaBuffet::carritoPrecios;
-QList<int> SistemaBuffet::carritoCantidades;
+// Profesor (04_DatosSQL): {dni, nombre, apellido}. Ninguno tiene usuario todavía
+QList<Profesor> SistemaBuffet::profesores = {
+    {"25418763", "Pablo", "Linares"},
+    {"27904512", "Cynthya", "Berea"},
+    {"29387104", "Cristian", "Dávalos"},
+    {"26150938", "Gabriela", "Tamer"},
+    {"23716485", "Sergio", "Ipolo"},
+    {"22058391", "Julio", "Toni"},
+    {"33842017", "Facundo", "Scally"},
+    {"30217649", "Mariana", "Milano"},
+    {"20574836", "Norma", "Aloma"},
+    {"21863270", "Néstor", "Quiñones"},
+    {"28640195", "Miguel", "Riños"},
+    {"34129057", "Victoria", "Erramuspe"},
+    {"31406782", "Cecilia", "Garabato"},
+    {"32791546", "Andrés", "Diz"},
+    {"35268014", "Josefina", "Maldonado"},
+    {"33015479", "Yamil", "Decastelli"},
+    {"36482910", "Luz", "Retamazo"},
+    {"31957320", "Bárbara", "Saldaño"},
+    {"29801643", "Natalia", "Guerrero"},
+    {"24360871", "Rossana", "Fortunatti"},
+    {"27512398", "Francisco", "Anselmi"}
+};
 
-// Mismo stock que la tabla Producto (04_DatosSQL). Con BDD: SELECT Stock_Producto FROM Producto
-QList<int> SistemaBuffet::productosStock = {0, 40, 80, 50, 45, 90, 25, 70, 70, 60, 150,
-                                            100, 100, 60, 80, 80, 70, 60, 40, 25, 40};
-QList<double> SistemaBuffet::productosPrecios = {0, 2800, 1100, 1800, 1600, 800, 2200, 700, 1100, 1200, 1000,
-                                                 900, 1300, 1400, 900, 700, 800, 600, 1500, 4200, 4100};
+// Usuario (04_DatosSQL): {dni, apodo, contraseña, rol, saldo}. La posición + 1 es el UserID
+QList<Usuario> SistemaBuffet::usuarios = {
+    {"12345678", "davidmel09", "Davidmel#2026", "Estudiante", 10000},
+    {"45987654", "luciagom08", "Luciagom#2026", "Estudiante", 0},
+    {"48499250", "mateofer11", "Mateofer#2026", "Estudiante", 0},
+    {"51715407", "valentinarod13", "Valentinarod#2026", "Estudiante", 0},
+    {"52929091", "santiagolop09", "Santiagolop#2026", "Estudiante", 0},
+    {"49373046", "camilamar12", "Camilamar#2026", "Estudiante", 0},
+    {"52303055", "benjamingar13", "Benjamingar#2026", "Estudiante", 0},
+    {"52420093", "martinaper13", "Martinaper#2026", "Estudiante", 0},
+    {"49512712", "thiagosan08", "Thiagosan#2026", "Estudiante", 0},
+    {"52652318", "sofiarom09", "Sofiarom#2026", "Estudiante", 0},
+    {"48428925", "joaquindia11", "Joaquindia#2026", "Estudiante", 0},
+    {"48322516", "julietaalv13", "Julietaalv#2026", "Estudiante", 0},
+    {"47596375", "bautistator13", "Bautistator#2026", "Estudiante", 0},
+    {"53199127", "agustinarui11", "Agustinarui#2026", "Estudiante", 0},
+    {"49263492", "lautaroaco12", "Lautaroaco#2026", "Estudiante", 0},
+    {"49609844", "micaelaben12", "Micaelaben#2026", "Estudiante", 0},
+    {"50491680", "facundomed12", "Facundomed#2026", "Estudiante", 0},
+    {"51808284", "florenciaher09", "Florenciaher#2026", "Estudiante", 0},
+    {"50355436", "nicolassua09", "Nicolassua#2026", "Estudiante", 0},
+    {"52176234", "rocioagu11", "Rocioagu#2026", "Estudiante", 0},
+    {"", "marcela.ibanez", "MarcelaBuffet#2026", "Personal de caja", 0},
+    {"", "diego.paz", "DiegoBuffet#2026", "Personal de caja", 0},
+    {"", "karina.luna", "KarinaBuffet#2026", "Personal de caja", 0},
+    {"", "sergio.ledesma", "SergioBuffet#2026", "Personal de caja", 0},
+    {"", "paola.vega", "PaolaBuffet#2026", "Personal de caja", 0},
+    {"", "hector.maldonado", "HectorBuffet#2026", "Personal de caja", 0},
+    {"", "alejandro.funes", "AlejandroBuffet#2026", "Administración", 0},
+    {"", "silvia.arce", "SilviaBuffet#2026", "Personal de caja", 0},
+    {"", "ramiro.sosa", "RamiroBuffet#2026", "Personal de caja", 0},
+    {"", "veronica.campos", "VeronicaBuffet#2026", "Administración", 0},
+    {"", "soporte.dev", "SoporteDev#2026", "Desarrollador", 0}
+};
 
-int SistemaBuffet::menuHoyID = 0;
-QString SistemaBuffet::menuHoyPlato = "";
-QString SistemaBuffet::menuHoyIncluye = "";
-double SistemaBuffet::menuHoyPrecio = 0;
+// Empleado con usuario (04_DatosSQL): {apodo, nombre, puesto, PIN, token}
+QList<Empleado> SistemaBuffet::empleados = {
+    {"marcela.ibanez", "Marcela Ibáñez", "Cajera Turno Mañana", "1234", ""},
+    {"diego.paz", "Diego Paz", "Cajero Turno Mañana", "2580", ""},
+    {"karina.luna", "Karina Luna", "Cajera Turno Mañana", "3691", ""},
+    {"sergio.ledesma", "Sergio Ledesma", "Cajero Turno Tarde", "4702", ""},
+    {"paola.vega", "Paola Vega", "Cajera Turno Tarde", "5813", ""},
+    {"hector.maldonado", "Héctor Maldonado", "Cajero Turno Tarde", "6924", ""},
+    {"alejandro.funes", "Alejandro Funes", "Encargado General de Buffet", "", ""},
+    {"silvia.arce", "Silvia Arce", "Atención al Mostrador Turno Mañana", "7035", ""},
+    {"ramiro.sosa", "Ramiro Sosa", "Atención al Mostrador Turno Tarde", "8146", ""},
+    {"veronica.campos", "Verónica Campos", "Administrativa Contable", "", ""},
+    {"soporte.dev", "Soporte Técnico", "Desarrollador de Sistemas", "", "DEV-BEREA-2026"}
+};
 
-// Menú semanal fijo: los 5 primeros menús de Menu_Del_Dia y Detalle_Menu_Dia (04_DatosSQL), en orden de Menu_Del_DiaID.
+// Producto (04_DatosSQL): {id, nombre, descripción, categoría, precio, stock}
+// La posición es el ProductoID. La posición 0 no es un producto: es el menú del día
+QList<Producto> SistemaBuffet::productos = {
+    {0, "Menú del día", "", "", 0, 0},
+    {1, "Sándwich de Milanesa", "Milanesa de carne en pan francés con lechuga y tomate", "Sándwiches y Tostados", 2800, 40},
+    {2, "Empanada de Carne", "Empanada al horno rellena de carne cortada a cuchillo", "Empanadas y Tartas", 1100, 80},
+    {3, "Porción de Pizza Muzzarella", "Porción de pizza de muzzarella", "Pizzas", 1800, 50},
+    {4, "Pebete de Queso", "Pebete con queso cremoso", "Panificados", 1600, 45},
+    {5, "Medialuna de Manteca", "Medialuna dulce de manteca", "Medialunas y Facturas", 800, 90},
+    {6, "Ensalada Mixta", "Lechuga, tomate y zanahoria", "Ensaladas", 2200, 25},
+    {7, "Manzana", "Manzana roja por unidad", "Frutas", 700, 70},
+    {8, "Chocolatada 250 ml", "Leche chocolatada en envase individual", "Lácteos", 1100, 70},
+    {9, "Yogur Bebible de Frutilla", "Yogur bebible 200 ml", "Yogures y Postres", 1200, 60},
+    {10, "Agua Mineral 500 ml", "Agua mineral sin gas", "Aguas", 1000, 150},
+    {11, "Jugo en Caja 200 ml", "Jugo de frutas en envase individual", "Jugos", 900, 100},
+    {12, "Gaseosa 500ml", "Gaseosa línea cola 500 ml", "Gaseosas", 1300, 100},
+    {13, "Café con Leche", "Vaso de café con leche", "Infusiones Calientes", 1400, 60},
+    {14, "Barra de Cereal", "Barra de cereal con frutas", "Cereales y Barras", 900, 80},
+    {15, "Galletitas de Agua", "Paquete individual de galletitas de agua", "Galletitas", 700, 80},
+    {16, "Alfajor de Maicena", "Alfajor de maicena con dulce de leche y coco", "Alfajores", 800, 70},
+    {17, "Turrón de Maní", "Turrón de maní individual", "Golosinas", 600, 60},
+    {18, "Mix de Frutos Secos", "Mix de almendras, pasas y maní sin sal", "Snacks Saludables", 1500, 40},
+    {19, "Milanesa de Pollo con Puré", "Milanesa al horno con puré de papas", "Platos Calientes", 4200, 25},
+    {20, "Combo Sándwich + Gaseosa", "Sándwich de milanesa + gaseosa 500 ml", "Combos Escolares", 4100, 40}
+};
+
+// Menú semanal fijo: los 5 primeros de Menu_Del_Dia (04_DatosSQL): {día, plato, precio, stock, incluye}
 // Las semanas siguientes de la BDD repiten estos mismos platos
-QStringList SistemaBuffet::menusDias = {"Miércoles", "Jueves", "Viernes", "Lunes", "Martes"};
-QStringList SistemaBuffet::menusPlatos = {"Milanesa de pollo con puré", "Fideos con tuco y queso", "Ravioles con salsa fileto", "Tarta de choclo con ensalada", "Tortilla de papas con ensalada"};
-QList<double> SistemaBuffet::menusPrecios = {4200, 3800, 4300, 3900, 3900};
-QList<int> SistemaBuffet::menusStocks = {40, 35, 35, 30, 40};
-QStringList SistemaBuffet::menusIncluye = {"Agua Mineral 500 ml", "Jugo en Caja 200 ml", "Jugo en Caja 200 ml", "Manzana", "Agua Mineral 500 ml"};
+QList<MenuSemanal> SistemaBuffet::menusSemana = {
+    {"Miércoles", "Milanesa de pollo con puré", 4200, 40, "Agua Mineral 500 ml"},
+    {"Jueves", "Fideos con tuco y queso", 3800, 35, "Jugo en Caja 200 ml"},
+    {"Viernes", "Ravioles con salsa fileto", 4300, 35, "Jugo en Caja 200 ml"},
+    {"Lunes", "Tarta de choclo con ensalada", 3900, 30, "Manzana"},
+    {"Martes", "Tortilla de papas con ensalada", 3900, 40, "Agua Mineral 500 ml"}
+};
 
-QList<int> SistemaBuffet::pedidosRetiroIds;
-QStringList SistemaBuffet::pedidosCodigos;
-QStringList SistemaBuffet::pedidosAlumnos;
-QStringList SistemaBuffet::pedidosCursos;
-QStringList SistemaBuffet::pedidosDnis;
-QStringList SistemaBuffet::pedidosRecreos;
-QStringList SistemaBuffet::pedidosMetodos;
-QList<double> SistemaBuffet::pedidosMontos;
-QList<double> SistemaBuffet::pedidosAbonados;
-QList<double> SistemaBuffet::pedidosVueltos;
-QStringList SistemaBuffet::pedidosEstados;
-QStringList SistemaBuffet::pedidosDetalles;
 
-void SistemaBuffet::cargarUsuarioActivo(int indiceUsuario)
+// =====================================================================
+// BÚSQUEDAS
+// Recorren la lista hasta encontrar el dato. Devuelven la posición,
+// o -1 si no lo encontraron.
+// =====================================================================
+
+int SistemaBuffet::buscarUsuario(QString apodo)
 {
-    // Con BDD: los devuelve sp_iniciar_sesion junto con el Estudiante o el Profesor del DNI
-    usuarioDni = usuariosDnis[indiceUsuario];
-    // shortcut: el saldo se copia al entrar y no se guarda al salir; con BDD se lee siempre de Usuario.Saldo
-    usuarioSaldo = usuariosSaldos[indiceUsuario];
-
-    int indiceEstudiante = estudiantesDnis.indexOf(usuarioDni);
-    if (indiceEstudiante != -1) {
-        usuarioNombre = estudiantesNombres[indiceEstudiante];
-        usuarioApellido = estudiantesApellidos[indiceEstudiante];
-        usuarioCurso = estudiantesCursos[indiceEstudiante];
-    } else {
-        // Profesor: no tiene curso
-        int indiceProfesor = profesoresDnis.indexOf(usuarioDni);
-        usuarioNombre = profesoresNombres[indiceProfesor];
-        usuarioApellido = profesoresApellidos[indiceProfesor];
-        usuarioCurso = "Docente";
-    }
-}
-
-void SistemaBuffet::inicializarDatos()
-{
-    static bool inicializado = false;
-    if (inicializado) return;
-    inicializado = true;
-
-    // Pedido de ejemplo 1
-    pedidosCodigos.append("3C6MB");
-    pedidosAlumnos.append("David Melendez");
-    pedidosCursos.append("6° Año 1ra");
-    pedidosDnis.append("12345678");
-    pedidosRecreos.append("2do Recreo TM (10:35 a 10:45 hs)");
-    pedidosMetodos.append("Efectivo en Mostrador");
-    pedidosMontos.append(4100.0);
-    pedidosAbonados.append(5000.0);
-    pedidosVueltos.append(900.0);
-    pedidosEstados.append("PENDIENTE");
-    pedidosDetalles.append("1x Sándwich de Milanesa ($2800)\n1x Gaseosa 500ml ($1300)");
-
-    // Pedido de ejemplo 2
-    pedidosCodigos.append("8A2KP");
-    pedidosAlumnos.append("Lucía Gómez");
-    pedidosCursos.append("6° Año 2da");
-    pedidosDnis.append("45987654");
-    pedidosRecreos.append("Receso Inter-Turno - Almuerzo (12:05 a 13:30 hs)");
-    pedidosMetodos.append("Saldo de Cuenta Escolar");
-    pedidosMontos.append(2800.0);
-    pedidosAbonados.append(2800.0);
-    pedidosVueltos.append(0.0);
-    pedidosEstados.append("PENDIENTE");
-    pedidosDetalles.append("1x Sándwich de Milanesa ($2800)");
-
-    cargarMenuDelDia();
-}
-
-void SistemaBuffet::cargarMenuDelDia()
-{
-    menuHoyID = 0;
-    menuHoyPlato = "";
-    menuHoyIncluye = "";
-    menuHoyPrecio = 0;
-    productosStock[0] = 0;
-
-    // El día de la semana lo calcula Qt (dayOfWeek: 1 = lunes ... 7 = domingo) y se lo pasa al SP
-    QStringList dias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
-    QString hoy = dias[QDate::currentDate().dayOfWeek() - 1];
-
-    if (conn != NULL) {
-        // Con BDD: sp_menu_del_dia devuelve el menú de hoy (y copia el menú fijo de ese día si no estaba cargado)
-        MYSQL_RES *result = obtener_menu_del_dia(conn, hoy);
-        if (result == NULL) return;
-        MYSQL_ROW fila = NULL;
-        if (error_del_sp(result) == 0) {
-            fila = mysql_fetch_row(result);
+    for (int i = 0; i < usuarios.size(); i++) {
+        if (usuarios[i].apodo == apodo) {
+            return i;
         }
-        if (fila != NULL) {
-            menuHoyID = valor_fila(fila, 0).toInt();
-            menuHoyPlato = valor_fila(fila, 1);
-            menuHoyPrecio = valor_fila(fila, 2).toDouble();
-            productosStock[0] = valor_fila(fila, 3).toInt();
-            menuHoyIncluye = valor_fila(fila, 5);
-        }
-        mysql_free_result(result);
-        return;
     }
-
-    // Sin BDD: el menú fijo de ese día de la semana (sábado y domingo no están en la lista)
-    int i = menusDias.indexOf(hoy);
-    if (i != -1) {
-        menuHoyID = i + 1;
-        menuHoyPlato = menusPlatos[i];
-        menuHoyIncluye = menusIncluye[i];
-        menuHoyPrecio = menusPrecios[i];
-        productosStock[0] = menusStocks[i];
-    }
+    return -1;
 }
 
+int SistemaBuffet::buscarEmpleado(QString apodo)
+{
+    for (int i = 0; i < empleados.size(); i++) {
+        if (empleados[i].apodo == apodo) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int SistemaBuffet::buscarEstudiante(QString dni)
+{
+    for (int i = 0; i < estudiantes.size(); i++) {
+        if (estudiantes[i].dni == dni) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int SistemaBuffet::buscarProfesor(QString dni)
+{
+    for (int i = 0; i < profesores.size(); i++) {
+        if (profesores[i].dni == dni) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Busca si un DNI ya tiene cuenta de usuario
+int SistemaBuffet::buscarDniRegistrado(QString dni)
+{
+    for (int i = 0; i < usuarios.size(); i++) {
+        if (usuarios[i].dni == dni) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int SistemaBuffet::buscarPedido(QString codigo)
+{
+    for (int i = 0; i < pedidos.size(); i++) {
+        if (pedidos[i].codigo == codigo) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int SistemaBuffet::buscarEnCarrito(int id)
+{
+    for (int i = 0; i < carrito.size(); i++) {
+        if (carrito[i].id == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+// =====================================================================
+// FUNCIONES DEL CARRITO
+// =====================================================================
+
+// Agrega un producto. Si ya estaba en el carrito, le suma la cantidad
 void SistemaBuffet::agregarAlCarrito(int id, QString nombre, double precio, int cantidad)
 {
-    // Si ya existe el producto en el carrito, sumar la cantidad
-    for (int i = 0; i < carritoIds.size(); ++i) {
-        if (carritoIds[i] == id) {
-            carritoCantidades[i] += cantidad;
-            return;
-        }
-    }
+    int posicion = buscarEnCarrito(id);
 
-    // Si es nuevo, añadirlo a las listas
-    carritoIds.append(id);
-    carritoNombres.append(nombre);
-    carritoPrecios.append(precio);
-    carritoCantidades.append(cantidad);
+    if (posicion != -1) {
+        carrito[posicion].cantidad = carrito[posicion].cantidad + cantidad;
+    } else {
+        ItemCarrito nuevo;
+        nuevo.id = id;
+        nuevo.nombre = nombre;
+        nuevo.precio = precio;
+        nuevo.cantidad = cantidad;
+        carrito.append(nuevo);
+    }
 }
 
+// Deja el carrito vacío
 void SistemaBuffet::vaciarCarrito()
 {
-    carritoIds.clear();
-    carritoNombres.clear();
-    carritoPrecios.clear();
-    carritoCantidades.clear();
+    carrito.clear();
 }
 
+// Suma precio x cantidad de cada producto
 double SistemaBuffet::getTotalCarrito()
 {
     double total = 0.0;
-    for (int i = 0; i < carritoPrecios.size(); ++i) {
-        total += carritoPrecios[i] * carritoCantidades[i];
+    for (int i = 0; i < carrito.size(); i++) {
+        total = total + carrito[i].precio * carrito[i].cantidad;
     }
     return total;
 }
 
+// Cuenta cuántas unidades hay en total (2 alfajores + 1 agua = 3)
 int SistemaBuffet::getCantidadTotalCarrito()
 {
-    int cant = 0;
-    for (int i = 0; i < carritoCantidades.size(); ++i) {
-        cant += carritoCantidades[i];
+    int cantidadTotal = 0;
+    for (int i = 0; i < carrito.size(); i++) {
+        cantidadTotal = cantidadTotal + carrito[i].cantidad;
     }
-    return cant;
+    return cantidadTotal;
 }
 
+// Cuántas unidades de un producto ya están en el carrito (0 si no está)
 int SistemaBuffet::getCantidadEnCarrito(int id)
 {
-    for (int i = 0; i < carritoIds.size(); ++i) {
-        if (carritoIds[i] == id) {
-            return carritoCantidades[i];
-        }
+    int posicion = buscarEnCarrito(id);
+
+    if (posicion != -1) {
+        return carrito[posicion].cantidad;
+    } else {
+        return 0;
     }
-    return 0;
 }
 
-bool SistemaBuffet::cargarUsuarioDesdeBDD(int userID)
+// =====================================================================
+// inicializarDatos (MODO SIN BDD)
+// Carga dos pedidos de ejemplo y el menú de hoy. Se hace una sola vez,
+// aunque se vuelva a la pantalla de login.
+// =====================================================================
+void SistemaBuffet::inicializarDatos()
 {
-    MYSQL_RES *result = obtener_datos_usuario(conn, userID);
-    if (result == NULL) {
-        return false;
+    if (datosInicializados) {
+        return;
     }
-    MYSQL_ROW fila = mysql_fetch_row(result);
-    if (fila != NULL) {
-        usuarioID = userID;
-        usuarioRol = valor_fila(fila, 0);
-        usuarioNombre = valor_fila(fila, 1);
-        usuarioApellido = valor_fila(fila, 2);
-        usuarioCurso = valor_fila(fila, 3);
-        usuarioDni = valor_fila(fila, 4);
-        usuarioSaldo = valor_fila(fila, 5).toDouble();
-    }
-    mysql_free_result(result);
-    return fila != NULL;
-}
+    datosInicializados = true;
 
-void SistemaBuffet::cargarDesdeBDD()
-{
-    if (conn == NULL) return;
+    Pedido ejemplo1;
+    ejemplo1.retiroID = 0;
+    ejemplo1.codigo = "3C6MB";
+    ejemplo1.cliente = "David Melendez";
+    ejemplo1.curso = "6° Año 1ra";
+    ejemplo1.dni = "12345678";
+    ejemplo1.recreo = "2do Recreo TM (10:35 a 10:45 hs)";
+    ejemplo1.metodo = "Efectivo en Mostrador";
+    ejemplo1.monto = 4100.0;
+    ejemplo1.abonado = 5000.0;
+    ejemplo1.vuelto = 900.0;
+    ejemplo1.estado = "PENDIENTE";
+    ejemplo1.detalle = "1x Sándwich de Milanesa ($2800)\n1x Gaseosa 500ml ($1300)";
+    pedidos.append(ejemplo1);
 
-    MYSQL_RES *result = obtener_productos(conn);
-    if (result != NULL) {
-        MYSQL_ROW fila;
-        while ((fila = mysql_fetch_row(result)) != NULL) {
-            int id = valor_fila(fila, 0).toInt();
-            while (productosStock.size() <= id) {
-                productosStock.append(0);
-                productosPrecios.append(0);
-            }
-            productosPrecios[id] = valor_fila(fila, 3).toDouble();
-            productosStock[id] = valor_fila(fila, 4).toInt();
-            // Un producto dado de baja no se puede vender (sp_agregar_producto_carrito pide Activo = TRUE)
-            if (valor_fila(fila, 5) == "Inactivo") {
-                productosStock[id] = 0;
-            }
-        }
-        mysql_free_result(result);
-    }
-
-    result = obtener_pedidos(conn);
-    if (result != NULL) {
-        pedidosRetiroIds.clear();
-        pedidosCodigos.clear();
-        pedidosAlumnos.clear();
-        pedidosCursos.clear();
-        pedidosDnis.clear();
-        pedidosRecreos.clear();
-        pedidosMetodos.clear();
-        pedidosMontos.clear();
-        pedidosAbonados.clear();
-        pedidosVueltos.clear();
-        pedidosEstados.clear();
-        pedidosDetalles.clear();
-
-        MYSQL_ROW fila;
-        while ((fila = mysql_fetch_row(result)) != NULL) {
-            pedidosRetiroIds.append(valor_fila(fila, 0).toInt());
-            pedidosCodigos.append(valor_fila(fila, 1));
-            pedidosAlumnos.append(valor_fila(fila, 2));
-            pedidosCursos.append(valor_fila(fila, 3));
-            pedidosDnis.append(valor_fila(fila, 4));
-            pedidosRecreos.append(valor_fila(fila, 5));
-            pedidosMetodos.append(valor_fila(fila, 6));
-            pedidosMontos.append(valor_fila(fila, 7).toDouble());
-            // La BDD no guarda con cuánto pagó en efectivo
-            pedidosAbonados.append(valor_fila(fila, 7).toDouble());
-            pedidosVueltos.append(0.0);
-            pedidosEstados.append(valor_fila(fila, 8));
-            pedidosDetalles.append(valor_fila(fila, 9));
-        }
-        mysql_free_result(result);
-    }
+    Pedido ejemplo2;
+    ejemplo2.retiroID = 0;
+    ejemplo2.codigo = "8A2KP";
+    ejemplo2.cliente = "Lucía Gómez";
+    ejemplo2.curso = "6° Año 2da";
+    ejemplo2.dni = "45987654";
+    ejemplo2.recreo = "Receso Inter-Turno - Almuerzo (12:05 a 13:30 hs)";
+    ejemplo2.metodo = "Saldo de Cuenta Escolar";
+    ejemplo2.monto = 2800.0;
+    ejemplo2.abonado = 2800.0;
+    ejemplo2.vuelto = 0.0;
+    ejemplo2.estado = "PENDIENTE";
+    ejemplo2.detalle = "1x Sándwich de Milanesa ($2800)";
+    pedidos.append(ejemplo2);
 
     cargarMenuDelDia();
 }
 
+// =====================================================================
+// cargarUsuarioActivo (MODO SIN BDD)
+// Copia los datos del usuario que inició sesión al struct "usuario".
+// posicionUsuario es su posición en la lista "usuarios".
+// =====================================================================
+void SistemaBuffet::cargarUsuarioActivo(int posicionUsuario)
+{
+    usuario.id = posicionUsuario + 1;
+    usuario.rol = usuarios[posicionUsuario].rol;
+    usuario.dni = usuarios[posicionUsuario].dni;
+    // shortcut: el saldo se copia al entrar y no se guarda al salir; con BDD se lee siempre de Usuario.Saldo
+    usuario.saldo = usuarios[posicionUsuario].saldo;
+
+    // El nombre y el curso se buscan por DNI: primero entre los estudiantes
+    int posicionEstudiante = buscarEstudiante(usuario.dni);
+    if (posicionEstudiante != -1) {
+        usuario.nombre = estudiantes[posicionEstudiante].nombre;
+        usuario.apellido = estudiantes[posicionEstudiante].apellido;
+        usuario.curso = estudiantes[posicionEstudiante].curso;
+    } else {
+        // Si no es estudiante, es profesor (no tiene curso)
+        int posicionProfesor = buscarProfesor(usuario.dni);
+        usuario.nombre = profesores[posicionProfesor].nombre;
+        usuario.apellido = profesores[posicionProfesor].apellido;
+        usuario.curso = "Docente";
+    }
+}
+
+// =====================================================================
+// cargarUsuarioDesdeBDD (MODO CON BDD)
+// Lee de la BDD los datos del usuario que inició sesión.
+// Devuelve true si lo encontró.
+// =====================================================================
+bool SistemaBuffet::cargarUsuarioDesdeBDD(int userID)
+{
+    // Columnas: rol, nombre, apellido, curso, DNI, saldo
+    QStringList datos = leer_primera_fila(obtener_datos_usuario(conexion, userID));
+
+    if (datos.size() == 0) {
+        return false;
+    }
+
+    usuario.id = userID;
+    usuario.rol = datos[0];
+    usuario.nombre = datos[1];
+    usuario.apellido = datos[2];
+    usuario.curso = datos[3];
+    usuario.dni = datos[4];
+    usuario.saldo = datos[5].toDouble();
+    return true;
+}
+
+// =====================================================================
+// cargarMenuDelDia
+// Busca qué menú corresponde hoy y lo guarda en "menuHoy".
+// El stock del menú se guarda en productos[0].stock
+// =====================================================================
+void SistemaBuffet::cargarMenuDelDia()
+{
+    // Se arranca sin menú (así queda el sábado y el domingo)
+    menuHoy.id = 0;
+    menuHoy.plato = "";
+    menuHoy.incluye = "";
+    menuHoy.precio = 0;
+    productos[0].stock = 0;
+
+    // Nombre del día de hoy. dayOfWeek() da 1 para el lunes y 7 para el domingo
+    QStringList nombresDias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
+    QString hoy = nombresDias[QDate::currentDate().dayOfWeek() - 1];
+
+    if (conexion != NULL) {
+        // ----- MODO CON BDD -----
+        // sp_menu_del_dia devuelve: ID, plato, precio, stock, día, producto incluido
+        QStringList datos = leer_primera_fila(obtener_menu_del_dia(conexion, hoy));
+        if (datos.size() > 0 && datos[0] != "ERROR") {
+            menuHoy.id = datos[0].toInt();
+            menuHoy.plato = datos[1];
+            menuHoy.precio = datos[2].toDouble();
+            productos[0].stock = datos[3].toInt();
+            menuHoy.incluye = datos[5];
+        }
+    } else {
+        // ----- MODO SIN BDD -----
+        // Se busca el menú fijo de ese día (sábado y domingo no están)
+        for (int i = 0; i < menusSemana.size(); i++) {
+            if (menusSemana[i].dia == hoy) {
+                menuHoy.id = i + 1;
+                menuHoy.plato = menusSemana[i].plato;
+                menuHoy.incluye = menusSemana[i].incluye;
+                menuHoy.precio = menusSemana[i].precio;
+                productos[0].stock = menusSemana[i].stock;
+            }
+        }
+    }
+}
+
+// =====================================================================
+// cargarDesdeBDD (MODO CON BDD)
+// Trae de nuevo de la BDD los productos, los pedidos y el menú.
+// Sin conexión no hace nada: quedan los datos de ejemplo.
+// =====================================================================
+void SistemaBuffet::cargarDesdeBDD()
+{
+    if (conexion == NULL) {
+        return;
+    }
+
+    // ----- 1. Productos -----
+    // Columnas: ID, nombre, categoría, precio, stock, Activo/Inactivo
+    MYSQL_RES *resultado = obtener_productos(conexion);
+    if (resultado != NULL) {
+        MYSQL_ROW fila = mysql_fetch_row(resultado);
+        while (fila != NULL) {
+            int productoID = valor_fila(fila, 0).toInt();
+
+            // Si el admin agregó productos nuevos, la lista se agranda
+            while (productos.size() <= productoID) {
+                Producto nuevo;
+                nuevo.id = productos.size();
+                nuevo.precio = 0;
+                nuevo.stock = 0;
+                productos.append(nuevo);
+            }
+
+            // Nombre y categoría solo para los productos nuevos (los demás ya los tienen)
+            if (productos[productoID].nombre == "") {
+                productos[productoID].nombre = valor_fila(fila, 1);
+                productos[productoID].categoria = valor_fila(fila, 2);
+            }
+            productos[productoID].precio = valor_fila(fila, 3).toDouble();
+            productos[productoID].stock = valor_fila(fila, 4).toInt();
+
+            // Un producto dado de baja no se puede vender: se muestra sin stock
+            if (valor_fila(fila, 5) == "Inactivo") {
+                productos[productoID].stock = 0;
+            }
+
+            fila = mysql_fetch_row(resultado);
+        }
+        mysql_free_result(resultado);
+    }
+
+    // ----- 2. Pedidos: se borra la lista y se vuelve a llenar -----
+    // Columnas: RetiroID, código, cliente, curso, DNI, recreo, método, monto, estado, detalle
+    resultado = obtener_pedidos(conexion);
+    if (resultado != NULL) {
+        pedidos.clear();
+
+        MYSQL_ROW fila = mysql_fetch_row(resultado);
+        while (fila != NULL) {
+            Pedido pedido;
+            pedido.retiroID = valor_fila(fila, 0).toInt();
+            pedido.codigo = valor_fila(fila, 1);
+            pedido.cliente = valor_fila(fila, 2);
+            pedido.curso = valor_fila(fila, 3);
+            pedido.dni = valor_fila(fila, 4);
+            pedido.recreo = valor_fila(fila, 5);
+            pedido.metodo = valor_fila(fila, 6);
+            pedido.monto = valor_fila(fila, 7).toDouble();
+            // La BDD no guarda con cuánto pagó en efectivo: se toma el monto justo
+            pedido.abonado = pedido.monto;
+            pedido.vuelto = 0.0;
+            pedido.estado = valor_fila(fila, 8);
+            pedido.detalle = valor_fila(fila, 9);
+            pedidos.append(pedido);
+
+            fila = mysql_fetch_row(resultado);
+        }
+        mysql_free_result(resultado);
+    }
+
+    // ----- 3. Menú del día -----
+    cargarMenuDelDia();
+}
+
+// =====================================================================
+// cerrarSesion: deja el cierre de sesión en Log_Auditoria (solo con BDD)
+// =====================================================================
 void SistemaBuffet::cerrarSesion()
 {
-    if (conn == NULL) return;
-    MYSQL_RES *result = cerrar_sesion(conn, usuarioID);
-    if (result != NULL) {
-        mysql_free_result(result);
+    if (conexion != NULL) {
+        leer_primera_fila(cerrar_sesion(conexion, usuario.id));
     }
 }

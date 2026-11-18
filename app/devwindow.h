@@ -2,12 +2,26 @@
 #define DEVWINDOW_H
 
 #include <QWidget>
-#include <QStringList>
+#include <QList>
 
 namespace Ui {
 class DevWindow;
 }
 
+// Un stored procedure leído de 05_Backend.sql
+struct ProcedimientoSQL {
+    QString nombre;
+    QString schema;
+    QString codigo;
+};
+
+// Una prueba leída de 06_PruebasSQL.sql
+struct PruebaSQL {
+    QString titulo;
+    QString codigo;
+};
+
+// Panel del desarrollador: ver y ejecutar SPs, ver pruebas y abrir las otras vistas
 class DevWindow : public QWidget
 {
     Q_OBJECT
@@ -17,9 +31,9 @@ public:
     ~DevWindow();
 
 private slots:
-    void on_listSP_currentRowChanged(int fila);
+    void on_listSP_currentRowChanged(int filaElegida);
     void on_btnEjecutarSP_clicked();
-    void on_listPruebas_currentRowChanged(int fila);
+    void on_listPruebas_currentRowChanged(int filaElegida);
     void on_btnAbrirVistaAlumno_clicked();
     void on_btnAbrirVistaCaja_clicked();
     void on_btnAbrirVistaAdmin_clicked();
@@ -27,13 +41,8 @@ private slots:
 
 private:
     Ui::DevWindow *ui;
-
-    // Listas paralelas leídas de 05_Backend (SPs) y 06_PruebasSQL (pruebas)
-    QStringList spNombres;
-    QStringList spSchemas;
-    QStringList spCodigos;
-    QStringList pruebasTitulos;
-    QStringList pruebasCodigos;
+    QList<ProcedimientoSQL> procedimientos;
+    QList<PruebaSQL> pruebas;
 
     QString leerArchivo(QString ruta);
     void cargarSPs();

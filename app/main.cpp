@@ -3,13 +3,24 @@
 #include "basedatos.h"
 #include <QApplication>
 #include <QMessageBox>
+#include <cstdlib>
+#include <ctime>
 
+// =====================================================================
+// main: punto de entrada del programa
+// 1. Crea la aplicación y le pone los colores (crema y bordó)
+// 2. Se conecta a MySQL
+// 3. Abre la ventana de login
+// =====================================================================
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication aplicacion(argc, argv);
 
-    // Estilo global (Qt Style Sheets, sintaxis CSS): crema + bordó para todas las ventanas
-    a.setStyleSheet(
+    // Semilla para rand(): así los códigos de retiro salen distintos cada vez
+    srand(time(NULL));
+
+    // ----- 1. Estilo de todas las ventanas (Qt Style Sheets, se escribe como CSS) -----
+    aplicacion.setStyleSheet(
         "QWidget {"
         "    font-family: 'Segoe UI';"
         "    font-size: 13px;"
@@ -81,19 +92,24 @@ int main(int argc, char *argv[])
         "}"
     );
 
-    // Conexión a MySQL al arrancar; si falla, la app sigue con los datos de ejemplo
-    SistemaBuffet::conn = conectar_bdd();
-    if (SistemaBuffet::conn == NULL) {
+    // ----- 2. Conexión a MySQL -----
+    // Si falla, el programa sigue igual con los datos de ejemplo (modo sin BDD)
+    SistemaBuffet::conexion = conectar_bdd();
+    if (SistemaBuffet::conexion == NULL) {
         QMessageBox::warning(NULL, "Sin conexión",
             "No se pudo conectar con MySQL.\nLa aplicación va a usar los datos de ejemplo, sin guardar cambios en la BDD.");
     }
 
-    LoginWindow w;
-    w.show();
+    // ----- 3. Ventana de login -----
+    LoginWindow ventanaLogin;
+    ventanaLogin.show();
 
-    int resultado = a.exec();
-    if (SistemaBuffet::conn != NULL) {
-        mysql_close(SistemaBuffet::conn);
+    // exec() deja el programa funcionando hasta que se cierra la última ventana
+    int codigoSalida = aplicacion.exec();
+
+    // Al salir se cierra la conexión con MySQL
+    if (SistemaBuffet::conexion != NULL) {
+        mysql_close(SistemaBuffet::conexion);
     }
-    return resultado;
+    return codigoSalida;
 }

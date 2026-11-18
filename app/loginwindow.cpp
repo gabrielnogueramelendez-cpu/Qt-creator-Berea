@@ -9,37 +9,40 @@
 #include "basedatos.h"
 #include <QMessageBox>
 
+// Opciones del combo "Ingresar como" (comboRole), en el mismo orden que el .ui
+const int OPCION_ESTUDIANTE = 0;
+const int OPCION_CAJA = 1;
+const int OPCION_ADMINISTRACION = 2;
+const int OPCION_DESARROLLADOR = 3;
+
+// =====================================================================
+// Constructor: prepara la pantalla de login
+// =====================================================================
 LoginWindow::LoginWindow(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::LoginWindow),
-    m_intentosFallidos(0)
+    ui(new Ui::LoginWindow)
 {
     ui->setupUi(this);
     setWindowTitle("El Buffet de Alejandro - Iniciar Sesión");
 
-    // Inicializar datos del sistema
+    intentosFallidos = 0;
+
+    // Pedidos de ejemplo y menú del día (para el modo sin BDD)
     SistemaBuffet::inicializarDatos();
 
-    // Límites de longitud básicos (sin validadores bloqueantes)
     // Mismos largos que la BDD: Usuario.Contrasena, Empleado.PIN y Empleado.Token_Acceso
     ui->txtPass->setMaxLength(50);
     ui->txtPinCajero->setMaxLength(4);
     ui->txtTokenDev->setMaxLength(30);
 
-    // Conectar tecla Enter (returnPressed) de los campos al botón Iniciar Sesión
-    connect(ui->txtUser, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
-    connect(ui->txtPass, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
-    connect(ui->txtPinCajero, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
-    connect(ui->txtTokenDev, &QLineEdit::returnPressed, this, &LoginWindow::on_btnLogin_clicked);
-
-    // Foto del panel derecho (login.jpg en el .qrc); sin foto queda el fondo bordó con la frase
+    // Foto del panel derecho (login.jpg en recursos.qrc). Sin foto queda el fondo bordó
     QPixmap foto(":/imagenes/imagenes/login.jpg");
     if (!foto.isNull()) {
         foto = foto.scaled(ui->lblFotoLogin->size(), Qt::KeepAspectRatio);
         ui->lblFotoLogin->setPixmap(foto);
     }
 
-    actualizarCamposSegunRol(0);
+    actualizarCamposSegunRol(OPCION_ESTUDIANTE);
 }
 
 LoginWindow::~LoginWindow()
@@ -47,198 +50,233 @@ LoginWindow::~LoginWindow()
     delete ui;
 }
 
-void LoginWindow::on_comboRole_currentIndexChanged(int index)
+// =====================================================================
+// Enter en cualquier campo = botón INICIAR SESIÓN
+// =====================================================================
+void LoginWindow::on_txtUser_returnPressed()
 {
-    actualizarCamposSegunRol(index);
+    on_btnLogin_clicked();
 }
 
-void LoginWindow::actualizarCamposSegunRol(int index)
+void LoginWindow::on_txtPass_returnPressed()
 {
-    switch (index) {
-    case 0: // Estudiante
+    on_btnLogin_clicked();
+}
+
+void LoginWindow::on_txtPinCajero_returnPressed()
+{
+    on_btnLogin_clicked();
+}
+
+void LoginWindow::on_txtTokenDev_returnPressed()
+{
+    on_btnLogin_clicked();
+}
+
+// =====================================================================
+// Cambio en el combo "Ingresar como"
+// =====================================================================
+void LoginWindow::on_comboRole_currentIndexChanged(int opcionElegida)
+{
+    actualizarCamposSegunRol(opcionElegida);
+}
+
+// =====================================================================
+// actualizarCamposSegunRol: muestra solo los campos que pide cada rol
+//   - Caja: además del apodo y la clave, el PIN
+//   - Desarrollador: además del apodo y la clave, el token
+//   - Solo el estudiante puede ir a "Crear cuenta"
+// =====================================================================
+void LoginWindow::actualizarCamposSegunRol(int opcionElegida)
+{
+    // Primero se esconde todo lo que es opcional
+    ui->lblPinCajero->hide();
+    ui->txtPinCajero->hide();
+    ui->lblTokenDev->hide();
+    ui->txtTokenDev->hide();
+    ui->lblNoAccount->hide();
+    ui->btnGoRegister->hide();
+
+    // Después se muestra lo que corresponde a la opción elegida
+    if (opcionElegida == OPCION_ESTUDIANTE) {
         ui->lblUser->setText("APODO");
         ui->txtUser->setPlaceholderText("davidmel09");
-        ui->lblPinCajero->hide();
-        ui->txtPinCajero->hide();
-        ui->lblTokenDev->hide();
-        ui->txtTokenDev->hide();
         ui->lblNoAccount->show();
         ui->btnGoRegister->show();
         ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: davidmel09 · Clave: Davidmel#2026");
-        break;
-
-    case 1: // Personal de Buffet / Cajero
+    } else if (opcionElegida == OPCION_CAJA) {
         ui->lblUser->setText("APODO DE EMPLEADO");
         ui->txtUser->setPlaceholderText("marcela.ibanez");
         ui->lblPinCajero->show();
         ui->txtPinCajero->show();
-        ui->lblTokenDev->hide();
-        ui->txtTokenDev->hide();
-        ui->lblNoAccount->hide();
-        ui->btnGoRegister->hide();
         ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: marcela.ibanez · Clave: MarcelaBuffet#2026 · PIN: 1234");
-        break;
-
-    case 2: // Administrador
+    } else if (opcionElegida == OPCION_ADMINISTRACION) {
         ui->lblUser->setText("APODO DEL ENCARGADO");
         ui->txtUser->setPlaceholderText("alejandro.funes");
-        ui->lblPinCajero->hide();
-        ui->txtPinCajero->hide();
-        ui->lblTokenDev->hide();
-        ui->txtTokenDev->hide();
-        ui->lblNoAccount->hide();
-        ui->btnGoRegister->hide();
         ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: alejandro.funes · Clave: AlejandroBuffet#2026");
-        break;
-
-    case 3: // Desarrollador / Soporte Técnico
+    } else if (opcionElegida == OPCION_DESARROLLADOR) {
         ui->lblUser->setText("APODO DE DESARROLLADOR");
         ui->txtUser->setPlaceholderText("soporte.dev");
-        ui->lblPinCajero->hide();
-        ui->txtPinCajero->hide();
         ui->lblTokenDev->show();
         ui->txtTokenDev->show();
-        ui->lblNoAccount->hide();
-        ui->btnGoRegister->hide();
         ui->lblNoticeRol->setText("ACCESO DE PRUEBA\nApodo: soporte.dev · Clave: SoporteDev#2026 · Token: DEV-BEREA-2026");
-        break;
     }
 }
 
+// =====================================================================
+// Botón INICIAR SESIÓN
+// 1. Controla que los campos estén bien escritos
+// 2. Revisa apodo, clave y PIN o token (en la BDD o en las listas)
+// 3. Si el rol coincide con la opción elegida, abre la ventana que va
+// =====================================================================
 void LoginWindow::on_btnLogin_clicked()
 {
-    QString usuario = ui->txtUser->text().trimmed();
-    QString password = ui->txtPass->text();
-    int indexRol = ui->comboRole->currentIndex();
+    QString apodo = ui->txtUser->text().trimmed();
+    QString clave = ui->txtPass->text();
+    QString pin = ui->txtPinCajero->text().trimmed();
+    QString token = ui->txtTokenDev->text().trimmed();
+    int opcionElegida = ui->comboRole->currentIndex();
 
-    if (m_intentosFallidos >= 3) {
+    // ----- 1. Controles de los campos -----
+    if (intentosFallidos >= 3) {
         QMessageBox::critical(this, "Bloqueado", "Superó el límite de 3 intentos fallidos.");
         return;
     }
 
-    if (usuario.isEmpty() || password.isEmpty()) {
-        m_intentosFallidos++;
+    if (apodo.isEmpty() || clave.isEmpty()) {
+        intentosFallidos++;
         QMessageBox::warning(this, "Datos Incompletos", "Por favor completa usuario y contraseña.");
         return;
     }
 
-    if (password.length() < 4) {
-        m_intentosFallidos++;
+    if (clave.length() < 4) {
+        intentosFallidos++;
         QMessageBox::warning(this, "Contraseña Corta", "La contraseña debe tener al menos 4 caracteres.");
         return;
     }
 
-    QString pin = ui->txtPinCajero->text().trimmed();
-    QString token = ui->txtTokenDev->text().trimmed();
-    if (indexRol == 1 && pin.length() != 4) {
+    if (opcionElegida == OPCION_CAJA && pin.length() != 4) {
         QMessageBox::warning(this, "PIN Inválido", "El PIN debe tener exactamente 4 dígitos.");
         return;
     }
-    if (indexRol == 3 && token.isEmpty()) {
+
+    if (opcionElegida == OPCION_DESARROLLADOR && token.isEmpty()) {
         QMessageBox::warning(this, "Token Inválido", "Ingresá el token de desarrollador.");
         return;
     }
 
-    // accesoCorrecto: apodo, contraseña y (si corresponde) PIN o token correctos. rol: el Nombre_Rol del usuario
+    // ----- 2. Revisión del acceso -----
+    // accesoCorrecto: true si apodo, clave y (si hace falta) PIN o token son correctos
+    // rolDelUsuario: el rol que tiene ese usuario en la BDD ("Estudiante", "Personal de caja", ...)
     bool accesoCorrecto = false;
-    QString rol = "";
-    int indiceUsuario = SistemaBuffet::usuariosApodos.indexOf(usuario);
+    QString rolDelUsuario = "";
+    int posicionUsuario = SistemaBuffet::buscarUsuario(apodo);
 
-    if (SistemaBuffet::conn != NULL) {
-        // Con BDD: el SP valida y deja el inicio de sesión (o el fallo) en Log_Auditoria
-        MYSQL_RES *result = NULL;
-        if (indexRol == 0 || indexRol == 2) {
-            result = iniciar_sesion(SistemaBuffet::conn, usuario, password);
-        } else if (indexRol == 1) {
-            result = acceso_personal(SistemaBuffet::conn, usuario, password, pin);
+    if (SistemaBuffet::conexion != NULL) {
+        // ----- MODO CON BDD -----
+        // El SP revisa los datos y deja el intento (bien o mal) en Log_Auditoria.
+        // Si los datos son correctos, devuelve el UserID en la primera columna
+        QStringList respuesta;
+        if (opcionElegida == OPCION_CAJA) {
+            respuesta = leer_primera_fila(acceso_personal(SistemaBuffet::conexion, apodo, clave, pin));
+        } else if (opcionElegida == OPCION_DESARROLLADOR) {
+            respuesta = leer_primera_fila(acceso_personal(SistemaBuffet::conexion, apodo, clave, token));
         } else {
-            result = acceso_personal(SistemaBuffet::conn, usuario, password, token);
+            respuesta = leer_primera_fila(iniciar_sesion(SistemaBuffet::conexion, apodo, clave));
         }
 
-        if (result != NULL) {
-            MYSQL_ROW fila = NULL;
-            if (error_del_sp(result) == 0) {
-                fila = mysql_fetch_row(result);
-            }
-            if (fila != NULL) {
-                accesoCorrecto = SistemaBuffet::cargarUsuarioDesdeBDD(valor_fila(fila, 0).toInt());
-                rol = SistemaBuffet::usuarioRol;
-            }
-            mysql_free_result(result);
+        if (respuesta.size() > 0 && respuesta[0] != "ERROR") {
+            int userID = respuesta[0].toInt();
+            accesoCorrecto = SistemaBuffet::cargarUsuarioDesdeBDD(userID);
+            rolDelUsuario = SistemaBuffet::usuario.rol;
         }
     } else {
-        // Sin BDD: las mismas reglas con las listas de SistemaBuffet
-        int indicePersonal = SistemaBuffet::personalApodos.indexOf(usuario);
-        accesoCorrecto = indiceUsuario != -1 && SistemaBuffet::usuariosContrasenas[indiceUsuario] == password;
-        if (indexRol == 1) {
-            accesoCorrecto = accesoCorrecto && indicePersonal != -1 && SistemaBuffet::personalPines[indicePersonal] == pin;
-        }
-        if (indexRol == 3) {
-            accesoCorrecto = accesoCorrecto && indicePersonal != -1 && SistemaBuffet::personalTokens[indicePersonal] == token;
-        }
-        if (indiceUsuario != -1) {
-            rol = SistemaBuffet::usuariosRoles[indiceUsuario];
+        // ----- MODO SIN BDD -----
+        // Las mismas reglas, buscando en las listas de SistemaBuffet
+        if (posicionUsuario != -1) {
+            Usuario encontrado = SistemaBuffet::usuarios[posicionUsuario];
+            rolDelUsuario = encontrado.rol;
+
+            if (encontrado.contrasena == clave) {
+                accesoCorrecto = true;
+            }
+
+            // Caja y desarrollador además tienen que estar en la lista de empleados
+            int posicionEmpleado = SistemaBuffet::buscarEmpleado(apodo);
+            if (opcionElegida == OPCION_CAJA) {
+                if (posicionEmpleado == -1 || SistemaBuffet::empleados[posicionEmpleado].pin != pin) {
+                    accesoCorrecto = false;
+                }
+            }
+            if (opcionElegida == OPCION_DESARROLLADOR) {
+                if (posicionEmpleado == -1 || SistemaBuffet::empleados[posicionEmpleado].token != token) {
+                    accesoCorrecto = false;
+                }
+            }
         }
     }
 
-    if (indexRol == 0) { // Alumno o profesor
-        if (accesoCorrecto && (rol == "Estudiante" || rol == "Profesor")) {
-            m_intentosFallidos = 0;
-            if (SistemaBuffet::conn == NULL) {
-                SistemaBuffet::cargarUsuarioActivo(indiceUsuario);
+    // ----- 3. Abrir la ventana que corresponde -----
+    // Las ventanas se crean con "new" para que sigan abiertas después de
+    // cerrar el login (si se crearan como variable común, se borrarían al
+    // terminar esta función)
+    if (opcionElegida == OPCION_ESTUDIANTE) {
+        if (accesoCorrecto && (rolDelUsuario == "Estudiante" || rolDelUsuario == "Profesor")) {
+            intentosFallidos = 0;
+            if (SistemaBuffet::conexion == NULL) {
+                SistemaBuffet::cargarUsuarioActivo(posicionUsuario);
             }
-            MainWindow *mainWin = new MainWindow();
-            mainWin->show();
+            MainWindow *ventanaCatalogo = new MainWindow();
+            ventanaCatalogo->show();
             this->close();
         } else {
-            m_intentosFallidos++;
-            int res = QMessageBox::warning(this, "Acceso Denegado",
+            intentosFallidos++;
+            int respuesta = QMessageBox::warning(this, "Acceso Denegado",
                 "Apodo o contraseña incorrectos.\n¿Deseas registrarte?",
                 QMessageBox::Yes | QMessageBox::No);
-            if (res == QMessageBox::Yes) {
-                RegisterDialog regDlg(this);
-                regDlg.exec();
+            if (respuesta == QMessageBox::Yes) {
+                RegisterDialog ventanaRegistro(this);
+                ventanaRegistro.exec();
             }
         }
-    }
-    else if (indexRol == 1) { // Personal de caja
-        if (accesoCorrecto && rol == "Personal de caja") {
-            m_intentosFallidos = 0;
-            CajeroWindow *cajeroWin = new CajeroWindow();
-            cajeroWin->show();
+    } else if (opcionElegida == OPCION_CAJA) {
+        if (accesoCorrecto && rolDelUsuario == "Personal de caja") {
+            intentosFallidos = 0;
+            CajeroWindow *ventanaMostrador = new CajeroWindow();
+            ventanaMostrador->show();
             this->close();
         } else {
-            m_intentosFallidos++;
+            intentosFallidos++;
             QMessageBox::warning(this, "Acceso Denegado", "Apodo, contraseña o PIN incorrectos.");
         }
-    }
-    else if (indexRol == 2) { // Administración
-        if (accesoCorrecto && rol == "Administración") {
-            m_intentosFallidos = 0;
-            AdminWindow *adminWin = new AdminWindow();
-            adminWin->show();
+    } else if (opcionElegida == OPCION_ADMINISTRACION) {
+        if (accesoCorrecto && rolDelUsuario == "Administración") {
+            intentosFallidos = 0;
+            AdminWindow *ventanaAdmin = new AdminWindow();
+            ventanaAdmin->show();
             this->close();
         } else {
-            m_intentosFallidos++;
+            intentosFallidos++;
             QMessageBox::warning(this, "Acceso Denegado", "Apodo o contraseña incorrectos, o el usuario no es de administración.");
         }
-    }
-    else if (indexRol == 3) { // Desarrollador
-        if (accesoCorrecto && rol == "Desarrollador") {
-            m_intentosFallidos = 0;
-            DevWindow *devWin = new DevWindow();
-            devWin->show();
+    } else if (opcionElegida == OPCION_DESARROLLADOR) {
+        if (accesoCorrecto && rolDelUsuario == "Desarrollador") {
+            intentosFallidos = 0;
+            DevWindow *ventanaDesarrollador = new DevWindow();
+            ventanaDesarrollador->show();
             this->close();
         } else {
-            m_intentosFallidos++;
+            intentosFallidos++;
             QMessageBox::warning(this, "Acceso Denegado", "Apodo, contraseña o token incorrectos.");
         }
     }
 }
 
+// =====================================================================
+// Botón MOSTRAR / OCULTAR: muestra u oculta la contraseña
+// =====================================================================
 void LoginWindow::on_btnMostrar_clicked()
 {
-    // Muestra u oculta la contraseña
     if (ui->txtPass->echoMode() == QLineEdit::Password) {
         ui->txtPass->setEchoMode(QLineEdit::Normal);
         ui->btnMostrar->setText("OCULTAR");
@@ -248,8 +286,11 @@ void LoginWindow::on_btnMostrar_clicked()
     }
 }
 
+// =====================================================================
+// Botón "Crear cuenta": abre el registro
+// =====================================================================
 void LoginWindow::on_btnGoRegister_clicked()
 {
-    RegisterDialog regDlg(this);
-    regDlg.exec();
+    RegisterDialog ventanaRegistro(this);
+    ventanaRegistro.exec();
 }

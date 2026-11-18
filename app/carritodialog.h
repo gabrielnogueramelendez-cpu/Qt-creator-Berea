@@ -7,6 +7,7 @@ namespace Ui {
 class CarritoDialog;
 }
 
+// Ventana del carrito: ver, cambiar cantidades, quitar productos y pasar al pago
 class CarritoDialog : public QDialog
 {
     Q_OBJECT
@@ -15,11 +16,12 @@ public:
     explicit CarritoDialog(QWidget *parent = nullptr);
     ~CarritoDialog();
 
-    bool fueHaciaElPago() const { return m_haciaElPago; }
+    // true si se cerró con "PROCEDER AL PAGO"
+    bool fueHaciaElPago() { return eligioPagar; }
 
 private slots:
     void on_btnModificarCantidad_clicked();
-    void on_tableCarrito_cellClicked(int row, int column);
+    void on_tableCarrito_cellClicked(int fila, int columna);
     void on_btnEliminarItem_clicked();
     void on_btnVaciarCarrito_clicked();
     void on_btnSeguirComprando_clicked();
@@ -27,7 +29,7 @@ private slots:
 
 private:
     Ui::CarritoDialog *ui;
-    bool m_haciaElPago;
+    bool eligioPagar;
     void recargarTablaCarrito();
 };
 
