@@ -36,4 +36,4 @@ mysql -u root -p --force < database/06_PruebasSQL_GrupoNoguera_SanMartin.sql
 
 El 06 lleva `--force` porque algunos casos esperan un error a propósito. También se pueden abrir en MySQL Workbench y ejecutarlos completos, en el mismo orden.
 
-Si el servidor MySQL no está disponible, la aplicación sigue funcionando con los mismos datos en memoria (ver `docs/validaciones_sistema.md`, sección 6).
+La aplicación necesita el servidor MySQL: si no está disponible, avisa al arrancar y se cierra (ver `docs/validaciones_sistema.md`, sección 6).

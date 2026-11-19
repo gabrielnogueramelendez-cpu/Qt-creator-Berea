@@ -99,7 +99,7 @@ Lista maestra de validaciones de la aplicación Qt. Cada código (por ejemplo `C
      [ADM-02] Precio positivo estricto: Formato numérico decimal mayor a $0.
      [ADM-03] Stock entero no negativo: Valor entero >= 0.
      [ADM-04] Control de Nombres Duplicados: Impide registrar dos productos con el mismo nombre.
-     [ADM-05] Edición y Guardado en Vivo: Validación de celdas modificadas antes de persistir en memoria.
+     [ADM-05] Edición y Guardado en Vivo: Validación de celdas modificadas antes de guardarlas en la BDD. Solo se guarda el precio o el stock que cambió.
      [ADM-06] Baja de Producto Protegida: Confirmación previa antes de eliminar cualquier ítem del catálogo.
 
 5.2. Sistema de Auditoría en Tiempo Real:
@@ -111,6 +111,6 @@ Lista maestra de validaciones de la aplicación Qt. Cada código (por ejemplo `C
 --------------------------------------------------------------------------------
 6.1. Compatibilidad Relacional:
      [BDD-01] Parámetros Oficiales: localhost:3306, Base ElBuffetDeAlejandro, root/12341234.
-     [BDD-02] Fallback Transparente: Si el servidor MySQL no está corriendo aún, el motor C++ en memoria responde con la misma estructura del esquema de Codd en 3FN sin caídas.
+     [BDD-02] Sin conexión: Si el servidor MySQL no está corriendo, la app avisa al arrancar y se cierra sin caerse. Todos los datos salen de la base.
      [BDD-03] Testing de Stored Procedures: Módulo de verificación de SPs cumpliendo los 4 casos de prueba exigidos por la consigna escolar.
 ```

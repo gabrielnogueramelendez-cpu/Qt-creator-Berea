@@ -14,6 +14,7 @@ MYSQL_RES* ejecutar_consulta(MYSQL *conn, const std::string &sql);
 std::string texto_sql(MYSQL *conn, const QString &valor);
 QString valor_fila(MYSQL_ROW fila, int columna);
 int error_del_sp(MYSQL_RES *result);
+int numero_del_sp(MYSQL_RES *result);
 
 // Schema usuarios
 MYSQL_RES* registrar_usuario(MYSQL *conn, const QString &dni, const QString &apodo, const QString &clave);

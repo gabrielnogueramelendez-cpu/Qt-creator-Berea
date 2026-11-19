@@ -1,5 +1,5 @@
-#include "loginwindow.h"
-#include "sistemabuffet.h"
+#include "pantallas.h"
+#include "datos.h"
 #include "basedatos.h"
 #include <QApplication>
 #include <QMessageBox>
@@ -81,19 +81,19 @@ int main(int argc, char *argv[])
         "}"
     );
 
-    // Conexión a MySQL al arrancar; si falla, la app sigue con los datos de ejemplo
-    SistemaBuffet::conn = conectar_bdd();
-    if (SistemaBuffet::conn == NULL) {
-        QMessageBox::warning(NULL, "Sin conexión",
-            "No se pudo conectar con MySQL.\nLa aplicación va a usar los datos de ejemplo, sin guardar cambios en la BDD.");
+    // Conexión a MySQL al arrancar (mysql_init + mysql_real_connect, como en ejemplobd01)
+    conexion = conectar_bdd();
+    if (conexion == NULL) {
+        QMessageBox::critical(NULL, "Sin conexión",
+            "No se pudo conectar con MySQL.\n"
+            "Revisá que el servidor esté corriendo y que se hayan ejecutado los scripts 03, 04 y 05 de la carpeta database.");
+        return 1;
     }
 
-    LoginWindow w;
-    w.show();
-
+    abrir_login();
     int resultado = a.exec();
-    if (SistemaBuffet::conn != NULL) {
-        mysql_close(SistemaBuffet::conn);
-    }
+
+    // Libera la conexión al salir
+    mysql_close(conexion);
     return resultado;
 }

@@ -83,6 +83,22 @@ int error_del_sp(MYSQL_RES *result)
     return codigo;
 }
 
+int numero_del_sp(MYSQL_RES *result)
+{
+    // Primera columna de la primera fila (VentaID, Filas_Actualizadas, ...). 0 si el SP dio ERROR o no devolvió filas
+    int numero = 0;
+    if (result != NULL && error_del_sp(result) == 0) {
+        MYSQL_ROW fila = mysql_fetch_row(result);
+        if (fila != NULL && fila[0] != NULL) {
+            numero = atoi(fila[0]);
+        }
+    }
+    if (result != NULL) {
+        mysql_free_result(result);
+    }
+    return numero;
+}
+
 // ---------------------------------------------------------------- Schema usuarios
 
 MYSQL_RES* registrar_usuario(MYSQL *conn, const QString &dni, const QString &apodo, const QString &clave)
@@ -221,7 +237,7 @@ MYSQL_RES* actualizar_estado_retiro(MYSQL *conn, int userID, int retiroID, int e
 MYSQL_RES* obtener_productos(MYSQL *conn)
 {
     std::string sql = "SELECT p.ProductoID, p.Nombre_Producto, c.Categoria, p.Precio_Producto, p.Stock_Producto, "
-                      "IF(p.Activo, 'Activo', 'Inactivo') "
+                      "IF(p.Activo, 'Activo', 'Inactivo'), p.Descripcion_Producto "
                       "FROM schema_comercial.Producto p "
                       "INNER JOIN schema_comercial.Categoria c ON p.ID_Categoria = c.ID_Categoria "
                       "ORDER BY p.ProductoID;";
