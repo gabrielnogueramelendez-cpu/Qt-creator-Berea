@@ -222,15 +222,18 @@ void AdminWindow::on_btnGuardarEdit_clicked()
     }
 
     // Un SP para el stock y otro para el precio. Cada uno deja su log.
-    // Ojo: si el precio no cambió, MySQL no cuenta la fila como modificada
-    // y sp_modificar_precio devuelve 0, así que sale el aviso aunque el stock sí se guardó
-    bool stockGuardado = respuestaCorrecta(leer_primera_fila(modificar_stock(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, stock)));
-    bool precioGuardado = respuestaCorrecta(leer_primera_fila(modificar_precio(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, precio)));
-    if (!stockGuardado || !precioGuardado) {
-        QMessageBox::warning(this, "Error", "No se pudieron guardar los cambios en la base de datos.");
-    }
+    // Acá un 0 en Filas_Actualizadas NO es error: si el precio (o el stock) quedó
+    // igual, MySQL no cuenta la fila como modificada. Solo es error si el SP falló.
+    QStringList respuestaStock = leer_primera_fila(modificar_stock(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, stock));
+    QStringList respuestaPrecio = leer_primera_fila(modificar_precio(SistemaBuffet::conexion, SistemaBuffet::usuario.id, productoID, precio));
     cargarInventario();
     cargarLogsDesdeBDD();
+
+    if (respuestaStock.size() == 0 || respuestaStock[0] == "ERROR"
+        || respuestaPrecio.size() == 0 || respuestaPrecio[0] == "ERROR") {
+        QMessageBox::warning(this, "Error", "No se pudieron guardar los cambios en la base de datos.");
+        return;
+    }
 
     ui->lblEstadoAdmin->setText("Se guardaron los cambios de " + nombre + ".");
 }
