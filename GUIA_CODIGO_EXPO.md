@@ -62,7 +62,7 @@ Cada regla de negocio tiene un comentario `// INTERRUPTOR ...` en el código. Se
 
 | Regla | Archivo y función | Qué comentar |
 |---|---|---|
-| Horario de retiro (recreo automático) | `pagodialog.cpp`: constructor y `on_btnConfirmarPedido_clicked` | 1 de 2: `ui->comboRecreo->setEnabled(false);` (constructor). 2 de 2: comentar `int franjaID = franjaDisponible();` y descomentar la línea de abajo (`currentIndex()`). El `if (franjaID == 0)` queda activo: obliga a elegir un recreo |
+| Horario de retiro (recreo automático) | `pagodialog.cpp`: constructor y `on_btnConfirmarPedido_clicked` | Comentar dos líneas: `ui->comboRecreo->setEnabled(false);` (constructor) y `franjaID = franjaDisponible();` (al confirmar). El recreo sale de la lista y el `if (franjaID == 0)` obliga a elegir uno |
 | Monto en efectivo insuficiente | `pagodialog.cpp`: `on_btnConfirmarPedido_clicked` | El `if` de "Monto Insuficiente" (4 líneas). Ojo: el vuelto puede dar negativo |
 | 4 dígitos de Mercado Pago | `pagodialog.cpp`: `on_btnConfirmarPedido_clicked` | El `if` de "Comprobante Inválido" (4 líneas) |
 | Saldo insuficiente | `pagodialog.cpp`: `on_btnConfirmarPedido_clicked` | El `if` de "Saldo Insuficiente" (4 líneas). El SP `sp_registrar_venta` igual lo controla en la BDD |

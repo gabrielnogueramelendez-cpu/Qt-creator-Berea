@@ -92,7 +92,7 @@ PagoDialog::PagoDialog(QWidget *parent) :
     habilitarCamposMetodo();
 
     // El horario de retiro no se elige: es siempre el recreo que sigue
-    // INTERRUPTOR HORARIO (1 de 2): comentá esta línea para poder elegir el recreo a mano
+    // INTERRUPTOR HORARIO (1 de 2): comentá esta línea (y la 2 de 2) para pedir a cualquier hora
     ui->comboRecreo->setEnabled(false);
     ui->comboRecreo->setCurrentIndex(franjaDisponible());
 }
@@ -199,10 +199,11 @@ void PagoDialog::on_btnConfirmarPedido_clicked()
         return;
     }
 
-    // Se vuelve a calcular al confirmar, por si la ventana de pedidos cerró con esta pantalla abierta
-    int franjaID = franjaDisponible();
-    // INTERRUPTOR HORARIO (2 de 2): comentá la de arriba y descomentá la de abajo
-    // int franjaID = ui->comboRecreo->currentIndex();
+    // El recreo es el que muestra la lista...
+    int franjaID = ui->comboRecreo->currentIndex();
+    // ...pero se vuelve a calcular con la hora, por si la ventana de pedidos cerró con esta pantalla abierta
+    // INTERRUPTOR HORARIO (2 de 2): comentá esta línea (y la 1 de 2) para pedir a cualquier hora
+    franjaID = franjaDisponible();
     if (franjaID == 0) {
         QMessageBox::warning(this, "Horario de retiro",
             "No se puede pedir ahora (horario de clases) o falta elegir un recreo. "
