@@ -62,7 +62,7 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
 ## Sexta tanda: estudiantes para probar el registro
 
 1. 04_DatosSQL: se agregaron 3 estudiantes sin usuario, para que se pueda probar sp_registrar_usuario en la exposición. Los 20 anteriores ya tenían usuario.
-   - 48715903 Pablo Linares (6° 1ra), 48902617 Cynthia Berea (6° 2da), 49031458 Cristian Dávalos (6° 3ra). DNI y fecha de nacimiento son inventados.
+   - 48715903 Pablo Linares (6° 1ra), 48902617 Cynthya Berea (6° 2da), 49031458 Cristian Dávalos (6° 3ra). DNI y fecha de nacimiento son inventados.
 2. No cambia ningún UserID ni ningún resultado de 06: la planilla de pruebas sigue igual.
 
 ## Séptima tanda: profesores y roles
