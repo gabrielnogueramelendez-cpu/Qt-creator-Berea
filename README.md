@@ -18,9 +18,9 @@ Rama `version-ubuntu-simplificada`: misma aplicación y misma interfaz que `vers
 
 - los datos en memoria están en **structs** (`Usuario`, `Producto`, `Pedido`, `ItemCarrito`…) en `app/sistemabuffet.h`;
 - las decisiones están escritas con **if / else**, sin `switch` ni operador ternario;
-- cada función tiene un comentario que dice qué hace, y el modo **con BDD** y **sin BDD** están separados en bloques.
+- cada función tiene un comentario que dice qué hace.
 
-Se comparó contra la versión anterior con la misma secuencia de clics, sin BDD y con MySQL: los resultados son idénticos. Los manuales técnico y de usuario están en `docs/`.
+La versión final (esta) funciona **solo con MySQL**: no tiene datos de ejemplo en el código y, si no hay conexión, avisa y se cierra. Se probó con la misma secuencia de clics contra la BDD final. Los manuales técnico y de usuario están en `docs/`.
 
 ## Estructura
 
@@ -56,7 +56,7 @@ cmake --build build
 
 ## Base de datos
 
-Ver [`database/README.md`](database/README.md): son 3 schemas, 27 tablas y 27 stored procedures. Antes de abrir la app hay que ejecutar en MySQL los scripts 03, 04 y 05. La app se conecta con la API de C de MySQL y usa los stored procedures; si MySQL no está corriendo, avisa y funciona con los mismos datos en memoria, sin guardar cambios.
+Ver [`database/README.md`](database/README.md): son 3 schemas, 27 tablas y 27 stored procedures. Antes de abrir la app hay que ejecutar en MySQL los scripts 03, 04 y 05. La app se conecta con la API de C de MySQL y usa los stored procedures; si MySQL no está corriendo, avisa y se cierra.
 
 ## Roles
 
