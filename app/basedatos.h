@@ -48,7 +48,7 @@ MYSQL_RES* baja_producto(MYSQL *conexion, int userID, int productoID);
 MYSQL_RES* registrar_venta(MYSQL *conexion, int userID, int metodoPagoID);
 MYSQL_RES* agregar_producto_carrito(MYSQL *conexion, int ventaID, int productoID, int cantidad);
 MYSQL_RES* obtener_menu_del_dia(MYSQL *conexion, const QString &dia);
-MYSQL_RES* agregar_menu_carrito(MYSQL *conexion, int ventaID, int menuID, int cantidad);
+MYSQL_RES* agregar_menu_carrito(MYSQL *conexion, int ventaID, int menuID, int cantidad, const QString &dia);
 MYSQL_RES* generar_retiro(MYSQL *conexion, int ventaID, int franjaID, const QString &codigo);
 MYSQL_RES* actualizar_estado_retiro(MYSQL *conexion, int userID, int retiroID, int estadoID);
 MYSQL_RES* obtener_productos(MYSQL *conexion);

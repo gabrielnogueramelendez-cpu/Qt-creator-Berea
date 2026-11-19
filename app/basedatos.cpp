@@ -275,10 +275,11 @@ MYSQL_RES* obtener_menu_del_dia(MYSQL *conexion, const QString &dia)
 }
 
 // Agrega el menú del día a la venta y descuenta su stock
-MYSQL_RES* agregar_menu_carrito(MYSQL *conexion, int ventaID, int menuID, int cantidad)
+MYSQL_RES* agregar_menu_carrito(MYSQL *conexion, int ventaID, int menuID, int cantidad, const QString &dia)
 {
     std::string sql = "CALL schema_comercial.sp_agregar_menu_carrito(" + std::to_string(ventaID) + ", "
-                      + std::to_string(menuID) + ", " + std::to_string(cantidad) + ");";
+                      + std::to_string(menuID) + ", " + std::to_string(cantidad) + ", '"
+                      + texto_sql(conexion, dia) + "');";
     return ejecutar_consulta(conexion, sql);
 }
 

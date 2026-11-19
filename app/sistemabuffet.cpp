@@ -270,12 +270,14 @@ void SistemaBuffet::cargarMenuDelDia()
     menuHoy.plato = "";
     menuHoy.incluye = "";
     menuHoy.precio = 0;
+    menuHoy.dia = "";
     productos[0].stock = 0;
 
     // ----- Paso 2: nombre del día de hoy -----
     // dayOfWeek() da 1 para el lunes y 7 para el domingo
     QStringList nombresDias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
     QString hoy = nombresDias[QDate::currentDate().dayOfWeek() - 1];
+    menuHoy.dia = hoy;
 
     // ----- Paso 3: se le pide el menú a la BDD -----
     // Columnas: 0 ID, 1 plato, 2 precio, 3 stock, 4 día, 5 producto incluido

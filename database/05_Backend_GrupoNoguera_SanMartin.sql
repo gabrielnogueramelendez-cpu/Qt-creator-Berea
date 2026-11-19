@@ -30,7 +30,6 @@ CREATE PROCEDURE sp_registrar_usuario(p_DNI VARCHAR(20), p_Apodo VARCHAR(50), p_
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
-    DECLARE es_profesor INT DEFAULT 0;
 
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -40,10 +39,18 @@ BEGIN
         SELECT 'ERROR' AS estado, codigo_error AS codigo_sql, mensaje_error AS descripcion_error;
     END;
 
-    SELECT COUNT(*) INTO es_profesor FROM Profesor WHERE DNI = p_DNI;
+    -- Si el DNI es de un profesor se guarda en DNI_Profesor con rol 2
+    INSERT INTO Usuario (DNI_Profesor, Apodo, Contrasena, RolID)
+    SELECT DNI, p_Apodo, p_Contrasena, 2
+    FROM Profesor
+    WHERE DNI = p_DNI;
 
-    INSERT INTO Usuario (DNI, DNI_Profesor, Apodo, Contrasena, RolID)
-    VALUES (IF(es_profesor = 1, NULL, p_DNI), IF(es_profesor = 1, p_DNI, NULL), p_Apodo, p_Contrasena, IF(es_profesor = 1, 2, 1));
+    -- Si no, se guarda en DNI con rol 1 (si tampoco es estudiante, la FK da error)
+    INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID)
+    SELECT p_DNI, p_Apodo, p_Contrasena, RolID
+    FROM Rol
+    WHERE RolID = 1
+      AND NOT EXISTS (SELECT 1 FROM Profesor WHERE DNI = p_DNI);
 
     INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
     SELECT UserID, 4, CURDATE(), CURTIME(), CONCAT('Nuevo usuario: ', Apodo)
@@ -85,11 +92,11 @@ BEGIN
     SET filas = ROW_COUNT();
 
     -- Si no, se registra el intento fallido (UserID queda NULL si el apodo no existe)
-    IF filas = 0 THEN
-        INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-        VALUES ((SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
-                CONCAT('Intento fallido con el apodo: ', COALESCE(p_Apodo, '(vacío)')));
-    END IF;
+    INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+    SELECT (SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
+           CONCAT('Intento fallido con el apodo: ', COALESCE(p_Apodo, '(vacío)'))
+    FROM Rol
+    WHERE RolID = 1 AND filas = 0;
 
     SELECT u.UserID, u.Apodo, r.Nombre_Rol AS Tipo_Usuario
     FROM Usuario u
@@ -128,11 +135,11 @@ BEGIN
     SET filas = ROW_COUNT();
 
     -- Si no, se registra el intento fallido
-    IF filas = 0 THEN
-        INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-        VALUES ((SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
-                CONCAT('Intento fallido del personal con el apodo: ', COALESCE(p_Apodo, '(vacío)')));
-    END IF;
+    INSERT INTO Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+    SELECT (SELECT UserID FROM Usuario WHERE Apodo = p_Apodo), 3, CURDATE(), CURTIME(),
+           CONCAT('Intento fallido del personal con el apodo: ', COALESCE(p_Apodo, '(vacío)'))
+    FROM Rol
+    WHERE RolID = 1 AND filas = 0;
 
     SELECT u.UserID, u.Apodo, e.Nombre_Empleado, e.Apellido_Empleado, p.Nombre_Puesto
     FROM Usuario u
@@ -373,10 +380,10 @@ BEGIN
 
     SET filas = ROW_COUNT();
 
-    IF filas = 1 THEN
-        INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-        VALUES (p_UserID, 16, CURDATE(), CURTIME(), CONCAT('Menú del ', p_Dia, ': ', p_Plato));
-    END IF;
+    INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+    SELECT p_UserID, 16, CURDATE(), CURTIME(), CONCAT('Menú del ', p_Dia, ': ', p_Plato)
+    FROM Menu_Del_Dia
+    WHERE Dia_Semana = p_Dia AND filas = 1;
 
     SELECT filas AS Filas_Actualizadas, Menu_Del_DiaID, Plato_menu, Precio_menu, Stock_menu, Dia_Semana
     FROM Menu_Del_Dia
@@ -469,7 +476,7 @@ DELIMITER ;
 -- ----------------------------------------------------------------------------
 DROP PROCEDURE IF EXISTS sp_agregar_menu_carrito;
 DELIMITER //
-CREATE PROCEDURE sp_agregar_menu_carrito(p_VentaID INT, p_Menu_Del_DiaID INT, p_Cantidad INT)
+CREATE PROCEDURE sp_agregar_menu_carrito(p_VentaID INT, p_Menu_Del_DiaID INT, p_Cantidad INT, p_Dia VARCHAR(10))
 BEGIN
     DECLARE codigo_error INT DEFAULT 0;
     DECLARE mensaje_error VARCHAR(255) DEFAULT '';
@@ -488,9 +495,9 @@ BEGIN
     FROM Menu_Del_Dia
     WHERE Menu_Del_DiaID = p_Menu_Del_DiaID
       AND Stock_menu >= p_Cantidad
-      -- Solo el menú del día de hoy. WEEKDAY da 0 = lunes ... 6 = domingo; el sábado y el
-      -- domingo ELT devuelve NULL y no coincide con ningún menú: el fin de semana no se vende
-      AND Dia_Semana = ELT(WEEKDAY(CURDATE()) + 1, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes')
+      -- Solo el menú del día de hoy: el día lo calcula la app y lo pasa en p_Dia
+      -- (sábado y domingo no hay menú, así que no coincide ninguno)
+      AND Dia_Semana = p_Dia
       AND NOT EXISTS (SELECT 1 FROM Retiro WHERE VentaID = p_VentaID);
 
     SET filas = ROW_COUNT();
@@ -631,13 +638,15 @@ BEGIN
       AND p_Nuevo_EstadoID = 3 AND filas = 1;
 
     -- Log: entrega (10) o cancelación (11)
-    IF filas = 1 AND p_Nuevo_EstadoID = 2 THEN
-        INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-        VALUES (p_UserID, 10, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' entregado'));
-    ELSEIF filas = 1 AND p_Nuevo_EstadoID = 3 THEN
-        INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
-        VALUES (p_UserID, 11, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' cancelado'));
-    END IF;
+    INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+    SELECT p_UserID, 10, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' entregado')
+    FROM Retiro
+    WHERE RetiroID = p_RetiroID AND filas = 1 AND p_Nuevo_EstadoID = 2;
+
+    INSERT INTO schema_usuarios.Log_Auditoria (UserID, Tipo_Evento_ID, Fecha, Hora, Detalle)
+    SELECT p_UserID, 11, CURDATE(), CURTIME(), CONCAT('Retiro ', p_RetiroID, ' cancelado')
+    FROM Retiro
+    WHERE RetiroID = p_RetiroID AND filas = 1 AND p_Nuevo_EstadoID = 3;
 
     SELECT filas AS Filas_Actualizadas, r.RetiroID, er.Estado
     FROM Retiro r

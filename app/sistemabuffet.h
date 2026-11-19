@@ -40,6 +40,7 @@ struct MenuDelDia {
     QString plato;     // Plato_menu
     QString incluye;   // producto que viene con el menú (Detalle_Menu_Dia)
     double precio;     // Precio_menu
+    QString dia;       // Dia_Semana: se lo pasa a sp_agregar_menu_carrito al pagar
 };
 
 // Un pedido: tablas Retiro + Venta + Carrito juntas (consulta obtener_pedidos)

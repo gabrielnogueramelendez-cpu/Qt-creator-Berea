@@ -304,7 +304,7 @@ bool PagoDialog::guardarPedidoEnBDD(int metodoPagoID, int franjaID)
 
         if (item.id == 0) {
             // El id 0 es el menú del día
-            respuesta = leer_primera_fila(agregar_menu_carrito(conexion, ventaID, SistemaBuffet::menuHoy.id, item.cantidad));
+            respuesta = leer_primera_fila(agregar_menu_carrito(conexion, ventaID, SistemaBuffet::menuHoy.id, item.cantidad, SistemaBuffet::menuHoy.dia));
         } else {
             respuesta = leer_primera_fila(agregar_producto_carrito(conexion, ventaID, item.id, item.cantidad));
         }
