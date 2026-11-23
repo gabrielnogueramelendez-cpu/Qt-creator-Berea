@@ -499,7 +499,7 @@ button.causa.on { border-color: var(--bordo); background: #F3EADB; }
       <div class="paquete aparece" style="--d:1.2s; animation-delay:2.4s; position:absolute; left:0; top:0; width:20px; height:20px; background:var(--bordo); offset-path:path('M300 200 H1380');"></div>
       <div class="g4" style="position:relative; gap:60px">
         <div class="card r" style="--i:1; height:420px"><p class="eb">1 · Interfaz</p><svg width="120" height="90" viewBox="0 0 120 90" aria-hidden="true"><rect x="4" y="4" width="112" height="82" fill="#FFFDF8" stroke="#6B1B2A" stroke-width="3"/><rect x="4" y="4" width="112" height="18" fill="#6B1B2A"/><rect x="16" y="34" width="40" height="40" fill="#EDE3D3"/><rect x="64" y="34" width="40" height="40" fill="#EDE3D3"/></svg><h3 style="font-size:40px">C++ con Qt Widgets</h3><p class="chico">Ventanas de alumno, caja, administración y desarrollo.</p></div>
-        <div class="card r" style="--i:2; height:420px"><p class="eb">2 · Conexión</p><p style="font-family:Consolas, 'Courier New', monospace; font-size:22px; color:var(--bordo); line-height:1.5">mysql_query()<br>mysql_store_result()<br>mysql_fetch_row()</p><h3 style="font-size:40px">API de C de MySQL</h3><p class="chico">basedatos.cpp: una función por consulta, como en el material 006.</p></div>
+        <div class="card r" style="--i:2; height:420px"><p class="eb">2 · Conexión</p><p style="font-family:Consolas, 'Courier New', monospace; font-size:22px; color:var(--bordo); line-height:1.5">mysql_query()<br>mysql_store_result()<br>mysql_fetch_row()</p><h3 style="font-size:40px">API de C de MySQL</h3><p class="chico">basedatos.cpp: una función por consulta.</p></div>
         <div class="card r" style="--i:3; height:420px"><p class="eb">3 · Lógica</p><p class="num" style="font-size:100px">27</p><h3 style="font-size:40px">stored procedures</h3><p class="chico">Con EXIT HANDLER en cada uno.</p></div>
         <div class="card bordo r" style="--i:4; height:420px"><p class="eb">4 · Datos</p><svg width="100" height="100" viewBox="0 0 100 100" aria-hidden="true"><ellipse cx="50" cy="20" rx="40" ry="12" fill="none" stroke="#FFFFFF" stroke-width="3"/><path d="M10 20 V80 C10 96 90 96 90 80 V20 M10 50 C10 66 90 66 90 50" fill="none" stroke="#FFFFFF" stroke-width="3"/></svg><h3 style="font-size:40px">MySQL 8.0</h3><p style="font-size:24px; color:#F3EADB">3 schemas y 27 tablas en tercera forma normal.</p></div>
       </div>
@@ -510,7 +510,7 @@ button.causa.on { border-color: var(--bordo); background: #F3EADB; }
     </div>
   </div>
   <footer class="ftr"><div class="marca"><div class="logo">A</div><b>El Buffet de Alejandro</b></div><span>Proyecto 4° Año · Grupo Noguera - San Martín</span><span class="pag"></span></footer>
-  <aside class="nota">SAN MARTÍN, 50 s. Cuatro capas. 1: la interfaz en C++ con Qt Widgets. 2: basedatos.cpp habla con MySQL con la API de C, igual que en el material 006 del profesor Linares: una función por consulta. 3: la lógica vive en 27 stored procedures, con manejo de errores en cada uno. 4: MySQL 8.0 con tres schemas. Si el servidor no responde, la app no se cierra. Hay cuatro versiones: Windows, Ubuntu con Qt 6, Ubuntu con Qt 5 y la simplificada en Ubuntu con Qt 6, que es la que explicamos en la próxima.</aside>
+  <aside class="nota">SAN MARTÍN, 50 s. Cuatro capas. 1: la interfaz en C++ con Qt Widgets. 2: basedatos.cpp habla con MySQL con la API de C, con una función por consulta. 3: la lógica vive en 27 stored procedures, con manejo de errores en cada uno. 4: MySQL 8.0 con tres schemas. Si el servidor no responde, la app no se cierra. Hay cuatro versiones: Windows, Ubuntu con Qt 6, Ubuntu con Qt 5 y la simplificada en Ubuntu con Qt 6, que es la que explicamos en la próxima.</aside>
 </section>
 
 <!-- =========================================== 11b · CÓDIGO (versión simplificada) -->
@@ -601,7 +601,7 @@ buscarPedido(codigo)
     </div>
   </div>
   <footer class="ftr"><div class="marca"><div class="logo">A</div><b>El Buffet de Alejandro</b></div><span>DELIMITER y DECLARE EXIT HANDLER FOR SQLEXCEPTION en los 27</span><span class="pag"></span></footer>
-  <aside class="nota">NOGUERA, 50 s. La consigna de BDD pide que Log_Auditoria no se llene a mano: en el script 04 no hay ningún INSERT en Log_Auditoria; los registros los escriben los procedimientos, que tienen 18 INSERT en Log_Auditoria en el 05. A la derecha, qué tipo de evento queda registrado con cada llamada (nombres reales de la tabla Tipo_Evento). Los dos "tuneados" son versiones optimizadas de reportes, para comparar el plan de ejecución.</aside>
+  <aside class="nota">NOGUERA, 50 s. Log_Auditoria no se llena a mano: en el script 04 no hay ningún INSERT en Log_Auditoria; los registros los escriben los procedimientos, que tienen 18 INSERT en Log_Auditoria en el 05. A la derecha, qué tipo de evento queda registrado con cada llamada (nombres reales de la tabla Tipo_Evento). Los dos "tuneados" son versiones optimizadas de reportes, para comparar el plan de ejecución.</aside>
 </section>
 
 <!-- =========================================== 14 · MENÚ SEMANAL Y FRANJAS -->
@@ -850,7 +850,7 @@ buscarPedido(codigo)
     </div>
   </div>
   <footer class="ftr"><div class="marca"><div class="logo">A</div><b>El Buffet de Alejandro</b></div><span>Proyecto 4° Año · Grupo Noguera - San Martín</span><span class="pag"></span></footer>
-  <aside class="nota">SAN MARTÍN, 40 s. Recorrer las seis semanas del plan de la profesora Berea, cada una con su entregable. Hoy es la semana 6: el Demo Day, con el software final, los manuales y esta presentación. Próximos pasos: conectar una pasarela de pago real (hoy el pago se registra, no se cobra), cronometrar en un recreo real y hacer una prueba piloto en el buffet.</aside>
+  <aside class="nota">SAN MARTÍN, 40 s. Recorrer las seis semanas del plan del proyecto, cada una con su entregable. Hoy es la semana 6: el Demo Day, con el software final, los manuales y esta presentación. Próximos pasos: conectar una pasarela de pago real (hoy el pago se registra, no se cobra), cronometrar en un recreo real y hacer una prueba piloto en el buffet.</aside>
 </section>
 
 <!-- =========================================== 24 · CIERRE -->
