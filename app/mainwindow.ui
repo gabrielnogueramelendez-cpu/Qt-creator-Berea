@@ -207,7 +207,7 @@ QPushButton:hover { color: #6B1B2A; }</string>
        </size>
       </property>
       <property name="styleSheet">
-       <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 38px; color: #FFFFFF; background-color: #6B1B2A;</string>
+       <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 38px; color: #FFFFFF; background-color: #6B1B2A; border-image: url(:/imagenes/imagenes/portada.jpg);</string>
       </property>
       <property name="text">
        <string>Tu mejor recreo empieza acá.</string>

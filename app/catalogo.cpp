@@ -175,7 +175,6 @@ void abrir_catalogo()
             cargar_foto(etiquetas_foto[i], productos_nombres[id]);
         }
     }
-    cargar_foto(ui->lblPortada, "portada");
 
     QObject::connect(ui->btnVerMenu, &QPushButton::clicked, ver_menu);
     QObject::connect(ui->btnCheckout, &QPushButton::clicked, ir_a_pagar);

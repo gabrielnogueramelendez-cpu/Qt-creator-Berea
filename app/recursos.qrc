@@ -20,6 +20,8 @@
         <file alias="imagenes/Sándwich de Milanesa.jpg">imagenes/Sandwich de Milanesa.jpg</file>
         <file alias="imagenes/Turrón de Maní.jpg">imagenes/Turron de Mani.jpg</file>
         <file>imagenes/Yogur Bebible de Frutilla.jpg</file>
+        <file>imagenes/portada.jpg</file>
+        <file>imagenes/login.jpg</file>
     </qresource>
     <qresource prefix="/bdd">
         <file alias="05_Backend.sql">../database/05_Backend_GrupoNoguera_SanMartin.sql</file>
