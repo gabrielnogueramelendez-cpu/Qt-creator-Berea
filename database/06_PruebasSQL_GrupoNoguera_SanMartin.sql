@@ -1,7 +1,7 @@
 -- ============================================================================
 -- PROYECTO INFORMÁTICO I - SECCIÓN BASES DE DATOS
 -- El Buffet de Alejandro - PUNTO 6: SCRIPT DE PRUEBAS DE LOS STORED PROCEDURES
--- Por cada SP hay 4 pruebas (consigna 6.b):
+-- Por cada SP hay 4 pruebas:
 --   i.   Éxito (flujo normal)
 --   ii.  Sin coincidencias (valores que no existen)
 --   iii. Parámetros NULL / vacíos / límite
@@ -95,9 +95,9 @@ CALL sp_baja_producto(27, 21);
 SELECT ProductoID, Activo FROM Producto WHERE ProductoID = 21;
 
 -- ---------------- P07 sp_modificar_menu_dia ----------------
--- El menú es fijo (un menú por día hábil). Estas pruebas se corren de lunes a viernes:
--- el menú de HOY pasa a ser 'Milanesa con ensalada', $4500, stock 30 (lo usa P10)
-SET @dia_hoy = ELT(WEEKDAY(CURDATE()) + 1, 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes');
+-- El menú es fijo (un menú por día hábil). El día lo pasa la app; en las pruebas se usa
+-- el miércoles: ese menú pasa a ser 'Milanesa con ensalada', $4500, stock 30 (lo usa P10)
+SET @dia_hoy = 'Miércoles';
 -- i. Éxito: Filas_Actualizadas = 1
 CALL sp_modificar_menu_dia(27, @dia_hoy, 'Milanesa con ensalada', 4500.00, 30);
 -- ii. Sábado (no hay menú): no modifica nada y devuelve 0 filas
@@ -137,11 +137,11 @@ FROM Venta v INNER JOIN Carrito c ON v.VentaID = c.VentaID WHERE v.VentaID = 51 
 SET @menu_hoy = (SELECT Menu_Del_DiaID FROM Menu_Del_Dia WHERE Dia_Semana = @dia_hoy);
 SET @menu_otro = (SELECT MIN(Menu_Del_DiaID) FROM Menu_Del_Dia WHERE Dia_Semana <> @dia_hoy);
 -- i. Éxito: 1 menú de hoy ($4500, P07). Filas_Agregadas = 1, Monto_Total 6100
-CALL sp_agregar_menu_carrito(51, @menu_hoy, 1);
+CALL sp_agregar_menu_carrito(51, @menu_hoy, 1, @dia_hoy);
 -- ii. Menú de otro día de la semana: Filas_Agregadas = 0
-CALL sp_agregar_menu_carrito(51, @menu_otro, 1);
+CALL sp_agregar_menu_carrito(51, @menu_otro, 1, @dia_hoy);
 -- iii. Cantidad NULL: Filas_Agregadas = 0
-CALL sp_agregar_menu_carrito(51, @menu_hoy, NULL);
+CALL sp_agregar_menu_carrito(51, @menu_hoy, NULL, @dia_hoy);
 -- iv. Consistencia: monto = suma del carrito; stock del menú de hoy 30 -> 29
 SELECT v.Monto_Total, SUM(c.Cantidad * c.Precio_Unitario) AS Suma_Carrito,
        (SELECT Stock_menu FROM Menu_Del_Dia WHERE Menu_Del_DiaID = @menu_hoy) AS Stock_Menu

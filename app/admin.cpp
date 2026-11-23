@@ -1,3 +1,5 @@
+// admin.cpp: Administración: alta, precio, stock, baja y auditoría.  Diseño: adminwindow.ui
+
 #include "pantallas.h"
 #include "ui_adminwindow.h"
 #include "datos.h"
@@ -6,10 +8,14 @@
 #include <QTableWidgetItem>
 #include <QIntValidator>
 
-// Administración: ABM de productos y auditoría (adminwindow.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QWidget *ventana = NULL;
 static Ui::AdminWindow *ui = NULL;
 
+// ===== BLOQUE 2: FUNCIONES QUE MUESTRAN DATOS =====
+
+// Sirve para liberar el .ui cuando la ventana se cierra.
 static void liberar()
 {
     delete ui;
@@ -17,9 +23,9 @@ static void liberar()
     ventana = NULL;
 }
 
+// Sirve para mostrar todos los productos de la BDD en la tabla.
 static void mostrar_inventario()
 {
-    // Producto + Categoria (obtener_productos): ID, nombre, categoría, precio, stock y estado
     ui->tableProductosAdmin->setRowCount(0);
     MYSQL_RES *result = obtener_productos(conexion);
     if (result == NULL) {
@@ -35,7 +41,6 @@ static void mostrar_inventario()
                 texto = QString::number(texto.toDouble(), 'f', 0); // el precio sin los ,00
             }
             QTableWidgetItem *celda = new QTableWidgetItem(texto);
-            // Se guarda el valor que vino de la BDD para saber después si el usuario lo cambió
             celda->setData(Qt::UserRole, texto);
             ui->tableProductosAdmin->setItem(i, columna, celda);
         }
@@ -44,15 +49,16 @@ static void mostrar_inventario()
     mysql_free_result(result);
 }
 
+// Sirve para saber si el usuario editó una celda (texto actual distinto del original).
 static bool cambio(int fila, int columna)
 {
     QTableWidgetItem *celda = ui->tableProductosAdmin->item(fila, columna);
     return celda->text() != celda->data(Qt::UserRole).toString();
 }
 
+// Sirve para mostrar los últimos 50 eventos de auditoría.
 static void mostrar_logs()
 {
-    // Los logs los escriben los SP; acá se muestran los últimos 50 de Log_Auditoria
     ui->tableLogsAdmin->setRowCount(0);
     MYSQL_RES *result = obtener_logs(conexion);
     if (result == NULL) {
@@ -70,6 +76,7 @@ static void mostrar_logs()
     mysql_free_result(result);
 }
 
+// Sirve para dejar vacío el formulario de alta después de agregar.
 static void limpiar_formulario()
 {
     ui->txtNombreProd->clear();
@@ -79,6 +86,9 @@ static void limpiar_formulario()
     ui->comboCategoria->setCurrentIndex(0);
 }
 
+// ===== BLOQUE 3: FUNCIONES DE LOS BOTONES =====
+
+// Sirve para dar de alta un producto nuevo con los datos del formulario.
 static void agregar_producto()
 {
     QString nombre = ui->txtNombreProd->text().trimmed();
@@ -95,7 +105,7 @@ static void agregar_producto()
         return;
     }
 
-    // La posición en comboCategoria es el ID_Categoria; el ProductoID lo da AUTO_INCREMENT
+    // La posición del combo es el ID_Categoria
     MYSQL_RES *result = alta_producto(conexion, usuario_id, ui->comboCategoria->currentIndex(),
                                       nombre, descripcion, stock.toInt(), precio.toInt());
     if (numero_del_sp(result) == 0) {
@@ -108,6 +118,7 @@ static void agregar_producto()
     ui->lblEstadoAdmin->setText("Se agregó " + nombre + ".");
 }
 
+// Sirve para guardar el precio y/o el stock editados en la tabla.
 static void guardar_cambios()
 {
     int fila = ui->tableProductosAdmin->currentRow();
@@ -132,8 +143,6 @@ static void guardar_cambios()
         return;
     }
 
-    // Solo se llama al SP del valor que cambió: con el mismo valor el UPDATE no cambia filas y el SP devuelve 0.
-    // Cada SP deja su evento en Log_Auditoria (Modificación de Stock / de Precio)
     bool cambioStock = cambio(fila, 4);
     bool cambioPrecio = cambio(fila, 3);
     if (!cambioStock && !cambioPrecio) {
@@ -155,6 +164,7 @@ static void guardar_cambios()
     ui->lblEstadoAdmin->setText("Se guardaron los cambios de " + nombre + ".");
 }
 
+// Sirve para dar de baja (lógica) el producto elegido: queda inactivo, no se borra.
 static void dar_de_baja()
 {
     int fila = ui->tableProductosAdmin->currentRow();
@@ -165,7 +175,6 @@ static void dar_de_baja()
     int id = ui->tableProductosAdmin->item(fila, 0)->text().toInt();
     QString nombre = ui->tableProductosAdmin->item(fila, 1)->text();
 
-    // Baja lógica: sp_baja_producto pone Activo = FALSE y el producto queda en la tabla
     if (numero_del_sp(baja_producto(conexion, usuario_id, id)) == 0) {
         QMessageBox::warning(ventana, "Error", nombre + " ya estaba inactivo o no se pudo dar de baja.");
         return;
@@ -175,6 +184,7 @@ static void dar_de_baja()
     ui->lblEstadoAdmin->setText(nombre + " quedó inactivo.");
 }
 
+// Sirve para el botón SALIR: cierra la sesión y vuelve al login.
 static void cerrar_sesion_admin()
 {
     salir_de_la_cuenta();
@@ -182,6 +192,9 @@ static void cerrar_sesion_admin()
     ventana->close();
 }
 
+// ===== BLOQUE 4: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir la administración.
 void abrir_admin()
 {
     if (ventana != NULL) {

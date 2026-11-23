@@ -2,12 +2,12 @@ Aviso para el chat "BDD mejoras y recomendaciones": cambios hechos en la BDD des
 
 1. 03_ModeloSQL
    - Usuario: nueva columna `Saldo DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (Saldo >= 0)`.
-   - Se borraron los dos índices (`idx_log_fecha` e `idx_venta_fecha`): no se vieron en clase. El encabezado ahora dice "schemas, tablas y restricciones".
+   - Se borraron los dos índices (`idx_log_fecha` e `idx_venta_fecha`). El encabezado ahora dice "schemas, tablas y restricciones".
 
 2. 04_DatosSQL
    - Tipo_Evento 21 'Carga de Saldo' (el encabezado ahora dice 21).
    - Metodo_Pago 21 'Saldo de Cuenta Escolar' (el encabezado ahora dice 21).
-   - `UPDATE Usuario SET Saldo = 10000 WHERE UserID = 1;` como saldo de prueba.
+   - Saldo de prueba para los estudiantes 1, 2 y 4 a 20 (entre $5000 y $10000). El 3 arranca en 0 por las pruebas de saldo del 06.
 
 3. 05_Backend
    - SP nuevo `sp_cargar_saldo(p_UserID, p_Monto)` (SP 4b): solo suma montos > 0 y solo a usuarios con DNI (estudiantes). Deja el evento 21 en Log_Auditoria y devuelve Filas_Actualizadas y Saldo.
@@ -42,7 +42,7 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores. P28 dio 1 fila al cambiar 2
 
 ## Cuarta tanda: se saca sp_cambiar_contrasena
 
-Releímos la consigna (punto 5). Pide como mínimo 8 reportes, 1 de auditoría y 2 tuneados, y para las funcionalidades no da un número fijo. sp_cambiar_contrasena no lo usa ninguna pantalla de Qt y no hace falta para la consigna, así que se saca.
+sp_cambiar_contrasena no lo usa ninguna pantalla de Qt, así que se saca.
 
 1. 05_Backend: se borró el SP 4 (sp_cambiar_contrasena). El de saldo pasó a ser el SP 4. Del encabezado se sacó "5 Cambio de contraseña".
 2. 04_DatosSQL: el Tipo_Evento 5 queda en el catálogo, igual que el 17 al 20, que tampoco los usa ningún SP. El comentario ahora dice "Los IDs 1 a 4, 6 a 16, el 21 y el 22".
@@ -101,7 +101,7 @@ Verificación: 03 -> 04 -> 05 corrieron sin errores y quedan 26 SPs. 06 da los m
    - Los 20 menús repiten 5 platos fijos: lunes Tarta de choclo con ensalada, martes Tortilla de papas con ensalada, miércoles Milanesa de pollo con puré, jueves Fideos con tuco y queso, viernes Ravioles con salsa fileto. Cada uno con su producto incluido.
    - Cambia el precio de 4 ventas con menú para que coincida con el plato fijo: venta 7 (3900 -> 4300), ventas 16 y 21 (4200 -> 3900) y venta 30 (4600 -> 3900), en Venta y en Carrito.
 3. 05_Backend:
-   - sp_menu_del_dia(p_Fecha, p_Dia): ya no usa MOD ni DATEDIFF (no están en el material de la materia). El día de la semana lo manda la app. Si la fecha no tiene menú, copia el primero cargado para ese día (MIN + subconsulta + NOT EXISTS). Sábado, domingo o NULL: 0 filas. Devuelve también Dia_Semana y ya no usa GROUP_CONCAT.
+   - sp_menu_del_dia(p_Fecha, p_Dia): ya no usa MOD ni DATEDIFF. El día de la semana lo manda la app. Si la fecha no tiene menú, copia el primero cargado para ese día (MIN + subconsulta + NOT EXISTS). Sábado, domingo o NULL: 0 filas. Devuelve también Dia_Semana y ya no usa GROUP_CONCAT.
    - sp_alta_menu_dia suma el parámetro p_Dia (después de p_Fecha).
 4. 06_PruebasSQL: P07 y P28 pasan el día de la semana.
 5. Planilla: P07 y P28 con los parámetros nuevos; P13, P15 y P16 con los totales nuevos (139400 en vez de 140300).

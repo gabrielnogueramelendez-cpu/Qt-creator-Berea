@@ -1,14 +1,16 @@
+// main.cpp: Arranque: colores de toda la app, conexión a MySQL y login.
+
 #include "pantallas.h"
 #include "datos.h"
 #include "basedatos.h"
 #include <QApplication>
 #include <QMessageBox>
 
+// Sirve para arrancar la app: estilo, conexión a MySQL y login.
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    // Estilo global (Qt Style Sheets, sintaxis CSS): crema + bordó para todas las ventanas
     a.setStyleSheet(
         "QWidget {"
         "    font-family: 'Segoe UI';"
@@ -81,7 +83,6 @@ int main(int argc, char *argv[])
         "}"
     );
 
-    // Conexión a MySQL al arrancar (mysql_init + mysql_real_connect, como en ejemplobd01)
     conexion = conectar_bdd();
     if (conexion == NULL) {
         QMessageBox::critical(NULL, "Sin conexión",
@@ -93,7 +94,6 @@ int main(int argc, char *argv[])
     abrir_login();
     int resultado = a.exec();
 
-    // Libera la conexión al salir
     mysql_close(conexion);
     return resultado;
 }

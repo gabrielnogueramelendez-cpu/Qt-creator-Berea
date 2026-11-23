@@ -1,10 +1,13 @@
+// detalle.cpp: Detalle de un producto y elección de la cantidad.  Diseño: productdetaildialog.ui
+
 #include "pantallas.h"
 #include "ui_productdetaildialog.h"
 #include "datos.h"
 #include <QDialog>
 #include <QMessageBox>
 
-// Detalle de un producto o del menú del día (productdetaildialog.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QDialog *dialogo = NULL;
 static Ui::ProductDetailDialog *ui = NULL;
 static int producto_id = 0;
@@ -13,9 +16,11 @@ static int cantidad = 1;
 // Límite por pedido escolar
 static const int LIMITE_POR_PEDIDO = 10;
 
+// ===== BLOQUE 2: FUNCIONES DE LOS BOTONES =====
+
+// Sirve para calcular cuántas unidades se pueden pedir todavía de este producto.
 static int maximo_permitido()
 {
-    // No más de 10 ni más que el stock, contando lo que ya está en el carrito
     int maximo = productos_stock[producto_id];
     if (maximo > LIMITE_POR_PEDIDO) {
         maximo = LIMITE_POR_PEDIDO;
@@ -23,12 +28,14 @@ static int maximo_permitido()
     return maximo - cantidad_en_carrito(producto_id);
 }
 
+// Sirve para mostrar la cantidad elegida y el total (precio x cantidad).
 static void mostrar_cantidad()
 {
     ui->lblCantidad->setText(QString::number(cantidad));
     ui->lblCalculatedTotal->setText("Total: " + pesos(productos_precios[producto_id] * cantidad));
 }
 
+// Sirve para el botón +.
 static void sumar()
 {
     if (cantidad >= maximo_permitido()) {
@@ -49,6 +56,7 @@ static void sumar()
     mostrar_cantidad();
 }
 
+// Sirve para el botón -: resta una unidad (mínimo 1).
 static void restar()
 {
     if (cantidad > 1) {
@@ -57,6 +65,7 @@ static void restar()
     }
 }
 
+// Sirve para el botón AGREGAR AL PEDIDO: suma el producto al carrito y cierra.
 static void agregar()
 {
     if (cantidad > maximo_permitido()) {
@@ -69,6 +78,9 @@ static void agregar()
     dialogo->accept();
 }
 
+// ===== BLOQUE 3: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir el detalle del producto indicado.
 bool abrir_detalle(QWidget *padre, int productoID)
 {
     if (productoID < 0 || productoID >= productos_stock.size()) {

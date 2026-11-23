@@ -1,3 +1,5 @@
+// registro.cpp: Crear cuenta de alumno o profesor.  Diseño: registerdialog.ui
+
 #include "pantallas.h"
 #include "ui_registerdialog.h"
 #include "datos.h"
@@ -6,10 +8,14 @@
 #include <QMessageBox>
 #include <QIntValidator>
 
-// Diálogo de registro (registerdialog.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QDialog *dialogo = NULL;
 static Ui::RegisterDialog *ui = NULL;
 
+// ===== BLOQUE 2: FUNCIONES DE LOS BOTONES =====
+
+// Sirve para crear la cuenta.
 static void registrar()
 {
     QString dni = ui->txtRegDni->text().trimmed();
@@ -29,15 +35,15 @@ static void registrar()
         return;
     }
 
-    // El SP valida con la FK (DNI de un estudiante o un profesor) y los UNIQUE (DNI y apodo)
     MYSQL_RES *result = registrar_usuario(conexion, dni, apodo, clave);
-    int error = error_del_sp(result);
+    int error = -1;
     QString detalle = "";
-    if (error > 0) {
-        MYSQL_ROW fila = mysql_fetch_row(result);
-        detalle = valor_fila(fila, 2);
-    }
     if (result != NULL) {
+        MYSQL_ROW fila = mysql_fetch_row(result);
+        error = error_del_sp(fila);
+        if (error > 0) {
+            detalle = valor_fila(fila, 2);
+        }
         mysql_free_result(result);
     }
 
@@ -56,11 +62,15 @@ static void registrar()
     }
 }
 
+// Sirve para el botón Cancelar: cierra la pantalla sin registrar.
 static void cancelar()
 {
     dialogo->reject();
 }
 
+// ===== BLOQUE 3: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir la pantalla de registro.
 void abrir_registro(QWidget *padre)
 {
     dialogo = new QDialog(padre);

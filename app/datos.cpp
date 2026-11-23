@@ -1,6 +1,10 @@
+// datos.cpp: Variables globales (usuario, productos, menú, carrito, pedidos) y las funciones que las cargan.
+
 #include "datos.h"
 #include "basedatos.h"
 #include <QDate>
+
+// ===== BLOQUE 1: VARIABLES GLOBALES (valores iniciales) =====
 
 MYSQL *conexion = NULL;
 
@@ -21,6 +25,7 @@ int menu_hoy_id = 0;
 QString menu_hoy_plato = "";
 QString menu_hoy_incluye = "";
 double menu_hoy_precio = 0;
+QString menu_hoy_dia = "";
 
 QList<int> carrito_ids;
 QStringList carrito_nombres;
@@ -38,8 +43,9 @@ QList<double> pedidos_montos;
 QStringList pedidos_estados;
 QStringList pedidos_detalles;
 
-// ---------------------------------------------------------------- Carga desde la BDD
+// ===== BLOQUE 2: CARGA DESDE LA BDD =====
 
+// Sirve para traer de la BDD los datos del usuario que inició sesión.
 bool cargar_usuario(int userID)
 {
     MYSQL_RES *result = obtener_datos_usuario(conexion, userID);
@@ -61,6 +67,7 @@ bool cargar_usuario(int userID)
     return encontrado;
 }
 
+// Sirve para cargar el catálogo.
 void cargar_productos()
 {
     productos_nombres.clear();
@@ -68,7 +75,7 @@ void cargar_productos()
     productos_precios.clear();
     productos_stock.clear();
 
-    // Posición 0: el menú del día (se completa en cargar_menu_del_dia)
+    // Posición 0 = menú del día
     productos_nombres.append("");
     productos_descripciones.append("");
     productos_precios.append(0);
@@ -89,7 +96,6 @@ void cargar_productos()
             productos_precios[id] = valor_fila(fila, 3).toDouble();
             productos_stock[id] = valor_fila(fila, 4).toInt();
             productos_descripciones[id] = valor_fila(fila, 6);
-            // Un producto dado de baja no se puede vender (sp_agregar_producto_carrito pide Activo = TRUE)
             if (valor_fila(fila, 5) == "Inactivo") {
                 productos_stock[id] = 0;
             }
@@ -100,6 +106,7 @@ void cargar_productos()
     cargar_menu_del_dia();
 }
 
+// Sirve para cargar el menú de hoy.
 void cargar_menu_del_dia()
 {
     menu_hoy_id = 0;
@@ -108,19 +115,19 @@ void cargar_menu_del_dia()
     menu_hoy_precio = 0;
     productos_stock[0] = 0;
 
-    // El día de la semana lo calcula Qt (dayOfWeek: 1 = lunes ... 7 = domingo) y se lo pasa al SP
+    // Qt calcula el día (1 = lunes ... 7 = domingo) y se lo pasa al SP
     QStringList dias = {"Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"};
     QString hoy = dias[QDate::currentDate().dayOfWeek() - 1];
+    menu_hoy_dia = hoy;
 
     MYSQL_RES *result = obtener_menu_del_dia(conexion, hoy);
     if (result == NULL) {
         return;
     }
-    MYSQL_ROW fila = NULL;
-    if (error_del_sp(result) == 0) {
-        fila = mysql_fetch_row(result);
+    MYSQL_ROW fila = mysql_fetch_row(result);
+    if (error_del_sp(fila) != 0) {
+        fila = NULL;
     }
-    // Sábado y domingo el SP no devuelve filas
     if (fila != NULL) {
         menu_hoy_id = valor_fila(fila, 0).toInt();
         menu_hoy_plato = valor_fila(fila, 1);
@@ -134,6 +141,7 @@ void cargar_menu_del_dia()
     mysql_free_result(result);
 }
 
+// Sirve para traer todos los pedidos de la BDD.
 void cargar_pedidos()
 {
     pedidos_retiro_ids.clear();
@@ -167,9 +175,9 @@ void cargar_pedidos()
     mysql_free_result(result);
 }
 
+// Sirve para encontrar un pedido por su código de retiro.
 int buscar_pedido(const QString &codigo)
 {
-    // Búsqueda secuencial: devuelve la posición del pedido o -1
     for (int i = 0; i < pedidos_codigos.size(); i++) {
         if (pedidos_codigos[i] == codigo) {
             return i;
@@ -178,9 +186,9 @@ int buscar_pedido(const QString &codigo)
     return -1;
 }
 
+// Sirve para cerrar la sesión.
 void salir_de_la_cuenta()
 {
-    // Deja el cierre de sesión en Log_Auditoria (sp_cerrar_sesion)
     MYSQL_RES *result = cerrar_sesion(conexion, usuario_id);
     if (result != NULL) {
         mysql_free_result(result);
@@ -188,11 +196,11 @@ void salir_de_la_cuenta()
     vaciar_carrito();
 }
 
-// ---------------------------------------------------------------- Carrito
+// ===== BLOQUE 3: CARRITO (solo en memoria hasta que se paga) =====
 
+// Sirve para agregar un producto al carrito.
 void agregar_al_carrito(int id, const QString &nombre, double precio, int cantidad)
 {
-    // Si el producto ya está en el carrito, se suma la cantidad
     for (int i = 0; i < carrito_ids.size(); i++) {
         if (carrito_ids[i] == id) {
             carrito_cantidades[i] += cantidad;
@@ -205,6 +213,7 @@ void agregar_al_carrito(int id, const QString &nombre, double precio, int cantid
     carrito_cantidades.append(cantidad);
 }
 
+// Sirve para borrar un renglón del carrito (la fila elegida en la tabla).
 void quitar_del_carrito(int fila)
 {
     carrito_ids.removeAt(fila);
@@ -213,6 +222,7 @@ void quitar_del_carrito(int fila)
     carrito_cantidades.removeAt(fila);
 }
 
+// Sirve para dejar el carrito vacío (al pagar, al vaciarlo o al cerrar sesión).
 void vaciar_carrito()
 {
     carrito_ids.clear();
@@ -221,6 +231,7 @@ void vaciar_carrito()
     carrito_cantidades.clear();
 }
 
+// Sirve para calcular el total a pagar: suma precio x cantidad de cada renglón.
 double total_carrito()
 {
     double total = 0;
@@ -230,6 +241,7 @@ double total_carrito()
     return total;
 }
 
+// Sirve para contar cuántas unidades hay en total en el carrito.
 int cantidad_total_carrito()
 {
     int cantidad = 0;
@@ -239,6 +251,7 @@ int cantidad_total_carrito()
     return cantidad;
 }
 
+// Sirve para saber cuántas unidades de un producto ya están en el carrito.
 int cantidad_en_carrito(int id)
 {
     for (int i = 0; i < carrito_ids.size(); i++) {
@@ -249,6 +262,9 @@ int cantidad_en_carrito(int id)
     return 0;
 }
 
+// ===== BLOQUE 4: FORMATO =====
+
+// Sirve para mostrar un precio con el signo $ y sin decimales: 2800 -> "$2800".
 QString pesos(double monto)
 {
     return "$" + QString::number(monto, 'f', 0);

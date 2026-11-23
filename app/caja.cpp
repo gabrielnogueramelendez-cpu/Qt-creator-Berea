@@ -1,3 +1,5 @@
+// caja.cpp: Mostrador: buscar un código y entregar o cancelar el pedido.  Diseño: cajerowindow.ui
+
 #include "pantallas.h"
 #include "ui_cajerowindow.h"
 #include "datos.h"
@@ -5,7 +7,8 @@
 #include <QMessageBox>
 #include <QTableWidgetItem>
 
-// Mostrador: el cajero busca el código, entrega o cancela el pedido (cajerowindow.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QWidget *ventana = NULL;
 static Ui::CajeroWindow *ui = NULL;
 static QString codigo_actual = "";
@@ -14,6 +17,9 @@ static QString codigo_actual = "";
 static const int ENTREGADO = 2;
 static const int CANCELADO = 3;
 
+// ===== BLOQUE 2: FUNCIONES DE LOS BOTONES Y LA TABLA =====
+
+// Sirve para liberar el .ui cuando la ventana se cierra.
 static void liberar()
 {
     delete ui;
@@ -21,6 +27,7 @@ static void liberar()
     ventana = NULL;
 }
 
+// Sirve para leer los pedidos de la BDD y mostrarlos en la tabla.
 static void mostrar_pedidos()
 {
     cargar_pedidos();
@@ -35,6 +42,7 @@ static void mostrar_pedidos()
     }
 }
 
+// Sirve para borrar el detalle de la derecha y desactivar los botones, con un mensaje.
 static void limpiar_detalle(const QString &mensaje)
 {
     codigo_actual = "";
@@ -47,6 +55,7 @@ static void limpiar_detalle(const QString &mensaje)
     ui->btnCancelarPedido->setEnabled(false);
 }
 
+// Sirve para el botón BUSCAR (o Enter): muestra el pedido de ese código.
 static void buscar_codigo()
 {
     QString codigo = ui->txtCodigoRetiro->text().trimmed().toUpper();
@@ -61,7 +70,6 @@ static void buscar_codigo()
         return;
     }
 
-    // Solo se puede cambiar un pedido PENDIENTE (igual que sp_actualizar_estado_retiro)
     codigo_actual = codigo;
     bool pendiente = (pedidos_estados[i] == "PENDIENTE");
     ui->btnEntregarPedido->setEnabled(pendiente);
@@ -75,7 +83,6 @@ static void buscar_codigo()
     ui->lblDetalleAlumno->setText(QString("Cliente: %1\nDNI %2 · %3").arg(pedidos_clientes[i], pedidos_dnis[i], pedidos_cursos[i]));
     ui->lblDetalleRecreo->setText(QString("Retiro: %1\nPago: %2").arg(pedidos_recreos[i], pedidos_metodos[i]));
 
-    // Un renglón por producto (tabla Carrito de esa venta)
     ui->listDetalleItems->clear();
     QStringList lineas = pedidos_detalles[i].split('\n', Qt::SkipEmptyParts);
     for (int j = 0; j < lineas.size(); j++) {
@@ -84,19 +91,21 @@ static void buscar_codigo()
     ui->lblTotalMonto->setText("Total: " + pesos(pedidos_montos[i]));
 }
 
+// Sirve para que, al tocar una fila de la tabla, se busque ese código.
 static void elegir_pedido(int fila, int)
 {
     ui->txtCodigoRetiro->setText(ui->tableColasPedidos->item(fila, 0)->text());
     buscar_codigo();
 }
 
+// Sirve para cambiar el estado del pedido elegido en la BDD.
 static void cambiar_estado(int estadoID)
 {
     int i = buscar_pedido(codigo_actual);
     if (i == -1) {
         return;
     }
-    // Al cancelar, el SP devuelve el stock y, si pagó con saldo, el saldo
+    // Al cancelar, el SP devuelve el stock y el saldo
     MYSQL_RES *result = actualizar_estado_retiro(conexion, usuario_id, pedidos_retiro_ids[i], estadoID);
     if (numero_del_sp(result) == 0) {
         QMessageBox::warning(ventana, "Error", "No se pudo actualizar el pedido en la base de datos.");
@@ -105,16 +114,19 @@ static void cambiar_estado(int estadoID)
     buscar_codigo();
 }
 
+// Sirve para el botón MARCAR ENTREGADO.
 static void entregar()
 {
     cambiar_estado(ENTREGADO);
 }
 
+// Sirve para el botón CANCELAR PEDIDO.
 static void cancelar()
 {
     cambiar_estado(CANCELADO);
 }
 
+// Sirve para el botón SALIR: cierra la sesión y vuelve al login.
 static void cerrar_sesion_caja()
 {
     salir_de_la_cuenta();
@@ -122,6 +134,9 @@ static void cerrar_sesion_caja()
     ventana->close();
 }
 
+// ===== BLOQUE 3: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir el mostrador.
 void abrir_caja()
 {
     if (ventana != NULL) {

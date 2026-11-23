@@ -1,3 +1,5 @@
+// carrito.cpp: Carrito: cambiar cantidades, quitar productos e ir al pago.  Diseño: carritodialog.ui
+
 #include "pantallas.h"
 #include "ui_carritodialog.h"
 #include "datos.h"
@@ -5,17 +7,21 @@
 #include <QMessageBox>
 #include <QTableWidgetItem>
 
-// Carrito de compras (carritodialog.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QDialog *dialogo = NULL;
 static Ui::CarritoDialog *ui = NULL;
 static bool hacia_el_pago = false;
 
+// ===== BLOQUE 2: FUNCIONES DE LOS BOTONES Y LA TABLA =====
+
+// Sirve para dibujar la tabla del carrito (un renglón por producto) y el total.
 static void mostrar_carrito()
 {
     ui->tableCarrito->setRowCount(0);
     for (int i = 0; i < carrito_ids.size(); i++) {
         ui->tableCarrito->insertRow(i);
-        // El id 0 es el menú del día
+        // id 0 = menú del día
         QString id = (carrito_ids[i] == 0) ? QString("Menú") : QString::number(carrito_ids[i]);
         ui->tableCarrito->setItem(i, 0, new QTableWidgetItem(id));
         ui->tableCarrito->setItem(i, 1, new QTableWidgetItem(carrito_nombres[i]));
@@ -33,12 +39,13 @@ static void mostrar_carrito()
     ui->btnEliminarItem->setEnabled(hayItems);
 }
 
+// Sirve para que, al tocar una fila, el selector muestre la cantidad de ese producto.
 static void elegir_fila(int fila, int)
 {
-    // El selector muestra la cantidad actual de ese producto
     ui->spinCantidad->setValue(carrito_cantidades[fila]);
 }
 
+// Sirve para cambiar la cantidad del producto elegido (máximo 10 y no más que el stock).
 static void modificar_cantidad()
 {
     int fila = ui->tableCarrito->currentRow();
@@ -60,6 +67,7 @@ static void modificar_cantidad()
     mostrar_carrito();
 }
 
+// Sirve para quitar del carrito el producto elegido (pide confirmación).
 static void eliminar_item()
 {
     int fila = ui->tableCarrito->currentRow();
@@ -76,6 +84,7 @@ static void eliminar_item()
     }
 }
 
+// Sirve para borrar todos los productos del carrito (pide confirmación).
 static void vaciar()
 {
     int respuesta = QMessageBox::question(dialogo, "Vaciar Carrito",
@@ -87,11 +96,13 @@ static void vaciar()
     }
 }
 
+// Sirve para volver al catálogo sin pagar.
 static void seguir_comprando()
 {
     dialogo->reject();
 }
 
+// Sirve para cerrar el carrito avisando que hay que abrir el pago.
 static void ir_al_pago()
 {
     if (carrito_ids.isEmpty()) {
@@ -102,6 +113,9 @@ static void ir_al_pago()
     dialogo->accept();
 }
 
+// ===== BLOQUE 3: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir el carrito: arma la tabla, conecta los botones y espera.
 bool abrir_carrito(QWidget *padre)
 {
     hacia_el_pago = false;

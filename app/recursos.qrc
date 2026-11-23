@@ -1,5 +1,25 @@
 <RCC>
     <qresource prefix="/imagenes">
+        <file>imagenes/Agua Mineral 500 ml.jpg</file>
+        <file>imagenes/Alfajor de Maicena.jpg</file>
+        <file>imagenes/Barra de Cereal.jpg</file>
+        <file alias="imagenes/Café con Leche.jpg">imagenes/Cafe con Leche.jpg</file>
+        <file>imagenes/Chocolatada 250 ml.jpg</file>
+        <file alias="imagenes/Combo Sándwich + Gaseosa.jpg">imagenes/Combo Sandwich + Gaseosa.jpg</file>
+        <file>imagenes/Empanada de Carne.jpg</file>
+        <file>imagenes/Ensalada Mixta.jpg</file>
+        <file>imagenes/Galletitas de Agua.jpg</file>
+        <file>imagenes/Gaseosa 500ml.jpg</file>
+        <file>imagenes/Jugo en Caja 200 ml.jpg</file>
+        <file>imagenes/Manzana.jpg</file>
+        <file>imagenes/Medialuna de Manteca.jpg</file>
+        <file alias="imagenes/Milanesa de Pollo con Puré.jpg">imagenes/Milanesa de Pollo con Pure.jpg</file>
+        <file>imagenes/Mix de Frutos Secos.jpg</file>
+        <file>imagenes/Pebete de Queso.jpg</file>
+        <file alias="imagenes/Porción de Pizza Muzzarella.jpg">imagenes/Porcion de Pizza Muzzarella.jpg</file>
+        <file alias="imagenes/Sándwich de Milanesa.jpg">imagenes/Sandwich de Milanesa.jpg</file>
+        <file alias="imagenes/Turrón de Maní.jpg">imagenes/Turron de Mani.jpg</file>
+        <file>imagenes/Yogur Bebible de Frutilla.jpg</file>
     </qresource>
     <qresource prefix="/bdd">
         <file alias="05_Backend.sql">../database/05_Backend_GrupoNoguera_SanMartin.sql</file>

@@ -1,3 +1,5 @@
+// catalogo.cpp: Catálogo del alumno: productos, menú del día, saldo y botón TU PEDIDO.  Diseño: mainwindow.ui
+
 #include "pantallas.h"
 #include "ui_mainwindow.h"
 #include "datos.h"
@@ -5,7 +7,8 @@
 #include <QMessageBox>
 #include <QDate>
 
-// Catálogo del alumno o profesor (mainwindow.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QMainWindow *ventana = NULL;
 static Ui::MainWindow *ui = NULL;
 
@@ -15,6 +18,9 @@ static QPushButton *botones[CANTIDAD_PRODUCTOS];
 static QLabel *etiquetas_precio[CANTIDAD_PRODUCTOS];
 static QLabel *etiquetas_foto[CANTIDAD_PRODUCTOS];
 
+// ===== BLOQUE 2: FUNCIONES QUE MUESTRAN DATOS =====
+
+// Sirve para liberar el .ui cuando la ventana se cierra.
 static void liberar()
 {
     delete ui;
@@ -22,15 +28,16 @@ static void liberar()
     ventana = NULL;
 }
 
+// Sirve para poner la foto de un producto en su etiqueta.
 static void cargar_foto(QLabel *etiqueta, const QString &nombre)
 {
-    // El archivo se llama igual que el producto; sin foto queda el texto del .ui
     QPixmap foto(":/imagenes/imagenes/" + nombre + ".jpg");
     if (!foto.isNull()) {
         etiqueta->setPixmap(foto.scaled(etiqueta->size(), Qt::KeepAspectRatio));
     }
 }
 
+// Sirve para escribir el precio de la BDD debajo de cada producto.
 static void mostrar_precios()
 {
     for (int i = 0; i < CANTIDAD_PRODUCTOS; i++) {
@@ -41,9 +48,9 @@ static void mostrar_precios()
     }
 }
 
+// Sirve para completar la tarjeta del menú del día (plato, qué incluye, precio y stock).
 static void mostrar_menu_del_dia()
 {
-    // Sábado y domingo no hay menú: queda el texto del .ui y no se puede agregar
     ui->btnVerMenu->setEnabled(menu_hoy_id != 0);
     if (menu_hoy_id == 0) {
         return;
@@ -55,6 +62,7 @@ static void mostrar_menu_del_dia()
     ui->lblStockMenu->setText(QString("QUEDAN %1").arg(productos_stock[0]));
 }
 
+// Sirve para actualizar la barra de arriba.
 static void mostrar_usuario_y_carrito()
 {
     ui->btnPerfil->setText(usuario_nombre.left(1) + usuario_apellido.left(1));
@@ -65,6 +73,9 @@ static void mostrar_usuario_y_carrito()
         .arg(pesos(total_carrito())));
 }
 
+// ===== BLOQUE 3: FUNCIONES DE LOS BOTONES =====
+
+// Sirve para abrir el detalle de un producto; si lo agregó, actualiza el botón del carrito.
 static void ver_producto(int id)
 {
     // id 0 = menú del día
@@ -73,11 +84,13 @@ static void ver_producto(int id)
     }
 }
 
+// Sirve para el botón del menú del día: abre su detalle (es el id 0).
 static void ver_menu()
 {
     ver_producto(0);
 }
 
+// Sirve para el botón TU PEDIDO.
 static void ir_a_pagar()
 {
     if (carrito_ids.isEmpty()) {
@@ -86,7 +99,7 @@ static void ir_a_pagar()
         return;
     }
 
-    // 1. Carrito · 2. Pago · 3. Comprobante con el código de retiro
+    // 1. Carrito  2. Pago  3. Comprobante
     if (abrir_carrito(ventana)) {
         QString codigo;
         double abonado = 0;
@@ -96,19 +109,20 @@ static void ir_a_pagar()
         }
     }
 
-    // Stock, precios y menú actualizados después de la compra
     cargar_productos();
     mostrar_precios();
     mostrar_menu_del_dia();
     mostrar_usuario_y_carrito();
 }
 
+// Sirve para el botón de las iniciales: abre el perfil.
 static void ver_perfil()
 {
     abrir_perfil(ventana);
     mostrar_usuario_y_carrito(); // por si cargó saldo
 }
 
+// Sirve para el botón SALIR: cierra la sesión y vuelve al login.
 static void cerrar_sesion_catalogo()
 {
     salir_de_la_cuenta();
@@ -116,6 +130,9 @@ static void cerrar_sesion_catalogo()
     ventana->close();
 }
 
+// ===== BLOQUE 4: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir el catálogo.
 void abrir_catalogo()
 {
     if (ventana != NULL) {
@@ -146,7 +163,6 @@ void abrir_catalogo()
         ui->lblFotoJugo, ui->lblFotoGaseosa, ui->lblFotoCafe, ui->lblFotoBarra, ui->lblFotoGalletitas,
         ui->lblFotoAlfajor, ui->lblFotoTurron, ui->lblFotoFrutosSecos, ui->lblFotoPolloPure, ui->lblFotoCombo};
 
-    // Stock, precios, nombres y descripciones de la tabla Producto
     cargar_productos();
 
     for (int i = 0; i < CANTIDAD_PRODUCTOS; i++) {
@@ -154,7 +170,6 @@ void abrir_catalogo()
         etiquetas_precio[i] = p[i];
         etiquetas_foto[i] = f[i];
         int id = i + 1;
-        // Cada botón abre el detalle de su producto: la función anónima solo pasa el ProductoID
         QObject::connect(botones[i], &QPushButton::clicked, [id]() { ver_producto(id); });
         if (id < productos_nombres.size()) {
             cargar_foto(etiquetas_foto[i], productos_nombres[id]);

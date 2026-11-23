@@ -1,14 +1,20 @@
+// login.cpp: Inicio de sesión de los 4 roles.  Diseño: loginwindow.ui
+
 #include "pantallas.h"
 #include "ui_loginwindow.h"
 #include "datos.h"
 #include "basedatos.h"
 #include <QMessageBox>
 
-// Ventana de inicio de sesión (loginwindow.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QWidget *ventana = NULL;
 static Ui::LoginWindow *ui = NULL;
 static int intentos_fallidos = 0;
 
+// ===== BLOQUE 2: FUNCIONES DE LOS BOTONES Y CAMPOS =====
+
+// Sirve para liberar el .ui cuando la ventana se cierra (WA_DeleteOnClose).
 static void liberar()
 {
     delete ui;
@@ -16,9 +22,10 @@ static void liberar()
     ventana = NULL;
 }
 
+// Sirve para adaptar el formulario al TIPO DE USUARIO elegido en el combo.
 static void mostrar_campos_del_rol(int rol)
 {
-    // 0 Estudiante o profesor · 1 Personal de caja · 2 Administración · 3 Desarrollador
+    // 0 Alumno o profesor · 1 Caja · 2 Administración · 3 Desarrollo
     ui->lblPinCajero->setVisible(rol == 1);
     ui->txtPinCajero->setVisible(rol == 1);
     ui->lblTokenDev->setVisible(rol == 3);
@@ -50,6 +57,7 @@ static void mostrar_campos_del_rol(int rol)
     }
 }
 
+// Sirve para el botón MOSTRAR / OCULTAR: muestra la contraseña o la vuelve a tapar.
 static void mostrar_u_ocultar_clave()
 {
     if (ui->txtPass->echoMode() == QLineEdit::Password) {
@@ -61,13 +69,13 @@ static void mostrar_u_ocultar_clave()
     }
 }
 
+// Sirve para el botón de registro: abre la pantalla para crear una cuenta.
 static void ir_al_registro()
 {
     abrir_registro(ventana);
 }
 
-// Llama al SP que corresponde al rol y devuelve el Nombre_Rol del usuario, o "" si los datos no son correctos.
-// El SP deja el inicio de sesión (o el intento fallido) en Log_Auditoria
+// Sirve para comprobar el usuario en la BDD.
 static QString validar_acceso(int rol, const QString &apodo, const QString &clave, const QString &pin, const QString &token)
 {
     MYSQL_RES *result = NULL;
@@ -83,11 +91,9 @@ static QString validar_acceso(int rol, const QString &apodo, const QString &clav
     }
 
     int userID = 0;
-    if (error_del_sp(result) == 0) {
-        MYSQL_ROW fila = mysql_fetch_row(result);
-        if (fila != NULL) {
-            userID = valor_fila(fila, 0).toInt();
-        }
+    MYSQL_ROW fila = mysql_fetch_row(result);
+    if (fila != NULL && error_del_sp(fila) == 0) {
+        userID = valor_fila(fila, 0).toInt();
     }
     mysql_free_result(result);
 
@@ -97,6 +103,7 @@ static QString validar_acceso(int rol, const QString &apodo, const QString &clav
     return usuario_rol;
 }
 
+// Sirve para el botón INGRESAR.
 static void iniciar()
 {
     QString apodo = ui->txtUser->text().trimmed();
@@ -130,7 +137,6 @@ static void iniciar()
 
     QString rolBDD = validar_acceso(rol, apodo, clave, pin, token);
 
-    // Cada opción del combo solo deja entrar a los roles que le corresponden
     bool correcto = false;
     if (rol == 0) correcto = (rolBDD == "Estudiante" || rolBDD == "Profesor");
     if (rol == 1) correcto = (rolBDD == "Personal de caja");
@@ -163,6 +169,9 @@ static void iniciar()
     ventana->close();
 }
 
+// ===== BLOQUE 3: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir la ventana de login.
 void abrir_login()
 {
     if (ventana != NULL) {
@@ -176,7 +185,6 @@ void abrir_login()
     ventana->setWindowTitle("El Buffet de Alejandro - Iniciar Sesión");
     QObject::connect(ventana, &QObject::destroyed, liberar);
 
-    // Mismos largos que la BDD: Usuario.Contrasena, Empleado.PIN y Empleado.Token_Acceso
     ui->txtPass->setMaxLength(50);
     ui->txtPinCajero->setMaxLength(4);
     ui->txtTokenDev->setMaxLength(30);
@@ -190,7 +198,6 @@ void abrir_login()
     QObject::connect(ui->btnGoRegister, &QPushButton::clicked, ir_al_registro);
     QObject::connect(ui->comboRole, &QComboBox::currentIndexChanged, mostrar_campos_del_rol);
 
-    // Foto del panel derecho (si está en el .qrc)
     QPixmap foto(":/imagenes/imagenes/login.jpg");
     if (!foto.isNull()) {
         ui->lblFotoLogin->setPixmap(foto.scaled(ui->lblFotoLogin->size(), Qt::KeepAspectRatio));

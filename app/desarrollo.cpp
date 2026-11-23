@@ -1,3 +1,5 @@
+// desarrollo.cpp: Consola del desarrollador: ejecutar SP y ver las pruebas.  Diseño: devwindow.ui
+
 #include "pantallas.h"
 #include "ui_devwindow.h"
 #include "datos.h"
@@ -5,7 +7,8 @@
 #include <QMessageBox>
 #include <QFile>
 
-// Consola de desarrollo: SPs de 05_Backend, pruebas de 06_PruebasSQL y acceso a las otras vistas (devwindow.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QWidget *ventana = NULL;
 static Ui::DevWindow *ui = NULL;
 
@@ -16,6 +19,9 @@ static QStringList sp_codigos;
 static QStringList pruebas_titulos;
 static QStringList pruebas_codigos;
 
+// ===== BLOQUE 2: LECTURA DE LOS SCRIPTS 05 Y 06 =====
+
+// Sirve para liberar el .ui cuando la ventana se cierra.
 static void liberar()
 {
     delete ui;
@@ -23,6 +29,7 @@ static void liberar()
     ventana = NULL;
 }
 
+// Sirve para leer un archivo de texto de los recursos (los .sql del qrc).
 static QString leer_archivo(const QString &ruta)
 {
     QFile archivo(ruta);
@@ -35,6 +42,7 @@ static QString leer_archivo(const QString &ruta)
     return texto.remove('\r');
 }
 
+// Sirve para recorrer el script 05 y guardar nombre, schema y código de cada SP.
 static void cargar_sps()
 {
     sp_nombres.clear();
@@ -70,6 +78,7 @@ static void cargar_sps()
     }
 }
 
+// Sirve para recorrer el script 06 y guardar título y código de cada prueba.
 static void cargar_pruebas()
 {
     pruebas_titulos.clear();
@@ -81,7 +90,6 @@ static void cargar_pruebas()
 
     for (int i = 0; i < lineas.size(); i++) {
         QString linea = lineas[i];
-        // Cada prueba empieza con "-- ---------------- Pxx ..." y termina en la próxima o en un "-- ####"
         bool empieza = linea.startsWith("-- ---------------- P");
         bool termina = linea.startsWith("-- ####");
 
@@ -106,12 +114,14 @@ static void cargar_pruebas()
     }
 }
 
+// ===== BLOQUE 3: FUNCIONES DE LOS BOTONES Y LISTAS =====
+
+// Sirve para mostrar la firma y el código del SP elegido en la lista.
 static void elegir_sp(int fila)
 {
     if (fila < 0) {
         return;
     }
-    // La firma es lo que está antes de BEGIN: nombre y parámetros
     QString codigo = sp_codigos[fila];
     QString firma = codigo.left(codigo.indexOf("BEGIN")).mid(17).simplified();
     ui->lblFirmaSP->setText(sp_schemas[fila] + "." + firma);
@@ -120,6 +130,7 @@ static void elegir_sp(int fila)
     ui->lblSalidaSP->setText("");
 }
 
+// Sirve para el botón EJECUTAR.
 static void ejecutar_sp()
 {
     int fila = ui->listSP->currentRow();
@@ -128,7 +139,6 @@ static void ejecutar_sp()
         return;
     }
 
-    // Se arma el CALL con los parámetros escritos, como en ejemplobd04
     QString llamada = QString("CALL %1.%2(%3);").arg(sp_schemas[fila], sp_nombres[fila], ui->txtParametros->text().trimmed());
     MYSQL_RES *result = ejecutar_consulta(conexion, llamada.toStdString());
     if (result == NULL) {
@@ -136,25 +146,24 @@ static void ejecutar_sp()
         return;
     }
 
-    // Se recorren las filas con mysql_fetch_row, igual que los ejemplos con cout
     QString salida = llamada + "\n";
-    int columnas = mysql_num_fields(result);
-    for (int c = 0; c < columnas; c++) {
-        salida += QString::fromUtf8(mysql_fetch_field_direct(result, c)->name) + (c < columnas - 1 ? " | " : "\n");
-    }
-    MYSQL_ROW registro;
-    int mostradas = 0;
-    while ((registro = mysql_fetch_row(result)) != NULL && mostradas < 15) {
-        for (int c = 0; c < columnas; c++) {
-            salida += valor_fila(registro, c) + (c < columnas - 1 ? " | " : "\n");
+    MYSQL_ROW registro = mysql_fetch_row(result);
+    int error = error_del_sp(registro);
+    if (error != 0) {
+        salida += QString("El SP dio el error %1: %2").arg(error).arg(valor_fila(registro, 2));
+    } else {
+        int filas = 0;
+        while (registro != NULL) {
+            filas++;
+            registro = mysql_fetch_row(result);
         }
-        mostradas++;
+        salida += QString("El SP se ejecutó bien y devolvió %1 filas.").arg(filas);
     }
-    salida += QString("(%1 filas)").arg(mysql_num_rows(result));
     mysql_free_result(result);
     ui->lblSalidaSP->setText(salida);
 }
 
+// Sirve para mostrar el código de la prueba elegida.
 static void elegir_prueba(int fila)
 {
     if (fila < 0) {
@@ -164,6 +173,7 @@ static void elegir_prueba(int fila)
     ui->txtPrueba->setPlainText(pruebas_codigos[fila]);
 }
 
+// Sirve para el botón SALIR: cierra la sesión y vuelve al login.
 static void cerrar_sesion_desarrollo()
 {
     salir_de_la_cuenta();
@@ -171,6 +181,9 @@ static void cerrar_sesion_desarrollo()
     ventana->close();
 }
 
+// ===== BLOQUE 4: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir la consola.
 void abrir_desarrollo()
 {
     if (ventana != NULL) {
@@ -187,7 +200,6 @@ void abrir_desarrollo()
     QObject::connect(ui->listSP, &QListWidget::currentRowChanged, elegir_sp);
     QObject::connect(ui->btnEjecutarSP, &QPushButton::clicked, ejecutar_sp);
     QObject::connect(ui->listPruebas, &QListWidget::currentRowChanged, elegir_prueba);
-    // Las otras vistas se abren con el usuario del desarrollador (sus datos quedan en las variables globales)
     QObject::connect(ui->btnAbrirVistaAlumno, &QPushButton::clicked, abrir_catalogo);
     QObject::connect(ui->btnAbrirVistaCaja, &QPushButton::clicked, abrir_caja);
     QObject::connect(ui->btnAbrirVistaAdmin, &QPushButton::clicked, abrir_admin);

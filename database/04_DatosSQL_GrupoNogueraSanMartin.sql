@@ -364,8 +364,12 @@ INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'ramiro.sosa',
 INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'veronica.campos', 'VeronicaBuffet#2026', 4);  -- 30: Verónica Campos
 INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'soporte.dev', 'SoporteDev#2026', 5);  -- 31: desarrollador
 
--- Saldo inicial de prueba para el usuario 1 (el resto arranca en 0)
+-- Saldo inicial de prueba de los estudiantes (el personal y el desarrollador arrancan en 0).
+-- El usuario 3 arranca en 0 porque lo usan las pruebas de saldo del script 06.
 UPDATE Usuario SET Saldo = 10000 WHERE UserID = 1;
+UPDATE Usuario SET Saldo = 8000 WHERE UserID IN (2, 4, 5, 6, 7);
+UPDATE Usuario SET Saldo = 6500 WHERE UserID IN (8, 9, 10, 11, 12, 13);
+UPDATE Usuario SET Saldo = 5000 WHERE UserID IN (14, 15, 16, 17, 18, 19, 20);
 
 -- ----------------------------------------------------------------------------
 -- Empleado (21) - los que usan el sistema tienen UserID

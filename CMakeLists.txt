@@ -83,7 +83,7 @@ if(WIN32)
             $<TARGET_FILE_DIR:ElBuffetDeAlejandro>
     )
 else()
-    # Ubuntu: paquete libmysqlclient-dev, igual que "g++ ... -lmysqlclient" de la guía 006
+    # Ubuntu: paquete libmysqlclient-dev (equivale a "g++ ... -lmysqlclient")
     target_include_directories(ElBuffetDeAlejandro PRIVATE /usr/include/mysql)
     target_link_libraries(ElBuffetDeAlejandro PRIVATE mysqlclient)
 endif()

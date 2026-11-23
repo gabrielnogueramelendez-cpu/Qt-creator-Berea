@@ -1,3 +1,5 @@
+// perfil.cpp: Perfil: saldo, carga de saldo e historial de pedidos.  Diseño: perfildialog.ui
+
 #include "pantallas.h"
 #include "ui_perfildialog.h"
 #include "datos.h"
@@ -6,18 +8,22 @@
 #include <QMessageBox>
 #include <QIntValidator>
 
-// Perfil: saldo de la cuenta escolar e historial de pedidos (perfildialog.ui)
+// ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
+
 static QDialog *dialogo = NULL;
 static Ui::PerfilDialog *ui = NULL;
 
+// ===== BLOQUE 2: FUNCIONES DE LOS BOTONES =====
+
+// Sirve para escribir el saldo actual del usuario.
 static void mostrar_saldo()
 {
     ui->lblSaldoActual->setText(pesos(usuario_saldo));
 }
 
+// Sirve para listar los pedidos del usuario (por su DNI), del más nuevo al más viejo.
 static void mostrar_historial()
 {
-    // Pedidos de la BDD filtrados por el DNI del usuario, del más nuevo al más viejo
     cargar_pedidos();
     ui->listPedidos->clear();
     for (int i = pedidos_codigos.size() - 1; i >= 0; i--) {
@@ -32,6 +38,7 @@ static void mostrar_historial()
     }
 }
 
+// Sirve para cargar saldo.
 static void cargar_saldo_en_cuenta()
 {
     QString monto = ui->txtMontoCarga->text();
@@ -44,7 +51,6 @@ static void cargar_saldo_en_cuenta()
         return;
     }
 
-    // sp_cargar_saldo devuelve Filas_Actualizadas = 1 si sumó el monto (solo a estudiantes)
     if (numero_del_sp(cargar_saldo(conexion, usuario_id, monto.toInt())) != 1) {
         QMessageBox::warning(dialogo, "Error", "No se pudo cargar el saldo en la base de datos.");
         return;
@@ -57,11 +63,15 @@ static void cargar_saldo_en_cuenta()
     ui->lblEstadoCarga->setText(QString("Se cargaron $%1 en tu cuenta escolar.").arg(monto));
 }
 
+// Sirve para el botón CERRAR del perfil.
 static void cerrar()
 {
     dialogo->accept();
 }
 
+// ===== BLOQUE 3: APERTURA DE LA PANTALLA =====
+
+// Sirve para abrir el perfil.
 void abrir_perfil(QWidget *padre)
 {
     dialogo = new QDialog(padre);

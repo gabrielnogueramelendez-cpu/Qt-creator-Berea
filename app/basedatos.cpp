@@ -1,138 +1,182 @@
+// basedatos.cpp: Todo lo que habla con MySQL: conexión y una función por SP o consulta.
+
 #include "basedatos.h"
 #include <iostream>
+#include <cstdlib>
 
-// Datos del servidor MySQL: cambiar la contraseña por la del root de cada computadora
+// ===== BLOQUE 1: CONFIGURACIÓN DE CONEXIÓN Y SERVIDOR =====
+// Datos de conexión. Si BDD_CLAVE da error 1045, se prueba BDD_CLAVE_WINDOWS.
+
 #ifndef BDD_SERVIDOR
 #define BDD_SERVIDOR "127.0.0.1"
 #endif
+
 #ifndef BDD_USUARIO
 #define BDD_USUARIO "root"
 #endif
+
 #ifndef BDD_CLAVE
-#define BDD_CLAVE "12341234"
+#define BDD_CLAVE "12341234"               // Clave estándar de las computadoras con Ubuntu
 #endif
+
+#ifndef BDD_CLAVE_WINDOWS
+#define BDD_CLAVE_WINDOWS ""  // clave alternativa (PC de casa): poner la propia al compilar
+#endif
+
 #ifndef BDD_PUERTO
 #define BDD_PUERTO 3306
 #endif
 
+#ifndef BDD_DEFAULT_SCHEMA
+#define BDD_DEFAULT_SCHEMA "schema_comercial"
+#endif
+
+// ===== BLOQUE 2: INICIALIZACIÓN Y CONEXIÓN (conectar_bdd) =====
+// mysql_init + mysql_real_connect.
+// Sirve para abrir la conexión con MySQL.
 MYSQL* conectar_bdd()
 {
     MYSQL *conn = mysql_init(NULL);
+    if (conn == NULL) {
+        std::cout << "[ERROR BDD] No se pudo inicializar la estructura MySQL (memoria insuficiente).\n";
+        return NULL;
+    }
 
-    if (mysql_real_connect(conn, BDD_SERVIDOR, BDD_USUARIO, BDD_CLAVE, "schema_comercial", BDD_PUERTO, NULL, 0)) {
-        // Sin esto los acentos y la ñ llegan mal
-        mysql_set_character_set(conn, "utf8mb4");
+    if (mysql_real_connect(conn, BDD_SERVIDOR, BDD_USUARIO, BDD_CLAVE,
+                           BDD_DEFAULT_SCHEMA, BDD_PUERTO, NULL, 0)) {
+        mysql_query(conn, "SET NAMES utf8mb4;");   // para que lleguen bien las tildes y la ñ
+        std::cout << "[BDD] Conectado exitosamente a MySQL (credencial principal: " << BDD_USUARIO << "@" << BDD_SERVIDOR << ").\n";
         return conn;
     }
 
-    std::cout << "Error de conexión: " << mysql_error(conn) << "\n";
+    // Si no entró con la clave principal, prueba con la de Windows
+    mysql_close(conn);
+    conn = mysql_init(NULL);
+    if (conn == NULL) {
+        return NULL;
+    }
+    if (mysql_real_connect(conn, BDD_SERVIDOR, BDD_USUARIO, BDD_CLAVE_WINDOWS,
+                           BDD_DEFAULT_SCHEMA, BDD_PUERTO, NULL, 0)) {
+        mysql_query(conn, "SET NAMES utf8mb4;");
+        std::cout << "[BDD] Conectado exitosamente a MySQL (credencial Windows: " << BDD_USUARIO << "@" << BDD_SERVIDOR << ").\n";
+        return conn;
+    }
+
+    std::cout << "[ERROR BDD] Error al conectar con MySQL: " << mysql_error(conn) << "\n";
     mysql_close(conn);
     return NULL;
 }
 
+// ===== BLOQUE 3: MOTOR DE EJECUCIÓN SQL Y MULTI-RESULTADOS (ejecutar_consulta) =====
+// mysql_query + mysql_store_result.
+// Sirve para mandar cualquier SQL (SELECT o CALL) y recibir su resultado.
 MYSQL_RES* ejecutar_consulta(MYSQL *conn, const std::string &sql)
 {
-    if (mysql_query(conn, sql.c_str()) != 0) {
-        std::cout << "Error al ejecutar: " << mysql_error(conn) << "\n";
+    if (conn == NULL) {
+        std::cout << "[ERROR BDD] Intento de consulta sobre conexion nula.\n";
         return NULL;
     }
+
+    if (mysql_query(conn, sql.c_str()) != 0) {
+        std::cout << "[ERROR SQL] Fallo al ejecutar consulta: " << mysql_error(conn) << "\n";
+        std::cout << "[CONSULTA FALLIDA]: " << sql << "\n";
+        return NULL;
+    }
+
     MYSQL_RES *result = mysql_store_result(conn);
 
-    // Un CALL devuelve un resultado extra al final; hay que leerlo para poder mandar la próxima consulta
     while (mysql_next_result(conn) == 0) {
         MYSQL_RES *extra = mysql_store_result(conn);
         if (extra != NULL) {
             mysql_free_result(extra);
         }
     }
+
     return result;
 }
 
-std::string texto_sql(MYSQL *conn, const QString &valor)
+// ===== BLOQUE 4: UTILIDADES DE SANITIZACIÓN Y LECTURA DE DATOS =====
+
+// Sirve para meter en un SQL un texto escrito por el usuario.
+std::string texto_sql(const QString &valor)
 {
-    // Hay que tener en cuenta las comillas: una ' escrita por el usuario rompería la consulta
-    std::string original = valor.toStdString();
-    std::string escapado(original.size() * 2 + 1, '\0');
-    unsigned long largo = mysql_real_escape_string(conn, &escapado[0], original.c_str(), original.size());
-    escapado.resize(largo);
-    return escapado;
+    QString escapado = valor;
+    escapado.replace("\\", "\\\\");   // primero la barra, después la comilla
+    escapado.replace("'", "''");      // en SQL, '' dentro de un texto es una comilla
+    return escapado.toStdString();
 }
 
+// Sirve para leer la columna de una fila como QString.
 QString valor_fila(MYSQL_ROW fila, int columna)
 {
-    // Un NULL de la BDD llega como puntero nulo
-    if (fila[columna] == NULL) {
+    if (fila == NULL || fila[columna] == NULL) {
         return "";
     }
     return QString::fromUtf8(fila[columna]);
 }
 
-int error_del_sp(MYSQL_RES *result)
+// Sirve para saber si un SP falló: su EXIT HANDLER devuelve la fila 'ERROR', código, mensaje.
+int error_del_sp(MYSQL_ROW fila)
 {
-    // Los SP devuelven estado = 'ERROR', codigo_sql y descripcion_error cuando salta el HANDLER
-    // Se llama antes de leer filas: deja el resultado otra vez en la primera fila
-    if (result == NULL) {
-        return -1;
+    if (fila != NULL && valor_fila(fila, 0) == "ERROR") {
+        return valor_fila(fila, 1).toInt();
     }
-    if (std::string(mysql_fetch_field_direct(result, 0)->name) != "estado") {
-        return 0;
-    }
-    MYSQL_ROW fila = mysql_fetch_row(result);
-    int codigo = atoi(fila[1]);
-    mysql_data_seek(result, 0);
-    return codigo;
+    return 0;
 }
 
+// Sirve para leer el número que devuelven muchos SP (el VentaID nuevo o cuántas filas cambió).
 int numero_del_sp(MYSQL_RES *result)
 {
-    // Primera columna de la primera fila (VentaID, Filas_Actualizadas, ...). 0 si el SP dio ERROR o no devolvió filas
     int numero = 0;
-    if (result != NULL && error_del_sp(result) == 0) {
-        MYSQL_ROW fila = mysql_fetch_row(result);
-        if (fila != NULL && fila[0] != NULL) {
-            numero = atoi(fila[0]);
-        }
-    }
     if (result != NULL) {
+        MYSQL_ROW fila = mysql_fetch_row(result);
+        if (fila != NULL && error_del_sp(fila) == 0) {
+            numero = valor_fila(fila, 0).toInt();
+        }
         mysql_free_result(result);
     }
     return numero;
 }
 
-// ---------------------------------------------------------------- Schema usuarios
+// ===== BLOQUE 5: PROCEDIMIENTOS ALMACENADOS DE schema_usuarios =====
 
+// SP 1: Registra nuevo usuario verificando existencia de DNI en Estudiante o Profesor
 MYSQL_RES* registrar_usuario(MYSQL *conn, const QString &dni, const QString &apodo, const QString &clave)
 {
     std::string sql = "CALL schema_usuarios.sp_registrar_usuario('"
-                      + texto_sql(conn, dni) + "', '"
-                      + texto_sql(conn, apodo) + "', '"
-                      + texto_sql(conn, clave) + "');";
+                      + texto_sql(dni) + "', '"
+                      + texto_sql(apodo) + "', '"
+                      + texto_sql(clave) + "');";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 2: Inicio de sesión estándar (Alumnos, Profesores y Administración)
 MYSQL_RES* iniciar_sesion(MYSQL *conn, const QString &apodo, const QString &clave)
 {
     std::string sql = "CALL schema_usuarios.sp_iniciar_sesion('"
-                      + texto_sql(conn, apodo) + "', '"
-                      + texto_sql(conn, clave) + "');";
+                      + texto_sql(apodo) + "', '"
+                      + texto_sql(clave) + "');";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 2b: Acceso con credencial de doble factor (PIN de 4 dígitos en caja o Token en desarrollo)
 MYSQL_RES* acceso_personal(MYSQL *conn, const QString &apodo, const QString &clave, const QString &pinOToken)
 {
     std::string sql = "CALL schema_usuarios.sp_acceso_personal('"
-                      + texto_sql(conn, apodo) + "', '"
-                      + texto_sql(conn, clave) + "', '"
-                      + texto_sql(conn, pinOToken) + "');";
+                      + texto_sql(apodo) + "', '"
+                      + texto_sql(clave) + "', '"
+                      + texto_sql(pinOToken) + "');";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 3: Cierre de sesión y registro de evento en Log_Auditoria
 MYSQL_RES* cerrar_sesion(MYSQL *conn, int userID)
 {
     std::string sql = "CALL schema_usuarios.sp_cerrar_sesion(" + std::to_string(userID) + ");";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 4: Carga de saldo en la cuenta escolar del estudiante
 MYSQL_RES* cargar_saldo(MYSQL *conn, int userID, int monto)
 {
     std::string sql = "CALL schema_usuarios.sp_cargar_saldo(" + std::to_string(userID) + ", "
@@ -140,9 +184,9 @@ MYSQL_RES* cargar_saldo(MYSQL *conn, int userID, int monto)
     return ejecutar_consulta(conn, sql);
 }
 
+// Consulta estructurada para obtener datos personales, rol y saldo del usuario activo
 MYSQL_RES* obtener_datos_usuario(MYSQL *conn, int userID)
 {
-    // Nombre, curso y DNI salen de Estudiante o de Profesor; el personal no tiene ninguno de los dos
     std::string sql = "SELECT r.Nombre_Rol, "
                       "COALESCE(e.Nombre_Estudiante, p.Nombre_Profesor, em.Nombre_Empleado, u.Apodo), "
                       "COALESCE(e.Apellido_Estudiante, p.Apellido_Profesor, em.Apellido_Empleado, ''), "
@@ -158,19 +202,21 @@ MYSQL_RES* obtener_datos_usuario(MYSQL *conn, int userID)
     return ejecutar_consulta(conn, sql);
 }
 
-// ---------------------------------------------------------------- Schema comercial
+// ===== BLOQUE 6: PROCEDIMIENTOS ALMACENADOS Y CONSULTAS DE schema_comercial =====
 
+// SP 5: Alta de producto nuevo por parte de la administración
 MYSQL_RES* alta_producto(MYSQL *conn, int userID, int categoriaID, const QString &nombre, const QString &descripcion, int stock, int precio)
 {
     std::string sql = "CALL schema_comercial.sp_alta_producto(" + std::to_string(userID) + ", "
                       + std::to_string(categoriaID) + ", '"
-                      + texto_sql(conn, nombre) + "', '"
-                      + texto_sql(conn, descripcion) + "', "
+                      + texto_sql(nombre) + "', '"
+                      + texto_sql(descripcion) + "', "
                       + std::to_string(stock) + ", "
                       + std::to_string(precio) + ");";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 6: Modificación de stock con auditoría automática
 MYSQL_RES* modificar_stock(MYSQL *conn, int userID, int productoID, int stock)
 {
     std::string sql = "CALL schema_comercial.sp_modificar_stock(" + std::to_string(userID) + ", "
@@ -178,6 +224,7 @@ MYSQL_RES* modificar_stock(MYSQL *conn, int userID, int productoID, int stock)
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 6b: Modificación de precio con auditoría automática
 MYSQL_RES* modificar_precio(MYSQL *conn, int userID, int productoID, int precio)
 {
     std::string sql = "CALL schema_comercial.sp_modificar_precio(" + std::to_string(userID) + ", "
@@ -185,6 +232,7 @@ MYSQL_RES* modificar_precio(MYSQL *conn, int userID, int productoID, int precio)
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 7: Baja lógica de producto (Activo = FALSE)
 MYSQL_RES* baja_producto(MYSQL *conn, int userID, int productoID)
 {
     std::string sql = "CALL schema_comercial.sp_baja_producto(" + std::to_string(userID) + ", "
@@ -192,14 +240,15 @@ MYSQL_RES* baja_producto(MYSQL *conn, int userID, int productoID)
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 8: Registro inicial de venta (cabecera)
 MYSQL_RES* registrar_venta(MYSQL *conn, int userID, int metodoPagoID)
 {
-    // EmpleadoID va en NULL: el pedido lo hace el alumno desde la app, no un cajero
     std::string sql = "CALL schema_comercial.sp_registrar_venta(" + std::to_string(userID) + ", NULL, "
                       + std::to_string(metodoPagoID) + ");";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 9: Agregar ítem de producto al carrito y descontar stock
 MYSQL_RES* agregar_producto_carrito(MYSQL *conn, int ventaID, int productoID, int cantidad)
 {
     std::string sql = "CALL schema_comercial.sp_agregar_producto_carrito(" + std::to_string(ventaID) + ", "
@@ -207,26 +256,31 @@ MYSQL_RES* agregar_producto_carrito(MYSQL *conn, int ventaID, int productoID, in
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 10: Consulta del menú fijo para el día hábil indicado
 MYSQL_RES* obtener_menu_del_dia(MYSQL *conn, const QString &dia)
 {
-    std::string sql = "CALL schema_comercial.sp_menu_del_dia('" + texto_sql(conn, dia) + "');";
+    std::string sql = "CALL schema_comercial.sp_menu_del_dia('" + texto_sql(dia) + "');";
     return ejecutar_consulta(conn, sql);
 }
 
-MYSQL_RES* agregar_menu_carrito(MYSQL *conn, int ventaID, int menuID, int cantidad)
+// SP 10b: Agregar menú del día al carrito.
+MYSQL_RES* agregar_menu_carrito(MYSQL *conn, int ventaID, int menuID, int cantidad, const QString &dia)
 {
     std::string sql = "CALL schema_comercial.sp_agregar_menu_carrito(" + std::to_string(ventaID) + ", "
-                      + std::to_string(menuID) + ", " + std::to_string(cantidad) + ");";
+                      + std::to_string(menuID) + ", " + std::to_string(cantidad) + ", '"
+                      + texto_sql(dia) + "');";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 11: Generar retiro con código único alfanumérico de 5 caracteres
 MYSQL_RES* generar_retiro(MYSQL *conn, int ventaID, int franjaID, const QString &codigo)
 {
     std::string sql = "CALL schema_comercial.sp_generar_retiro(" + std::to_string(ventaID) + ", "
-                      + std::to_string(franjaID) + ", '" + texto_sql(conn, codigo) + "');";
+                      + std::to_string(franjaID) + ", '" + texto_sql(codigo) + "');";
     return ejecutar_consulta(conn, sql);
 }
 
+// SP 12: Actualizar estado de retiro (ENTREGADO = 2, CANCELADO = 3)
 MYSQL_RES* actualizar_estado_retiro(MYSQL *conn, int userID, int retiroID, int estadoID)
 {
     std::string sql = "CALL schema_comercial.sp_actualizar_estado_retiro(" + std::to_string(userID) + ", "
@@ -234,6 +288,7 @@ MYSQL_RES* actualizar_estado_retiro(MYSQL *conn, int userID, int retiroID, int e
     return ejecutar_consulta(conn, sql);
 }
 
+// Consulta de catálogo completo con nombres de categoría
 MYSQL_RES* obtener_productos(MYSQL *conn)
 {
     std::string sql = "SELECT p.ProductoID, p.Nombre_Producto, c.Categoria, p.Precio_Producto, p.Stock_Producto, "
@@ -244,9 +299,9 @@ MYSQL_RES* obtener_productos(MYSQL *conn)
     return ejecutar_consulta(conn, sql);
 }
 
+// Consulta de pedidos para mostrador y auditoría (unificación de Retiro + Venta + Carrito)
 MYSQL_RES* obtener_pedidos(MYSQL *conn)
 {
-    // Un renglón por retiro, con el detalle de la tabla Carrito en un solo texto
     std::string sql = "SELECT r.RetiroID, r.Codigo_Retiro, "
                       "COALESCE(CONCAT(e.Nombre_Estudiante, ' ', e.Apellido_Estudiante), "
                       "CONCAT(pf.Nombre_Profesor, ' ', pf.Apellido_Profesor), u.Apodo), "
@@ -271,6 +326,7 @@ MYSQL_RES* obtener_pedidos(MYSQL *conn)
     return ejecutar_consulta(conn, sql);
 }
 
+// Consulta de los últimos 50 registros de auditoría
 MYSQL_RES* obtener_logs(MYSQL *conn)
 {
     std::string sql = "SELECT u.Apodo, t.Nombre_Evento, l.Detalle "
