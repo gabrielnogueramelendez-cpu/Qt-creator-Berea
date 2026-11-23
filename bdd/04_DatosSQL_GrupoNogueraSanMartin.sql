@@ -1,0 +1,734 @@
+-- ============================================================================
+-- PROYECTO INFORMÁTICO I - SECCIÓN BASES DE DATOS
+-- El Buffet de Alejandro - Escuela Técnica N° 3 D.E. 9 "María Sánchez de Thompson"
+-- PUNTO 4: POBLAR EL MODELO CON DATOS
+-- ============================================================================
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- para vaciar el contenenidod e las tablas
+TRUNCATE TABLE schema_comercial.Retiro;
+TRUNCATE TABLE schema_comercial.Carrito;
+TRUNCATE TABLE schema_comercial.Detalle_Menu_Dia;
+TRUNCATE TABLE schema_comercial.Venta;
+TRUNCATE TABLE schema_comercial.Menu_Del_Dia;
+TRUNCATE TABLE schema_comercial.Producto;
+TRUNCATE TABLE schema_comercial.Franja_Retiro;
+TRUNCATE TABLE schema_comercial.Estado_Retiro;
+TRUNCATE TABLE schema_comercial.Metodo_Pago;
+TRUNCATE TABLE schema_comercial.Categoria;
+TRUNCATE TABLE schema_usuarios.Log_Auditoria;
+TRUNCATE TABLE schema_usuarios.Telefono;
+TRUNCATE TABLE schema_usuarios.Email;
+TRUNCATE TABLE schema_usuarios.Empleado;
+TRUNCATE TABLE schema_usuarios.Usuario;
+TRUNCATE TABLE schema_usuarios.Estudiante;
+TRUNCATE TABLE schema_usuarios.Profesor;
+TRUNCATE TABLE schema_usuarios.Rol;
+TRUNCATE TABLE schema_usuarios.Tipo_Evento;
+TRUNCATE TABLE schema_usuarios.Puesto;
+TRUNCATE TABLE schema_usuarios.Curso;
+TRUNCATE TABLE schema_geografia.Colegio;
+TRUNCATE TABLE schema_geografia.Distrito_Escolar;
+TRUNCATE TABLE schema_geografia.Region;
+TRUNCATE TABLE schema_geografia.Ciudad;
+TRUNCATE TABLE schema_geografia.Provincia;
+TRUNCATE TABLE schema_geografia.Pais;
+
+-- ============================================================================
+-- SCHEMA GEOGRAFÍA
+-- ============================================================================
+USE schema_geografia;
+
+-- ----------------------------------------------------------------------------
+-- Pais (20)
+-- ----------------------------------------------------------------------------
+INSERT INTO Pais (Nombre_Pais) VALUES ('Argentina');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Uruguay');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Paraguay');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Brasil');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Chile');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Bolivia');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Perú');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Ecuador');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Colombia');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Venezuela');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Panamá');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Costa Rica');
+INSERT INTO Pais (Nombre_Pais) VALUES ('México');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Cuba');
+INSERT INTO Pais (Nombre_Pais) VALUES ('República Dominicana');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Guatemala');
+INSERT INTO Pais (Nombre_Pais) VALUES ('España');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Italia');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Estados Unidos');
+INSERT INTO Pais (Nombre_Pais) VALUES ('Francia');
+
+-- ----------------------------------------------------------------------------
+-- Provincia (20 - todas de Argentina, ID_Pais = 1)
+-- ----------------------------------------------------------------------------
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Ciudad Autónoma de Buenos Aires');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Buenos Aires');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Catamarca');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Chaco');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Chubut');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Córdoba');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Corrientes');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Entre Ríos');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Formosa');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Jujuy');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'La Pampa');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'La Rioja');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Mendoza');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Misiones');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Neuquén');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Río Negro');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Salta');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'San Juan');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'San Luis');
+INSERT INTO Provincia (ID_Pais, Nombre_Provincia) VALUES (1, 'Santa Fe');
+
+-- ----------------------------------------------------------------------------
+-- Ciudad (20 - una capital por provincia)
+-- ----------------------------------------------------------------------------
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (1, 'Ciudad Autónoma de Buenos Aires');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (2, 'La Plata');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (3, 'San Fernando del Valle de Catamarca');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (4, 'Resistencia');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (5, 'Rawson');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (6, 'Córdoba');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (7, 'Corrientes');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (8, 'Paraná');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (9, 'Formosa');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (10, 'San Salvador de Jujuy');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (11, 'Santa Rosa');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (12, 'La Rioja');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (13, 'Mendoza');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (14, 'Posadas');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (15, 'Neuquén');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (16, 'Viedma');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (17, 'Salta');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (18, 'San Juan');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (19, 'San Luis');
+INSERT INTO Ciudad (ID_Provincia, Nombre_Ciudad) VALUES (20, 'Santa Fe');
+
+-- ----------------------------------------------------------------------------
+-- Region (20 - las 9 regiones educativas de CABA + regiones de otras ciudades)
+-- ----------------------------------------------------------------------------
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa I');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa II');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa III');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa IV');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa V');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa VI');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa VII');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa VIII');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (1, 'Región Educativa IX');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (2, 'Región Educativa 1 - La Plata');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (3, 'Región Educativa Catamarca Capital');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (4, 'Región Educativa I - Resistencia');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (5, 'Región Educativa Rawson');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (6, 'Región Educativa Córdoba Capital');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (7, 'Región Educativa I - Corrientes');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (8, 'Región Educativa Paraná');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (9, 'Región Educativa Formosa Capital');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (10, 'Región Educativa San Salvador de Jujuy');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (11, 'Región Educativa Santa Rosa');
+INSERT INTO Region (ID_Ciudad, Nombre_Region) VALUES (13, 'Región Educativa Mendoza Capital');
+
+-- ----------------------------------------------------------------------------
+-- Distrito_Escolar (20 distritos escolares de CABA)
+-- ----------------------------------------------------------------------------
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (1, 'Distrito Escolar N° 1');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (1, 'Distrito Escolar N° 2');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (2, 'Distrito Escolar N° 3');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (2, 'Distrito Escolar N° 4');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (3, 'Distrito Escolar N° 5');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (3, 'Distrito Escolar N° 6');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (4, 'Distrito Escolar N° 7');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (4, 'Distrito Escolar N° 8');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (5, 'Distrito Escolar N° 9');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (5, 'Distrito Escolar N° 10');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (6, 'Distrito Escolar N° 11');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (6, 'Distrito Escolar N° 12');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (7, 'Distrito Escolar N° 13');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (7, 'Distrito Escolar N° 14');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (8, 'Distrito Escolar N° 15');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (8, 'Distrito Escolar N° 16');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (9, 'Distrito Escolar N° 17');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (9, 'Distrito Escolar N° 18');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (9, 'Distrito Escolar N° 19');
+INSERT INTO Distrito_Escolar (ID_Region, Jurisdiccion) VALUES (9, 'Distrito Escolar N° 20');
+
+-- ----------------------------------------------------------------------------
+-- Colegio (20 escuelas técnicas de CABA) - ID_Colegio 1 = ET N° 3 D.E. 9
+-- ----------------------------------------------------------------------------
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (9, 'Escuela Técnica N° 3 D.E. 9 "María Sánchez de Thompson"', 'Av. Cabildo 40, Palermo');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (1, 'Escuela Técnica N° 12 D.E. 1 "Libertador Gral. José de San Martín"', 'Av. del Libertador 238, Retiro');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (2, 'Escuela Técnica N° 2 D.E. 2 "Osvaldo Magnasco"', 'Av. Córdoba 1950, Balvanera');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (3, 'Escuela Técnica N° 25 D.E. 3 "Teniente Primero de Artillería Luis A. Febre"', 'Av. Jujuy 255, Balvanera');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (4, 'Escuela Técnica N° 1 D.E. 4 "Otto Krause"', 'Av. Paseo Colón 650, San Telmo');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (5, 'Escuela Técnica N° 4 D.E. 5 "República del Líbano"', 'Av. Regimiento de Patricios 1933, Barracas');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (6, 'Escuela Técnica N° 11 D.E. 6 "Manuel Belgrano"', 'Cochabamba 2830, San Cristóbal');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (7, 'Escuela Técnica N° 9 D.E. 7 "Ing. Luis A. Huergo"', 'Martín de Gainza 1050, Caballito');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (8, 'Escuela Técnica N° 19 D.E. 8 "Alejandro Volta"', 'Av. José María Moreno 480, Caballito');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (10, 'Escuela Técnica N° 28 D.E. 10 "República Francesa"', 'Cuba 2410, Belgrano');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (11, 'Escuela Técnica N° 37 D.E. 11 "Hogar Naval Stella Maris"', 'Av. Pedro Goyena 1480, Caballito');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (12, 'Escuela Técnica N° 8 D.E. 12 "Paula Albarracín de Sarmiento"', 'Pío Collivadino 436, Flores');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (13, 'Escuela Técnica N° 17 D.E. 13 "Brig. Gral. Cornelio Saavedra"', 'Av. Lacarra 535, Parque Avellaneda');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (14, 'Escuela Técnica N° 32 D.E. 14 "Gral. José de San Martín"', 'Teodoro García 3899, Chacarita');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (15, 'Escuela Técnica N° 36 D.E. 15 "Almirante Guillermo Brown"', 'Galván 3710, Saavedra');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (16, 'Escuela Técnica N° 33 D.E. 16 "Fundación A.M.I.A."', 'Av. Alvarez Thomas 3391, Villa Urquiza');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (17, 'Escuela Técnica N° 24 D.E. 17 "Héctor Lorenzi"', 'Elpidio González 5120, Villa del Parque');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (18, 'Escuela Técnica N° 35 D.E. 18 "Ing. Eduardo Latzina"', 'Av. Lope de Vega 2150, Monte Castro');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (19, 'Escuela Técnica N° 7 D.E. 19 "Dolores Lavalle de Lavalle"', 'Zavaleta 204, Nueva Pompeya');
+INSERT INTO Colegio (ID_DE, Nombre_Colegio, Direccion) VALUES (20, 'Escuela Técnica N° 15 D.E. 20 "Maestro José Antonio Balseiro"', 'Av. Lisandro de la Torre 1185, Liniers');
+
+-- ============================================================================
+-- SCHEMA USUARIOS
+-- ============================================================================
+USE schema_usuarios;
+
+-- ----------------------------------------------------------------------------
+-- Curso (24 - de 1° a 6° año, divisiones 1ra a 4ta)
+-- ----------------------------------------------------------------------------
+INSERT INTO Curso (Anio, Division) VALUES (1, '1ra');
+INSERT INTO Curso (Anio, Division) VALUES (1, '2da');
+INSERT INTO Curso (Anio, Division) VALUES (1, '3ra');
+INSERT INTO Curso (Anio, Division) VALUES (1, '4ta');
+INSERT INTO Curso (Anio, Division) VALUES (2, '1ra');
+INSERT INTO Curso (Anio, Division) VALUES (2, '2da');
+INSERT INTO Curso (Anio, Division) VALUES (2, '3ra');
+INSERT INTO Curso (Anio, Division) VALUES (2, '4ta');
+INSERT INTO Curso (Anio, Division) VALUES (3, '1ra');
+INSERT INTO Curso (Anio, Division) VALUES (3, '2da');
+INSERT INTO Curso (Anio, Division) VALUES (3, '3ra');
+INSERT INTO Curso (Anio, Division) VALUES (3, '4ta');
+INSERT INTO Curso (Anio, Division) VALUES (4, '1ra');
+INSERT INTO Curso (Anio, Division) VALUES (4, '2da');
+INSERT INTO Curso (Anio, Division) VALUES (4, '3ra');
+INSERT INTO Curso (Anio, Division) VALUES (4, '4ta');
+INSERT INTO Curso (Anio, Division) VALUES (5, '1ra');
+INSERT INTO Curso (Anio, Division) VALUES (5, '2da');
+INSERT INTO Curso (Anio, Division) VALUES (5, '3ra');
+INSERT INTO Curso (Anio, Division) VALUES (5, '4ta');
+INSERT INTO Curso (Anio, Division) VALUES (6, '1ra');
+INSERT INTO Curso (Anio, Division) VALUES (6, '2da');
+INSERT INTO Curso (Anio, Division) VALUES (6, '3ra');
+INSERT INTO Curso (Anio, Division) VALUES (6, '4ta');
+
+-- ----------------------------------------------------------------------------
+-- Puesto (21)
+-- ----------------------------------------------------------------------------
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Cajera Turno Mañana');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Cajero Turno Mañana');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Cajero Turno Tarde');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Cajera Turno Tarde');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Encargado General de Buffet');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Cocinera');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Cocinero');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Ayudante de Cocina');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Atención al Mostrador Turno Mañana');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Atención al Mostrador Turno Tarde');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Repostera');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Repositor de Mercadería');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Responsable de Compras');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Mantenimiento');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Limpieza');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Auxiliar de Depósito');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Administrativa Contable');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Encargado de Turno Mañana');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Encargado de Turno Tarde');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Ayudante de Mostrador');
+INSERT INTO Puesto (Nombre_Puesto) VALUES ('Desarrollador de Sistemas');  -- 21
+
+-- ----------------------------------------------------------------------------
+-- Tipo_Evento (22) - catálogo de eventos de auditoría
+-- ----------------------------------------------------------------------------
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Inicio de Sesión Exitoso');  -- 1
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Cierre de Sesión');  -- 2
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Fallo de Autenticación');  -- 3
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Registro de Nuevo Usuario');  -- 4
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Cambio de Contraseña');  -- 5
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Registro de Venta');  -- 6
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Agregado de Producto al Carrito');  -- 7
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Agregado de Menú al Carrito');  -- 8
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Generación de Código de Retiro');  -- 9
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Entrega de Pedido');  -- 10
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Cancelación de Pedido');  -- 11
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Cambio de Estado de Pedido');  -- 12
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Alta de Producto');  -- 13
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Baja de Producto');  -- 14
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Modificación de Stock de Producto');  -- 15
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Modificación de Menú del Día');  -- 16
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Actualización de Perfil');  -- 17
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Apertura de Caja');  -- 18
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Cierre de Caja');  -- 19
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Exportación de Reporte');  -- 20
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Carga de Saldo');  -- 21
+INSERT INTO Tipo_Evento (Nombre_Evento) VALUES ('Modificación de Precio de Producto');  -- 22
+
+-- ----------------------------------------------------------------------------
+-- Rol (5)
+-- ----------------------------------------------------------------------------
+INSERT INTO Rol (Nombre_Rol) VALUES ('Estudiante');  -- 1
+INSERT INTO Rol (Nombre_Rol) VALUES ('Profesor');  -- 2
+INSERT INTO Rol (Nombre_Rol) VALUES ('Personal de caja');  -- 3
+INSERT INTO Rol (Nombre_Rol) VALUES ('Administración');  -- 4
+INSERT INTO Rol (Nombre_Rol) VALUES ('Desarrollador');  -- 5
+
+-- ----------------------------------------------------------------------------
+-- Estudiante (22 - todos de la ET N° 3, ID_Colegio = 1)
+-- ----------------------------------------------------------------------------
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('12345678', '20-12345678-3', 'David', 'Melendez', '2008-08-21', 1, 21);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('45987654', '27-45987654-0', 'Lucía', 'Gómez', '2008-11-03', 1, 22);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48499250', '23-48499250-9', 'Mateo', 'Fernández', '2011-09-30', 1, 11);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('51715407', '27-51715407-0', 'Valentina', 'Rodríguez', '2013-11-26', 1, 4);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('52929091', '20-52929091-9', 'Santiago', 'López', '2009-04-25', 1, 17);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('49373046', '27-49373046-6', 'Camila', 'Martínez', '2012-11-17', 1, 6);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('52303055', '20-52303055-9', 'Benjamín', 'García', '2013-09-01', 1, 3);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('52420093', '27-52420093-2', 'Martina', 'Pérez', '2013-02-09', 1, 4);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('49512712', '20-49512712-6', 'Thiago', 'Sánchez', '2008-03-11', 1, 21);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('52652318', '27-52652318-6', 'Sofía', 'Romero', '2009-01-25', 1, 18);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48428925', '20-48428925-6', 'Joaquín', 'Díaz', '2011-05-21', 1, 11);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('48322516', '23-48322516-4', 'Julieta', 'Álvarez', '2013-03-16', 1, 4);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('47596375', '20-47596375-0', 'Bautista', 'Torres', '2013-08-30', 1, 1);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('53199127', '27-53199127-9', 'Agustina', 'Ruiz', '2011-09-09', 1, 10);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('49263492', '20-49263492-2', 'Lautaro', 'Acosta', '2012-08-14', 1, 7);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('49609844', '27-49609844-2', 'Micaela', 'Benítez', '2012-01-24', 1, 8);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('50491680', '20-50491680-5', 'Facundo', 'Medina', '2012-05-20', 1, 5);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('51808284', '27-51808284-7', 'Florencia', 'Herrera', '2009-01-07', 1, 18);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('50355436', '20-50355436-5', 'Nicolás', 'Suárez', '2009-03-03', 1, 19);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('52176234', '27-52176234-4', 'Rocío', 'Aguirre', '2011-06-10', 1, 12);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('95671088', '20-95671088-0', 'Gabriel', 'Noguera', '2010-02-11', 1, 14);
+INSERT INTO Estudiante (DNI, CUIT, Nombre_Estudiante, Apellido_Estudiante, Fecha_Nacimiento, ID_Colegio, ID_Curso) VALUES ('50283716', '20-50283716-9', 'Tomás', 'San Martín', '2010-07-19', 1, 14);
+
+-- ----------------------------------------------------------------------------
+-- Profesor (21 - todos de la ET N° 3, ID_Colegio = 1)
+-- ----------------------------------------------------------------------------
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('25418763', '20-25418763-2', 'Pablo', 'Linares', '1977-03-14', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('27904512', '27-27904512-8', 'Cynthya', 'Berea', '1980-07-22', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('29387104', '20-29387104-4', 'Cristian', 'Dávalos', '1982-01-09', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('26150938', '27-26150938-0', 'Gabriela', 'Tamer', '1978-05-30', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('23716485', '20-23716485-8', 'Sergio', 'Ipolo', '1974-11-18', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('22058391', '20-22058391-1', 'Julio', 'Toni', '1972-02-26', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('33842017', '20-33842017-0', 'Facundo', 'Scally', '1988-09-04', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('30217649', '27-30217649-9', 'Mariana', 'Milano', '1983-12-11', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('20574836', '27-20574836-4', 'Norma', 'Aloma', '1969-06-19', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('21863270', '20-21863270-0', 'Néstor', 'Quiñones', '1970-10-02', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('28640195', '20-28640195-4', 'Miguel', 'Riños', '1981-04-27', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('34129057', '27-34129057-6', 'Victoria', 'Erramuspe', '1989-08-15', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('31406782', '27-31406782-2', 'Cecilia', 'Garabato', '1985-03-03', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('32791546', '20-32791546-1', 'Andrés', 'Diz', '1986-12-20', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('35268014', '27-35268014-7', 'Josefina', 'Maldonado', '1990-05-08', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('33015479', '20-33015479-9', 'Yamil', 'Decastelli', '1987-07-31', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('36482910', '27-36482910-3', 'Luz', 'Retamazo', '1991-10-24', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('31957320', '27-31957320-3', 'Bárbara', 'Saldaño', '1985-01-16', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('29801643', '27-29801643-0', 'Natalia', 'Guerrero', '1982-09-29', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('24360871', '27-24360871-1', 'Rossana', 'Fortunatti', '1975-04-12', 1);
+INSERT INTO Profesor (DNI, CUIT, Nombre_Profesor, Apellido_Profesor, Fecha_Nacimiento, ID_Colegio) VALUES ('27512398', '20-27512398-7', 'Francisco', 'Anselmi', '1979-11-05', 1);
+
+-- ----------------------------------------------------------------------------
+-- Usuario (31) - 1 a 20: estudiantes / 21 a 30: personal del buffet / 31: desarrollador
+-- ----------------------------------------------------------------------------
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('12345678', 'davidmel09', 'Davidmel#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('45987654', 'luciagom08', 'Luciagom#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('48499250', 'mateofer11', 'Mateofer#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('51715407', 'valentinarod13', 'Valentinarod#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52929091', 'santiagolop09', 'Santiagolop#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49373046', 'camilamar12', 'Camilamar#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52303055', 'benjamingar13', 'Benjamingar#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52420093', 'martinaper13', 'Martinaper#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49512712', 'thiagosan08', 'Thiagosan#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52652318', 'sofiarom09', 'Sofiarom#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('48428925', 'joaquindia11', 'Joaquindia#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('48322516', 'julietaalv13', 'Julietaalv#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('47596375', 'bautistator13', 'Bautistator#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('53199127', 'agustinarui11', 'Agustinarui#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49263492', 'lautaroaco12', 'Lautaroaco#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('49609844', 'micaelaben12', 'Micaelaben#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('50491680', 'facundomed12', 'Facundomed#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('51808284', 'florenciaher09', 'Florenciaher#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('50355436', 'nicolassua09', 'Nicolassua#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES ('52176234', 'rocioagu11', 'Rocioagu#2026', 1);
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'marcela.ibanez', 'MarcelaBuffet#2026', 3);  -- 21: Marcela Ibáñez
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'diego.paz', 'DiegoBuffet#2026', 3);  -- 22: Diego Paz
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'karina.luna', 'KarinaBuffet#2026', 3);  -- 23: Karina Luna
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'sergio.ledesma', 'SergioBuffet#2026', 3);  -- 24: Sergio Ledesma
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'paola.vega', 'PaolaBuffet#2026', 3);  -- 25: Paola Vega
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'hector.maldonado', 'HectorBuffet#2026', 3);  -- 26: Héctor Maldonado
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'alejandro.funes', 'AlejandroBuffet#2026', 4);  -- 27: Alejandro Funes
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'silvia.arce', 'SilviaBuffet#2026', 3);  -- 28: Silvia Arce
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'ramiro.sosa', 'RamiroBuffet#2026', 3);  -- 29: Ramiro Sosa
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'veronica.campos', 'VeronicaBuffet#2026', 4);  -- 30: Verónica Campos
+INSERT INTO Usuario (DNI, Apodo, Contrasena, RolID) VALUES (NULL, 'soporte.dev', 'SoporteDev#2026', 5);  -- 31: desarrollador
+
+-- Saldo inicial de prueba de los estudiantes (el personal y el desarrollador arrancan en 0).
+-- El usuario 3 arranca en 0 porque lo usan las pruebas de saldo del script 06.
+UPDATE Usuario SET Saldo = 10000 WHERE UserID = 1;
+UPDATE Usuario SET Saldo = 8000 WHERE UserID IN (2, 4, 5, 6, 7);
+UPDATE Usuario SET Saldo = 6500 WHERE UserID IN (8, 9, 10, 11, 12, 13);
+UPDATE Usuario SET Saldo = 5000 WHERE UserID IN (14, 15, 16, 17, 18, 19, 20);
+
+-- ----------------------------------------------------------------------------
+-- Empleado (21) - los que usan el sistema tienen UserID
+-- ----------------------------------------------------------------------------
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Marcela', 'Ibáñez', 1, 21);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Diego', 'Paz', 2, 22);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Karina', 'Luna', 1, 23);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Sergio', 'Ledesma', 3, 24);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Paola', 'Vega', 4, 25);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Héctor', 'Maldonado', 3, 26);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Alejandro', 'Funes', 5, 27);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Norma', 'Villalba', 6, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Raúl', 'Cardozo', 7, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Elena', 'Barrios', 8, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Marcos', 'Godoy', 8, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Silvia', 'Arce', 9, 28);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Ramiro', 'Sosa', 10, 29);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Gladys', 'Correa', 11, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Leandro', 'Fuentes', 12, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Patricia', 'Navarro', 13, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Walter', 'Bustos', 14, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Mónica', 'Escobar', 15, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Cristian', 'Toledo', 16, NULL);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID) VALUES ('Verónica', 'Campos', 17, 30);
+INSERT INTO Empleado (Nombre_Empleado, Apellido_Empleado, ID_Puesto, UserID, Token_Acceso) VALUES ('Soporte', 'Técnico', 21, 31, 'DEV-BEREA-2026');
+
+-- PIN del personal que atiende el mostrador (cajeros y atención al mostrador)
+UPDATE Empleado SET PIN = '1234' WHERE UserID = 21;
+UPDATE Empleado SET PIN = '2580' WHERE UserID = 22;
+UPDATE Empleado SET PIN = '3691' WHERE UserID = 23;
+UPDATE Empleado SET PIN = '4702' WHERE UserID = 24;
+UPDATE Empleado SET PIN = '5813' WHERE UserID = 25;
+UPDATE Empleado SET PIN = '6924' WHERE UserID = 26;
+UPDATE Empleado SET PIN = '7035' WHERE UserID = 28;
+UPDATE Empleado SET PIN = '8146' WHERE UserID = 29;
+
+-- ----------------------------------------------------------------------------
+-- Email (20)
+-- ----------------------------------------------------------------------------
+INSERT INTO Email (UserID, Email) VALUES (1, 'david.melendez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (2, 'lucia.gomez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (3, 'mateo.fernandez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (4, 'valentina.rodriguez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (5, 'santiago.lopez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (6, 'camila.martinez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (7, 'benjamin.garcia@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (8, 'martina.perez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (9, 'thiago.sanchez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (10, 'sofia.romero@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (11, 'joaquin.diaz@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (12, 'julieta.alvarez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (13, 'bautista.torres@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (14, 'agustina.ruiz@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (15, 'lautaro.acosta@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (16, 'micaela.benitez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (17, 'facundo.medina@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (18, 'florencia.herrera@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (19, 'nicolas.suarez@bue.edu.ar');
+INSERT INTO Email (UserID, Email) VALUES (20, 'rocio.aguirre@bue.edu.ar');
+
+-- ----------------------------------------------------------------------------
+-- Telefono (20)
+-- ----------------------------------------------------------------------------
+INSERT INTO Telefono (UserID, Telefono) VALUES (1, '+54 9 11 4356-8494');
+INSERT INTO Telefono (UserID, Telefono) VALUES (2, '+54 9 11 3154-6062');
+INSERT INTO Telefono (UserID, Telefono) VALUES (3, '+54 9 11 2202-7043');
+INSERT INTO Telefono (UserID, Telefono) VALUES (4, '+54 9 11 4978-8554');
+INSERT INTO Telefono (UserID, Telefono) VALUES (5, '+54 9 11 5458-2485');
+INSERT INTO Telefono (UserID, Telefono) VALUES (6, '+54 9 11 5266-9166');
+INSERT INTO Telefono (UserID, Telefono) VALUES (7, '+54 9 11 2953-7970');
+INSERT INTO Telefono (UserID, Telefono) VALUES (8, '+54 9 11 6148-9045');
+INSERT INTO Telefono (UserID, Telefono) VALUES (9, '+54 9 11 5261-9595');
+INSERT INTO Telefono (UserID, Telefono) VALUES (10, '+54 9 11 4118-7880');
+INSERT INTO Telefono (UserID, Telefono) VALUES (11, '+54 9 11 6620-8851');
+INSERT INTO Telefono (UserID, Telefono) VALUES (12, '+54 9 11 6202-9486');
+INSERT INTO Telefono (UserID, Telefono) VALUES (13, '+54 9 11 2207-4678');
+INSERT INTO Telefono (UserID, Telefono) VALUES (14, '+54 9 11 3056-1800');
+INSERT INTO Telefono (UserID, Telefono) VALUES (15, '+54 9 11 6286-2680');
+INSERT INTO Telefono (UserID, Telefono) VALUES (16, '+54 9 11 5517-8701');
+INSERT INTO Telefono (UserID, Telefono) VALUES (17, '+54 9 11 3166-8898');
+INSERT INTO Telefono (UserID, Telefono) VALUES (18, '+54 9 11 3875-2999');
+INSERT INTO Telefono (UserID, Telefono) VALUES (19, '+54 9 11 5742-8690');
+INSERT INTO Telefono (UserID, Telefono) VALUES (20, '+54 9 11 6469-5112');
+
+-- ============================================================================
+-- SCHEMA COMERCIAL
+-- ============================================================================
+USE schema_comercial;
+
+-- ----------------------------------------------------------------------------
+-- Categoria (20)
+-- ----------------------------------------------------------------------------
+INSERT INTO Categoria (Categoria) VALUES ('Sándwiches y Tostados');
+INSERT INTO Categoria (Categoria) VALUES ('Empanadas y Tartas');
+INSERT INTO Categoria (Categoria) VALUES ('Pizzas');
+INSERT INTO Categoria (Categoria) VALUES ('Panificados');
+INSERT INTO Categoria (Categoria) VALUES ('Medialunas y Facturas');
+INSERT INTO Categoria (Categoria) VALUES ('Ensaladas');
+INSERT INTO Categoria (Categoria) VALUES ('Frutas');
+INSERT INTO Categoria (Categoria) VALUES ('Lácteos');
+INSERT INTO Categoria (Categoria) VALUES ('Yogures y Postres');
+INSERT INTO Categoria (Categoria) VALUES ('Aguas');
+INSERT INTO Categoria (Categoria) VALUES ('Jugos');
+INSERT INTO Categoria (Categoria) VALUES ('Gaseosas');
+INSERT INTO Categoria (Categoria) VALUES ('Infusiones Calientes');
+INSERT INTO Categoria (Categoria) VALUES ('Cereales y Barras');
+INSERT INTO Categoria (Categoria) VALUES ('Galletitas');
+INSERT INTO Categoria (Categoria) VALUES ('Alfajores');
+INSERT INTO Categoria (Categoria) VALUES ('Golosinas');
+INSERT INTO Categoria (Categoria) VALUES ('Snacks Saludables');
+INSERT INTO Categoria (Categoria) VALUES ('Platos Calientes');
+INSERT INTO Categoria (Categoria) VALUES ('Combos Escolares');
+
+-- ----------------------------------------------------------------------------
+-- Metodo_Pago (21) - el 21 (Saldo de Cuenta Escolar) lo usan los SPs de 05_Backend
+-- ----------------------------------------------------------------------------
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Efectivo en Mostrador');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Mercado Pago');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Transferencia Institucional');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Tarjeta de Débito Visa');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Tarjeta de Débito Mastercard');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Tarjeta de Débito Maestro');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Tarjeta de Crédito Visa');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Tarjeta de Crédito Mastercard');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Tarjeta de Crédito American Express');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Tarjeta Naranja');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('MODO');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Cuenta DNI');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Ualá');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Naranja X');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Personal Pay');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Prex');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('QR Interoperable');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Brubank');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Vale Institucional');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Billetera Santander');
+INSERT INTO Metodo_Pago (MetodoPago) VALUES ('Saldo de Cuenta Escolar');  -- 21
+
+-- ----------------------------------------------------------------------------
+-- Estado_Retiro (3) - los únicos estados que usa el sistema
+-- ----------------------------------------------------------------------------
+INSERT INTO Estado_Retiro (Estado) VALUES ('PENDIENTE');  -- 1
+INSERT INTO Estado_Retiro (Estado) VALUES ('ENTREGADO');  -- 2
+INSERT INTO Estado_Retiro (Estado) VALUES ('CANCELADO');  -- 3
+
+-- ----------------------------------------------------------------------------
+-- Franja_Retiro (6) - horario real de la ET N° 3. A las 07:45 entran a clase, así que no hay retiro a esa hora.
+-- Los pedidos se hacen de un recreo para el siguiente: de 06:00 a 07:45 para el 1er recreo TM y durante cada
+-- recreo para el que sigue. En horario de clases la app no toma pedidos.
+-- ----------------------------------------------------------------------------
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo TM (09:00 a 09:15 hs)', '09:00:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo TM (10:35 a 10:45 hs)', '10:35:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Receso Inter-Turno - Almuerzo (12:05 a 13:30 hs)', '12:05:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('1er Recreo TT (14:50 a 15:00 hs)', '14:50:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('2do Recreo TT (16:20 a 16:30 hs)', '16:20:00');
+INSERT INTO Franja_Retiro (Nombre_Franja, Hora_Retiro) VALUES ('Atención Post-Clases (17:50 a 20:00 hs)', '17:50:00');
+
+-- ----------------------------------------------------------------------------
+-- Producto (20)
+-- ----------------------------------------------------------------------------
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (1, 'Sándwich de Milanesa', 'Milanesa de carne en pan francés con lechuga y tomate', 40, '2800.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (2, 'Empanada de Carne', 'Empanada al horno rellena de carne cortada a cuchillo', 80, '1100.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (3, 'Porción de Pizza Muzzarella', 'Porción de pizza de muzzarella', 50, '1800.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (4, 'Pebete de Queso', 'Pebete con queso cremoso', 45, '1600.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (5, 'Medialuna de Manteca', 'Medialuna dulce de manteca', 90, '800.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (6, 'Ensalada Mixta', 'Lechuga, tomate y zanahoria', 25, '2200.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (7, 'Manzana', 'Manzana roja por unidad', 70, '700.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (8, 'Chocolatada 250 ml', 'Leche chocolatada en envase individual', 70, '1100.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (9, 'Yogur Bebible de Frutilla', 'Yogur bebible 200 ml', 60, '1200.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (10, 'Agua Mineral 500 ml', 'Agua mineral sin gas', 150, '1000.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (11, 'Jugo en Caja 200 ml', 'Jugo de frutas en envase individual', 100, '900.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (12, 'Gaseosa 500ml', 'Gaseosa línea cola 500 ml', 100, '1300.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (13, 'Café con Leche', 'Vaso de café con leche', 60, '1400.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (14, 'Barra de Cereal', 'Barra de cereal con frutas', 80, '900.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (15, 'Galletitas de Agua', 'Paquete individual de galletitas de agua', 80, '700.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (16, 'Alfajor de Maicena', 'Alfajor de maicena con dulce de leche y coco', 70, '800.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (17, 'Turrón de Maní', 'Turrón de maní individual', 60, '600.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (18, 'Mix de Frutos Secos', 'Mix de almendras, pasas y maní sin sal', 40, '1500.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (19, 'Milanesa de Pollo con Puré', 'Milanesa al horno con puré de papas', 25, '4200.00');
+INSERT INTO Producto (ID_Categoria, Nombre_Producto, Descripcion_Producto, Stock_Producto, Precio_Producto) VALUES (20, 'Combo Sándwich + Gaseosa', 'Sándwich de milanesa + gaseosa 500 ml', 40, '4100.00');
+
+-- ----------------------------------------------------------------------------
+-- Menu_Del_Dia (5) - menú fijo: un plato por día hábil. Los fines de semana no hay menú
+-- ----------------------------------------------------------------------------
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (2, 'Tarta de choclo con ensalada', '3900.00', 30, 'Lunes');  -- 1
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Tortilla de papas con ensalada', '3900.00', 40, 'Martes');  -- 2
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Milanesa de pollo con puré', '4200.00', 40, 'Miércoles');  -- 3
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Fideos con tuco y queso', '3800.00', 35, 'Jueves');  -- 4
+INSERT INTO Menu_Del_Dia (ID_Categoria, Plato_menu, Precio_menu, Stock_menu, Dia_Semana) VALUES (19, 'Ravioles con salsa fileto', '4300.00', 35, 'Viernes');  -- 5
+
+-- ----------------------------------------------------------------------------
+-- Detalle_Menu_Dia (5) - producto que incluye cada menú
+-- ----------------------------------------------------------------------------
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (1, 7);   -- Lunes: manzana
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (2, 10);  -- Martes: agua
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (3, 10);  -- Miércoles: agua
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (4, 11);  -- Jueves: jugo
+INSERT INTO Detalle_Menu_Dia (Menu_Del_DiaID, ProductoID) VALUES (5, 11);  -- Viernes: jugo
+
+-- ----------------------------------------------------------------------------
+-- Venta (50 - TABLA PRINCIPAL). Monto_Total = suma de sus renglones de Carrito
+-- ----------------------------------------------------------------------------
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 8, 1, '2026-10-14', '09:05:00', '4200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 5, 2, '2026-10-14', '12:15:00', '2400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 15, 1, '2026-10-15', '10:40:00', '7600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 12, 3, '2026-10-15', '14:55:00', '2600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 5, 2, '2026-10-15', '16:25:00', '3800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-10-15', '07:20:00', '1600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-10-16', '09:10:00', '4300.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 2, 1, '2026-10-20', '12:20:00', '3600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (6, 5, 2, '2026-10-20', '16:25:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 9, 1, '2026-10-21', '09:08:00', '4100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 13, 1, '2026-10-21', '14:55:00', '5600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 16, 1, '2026-10-22', '10:40:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 1, 3, '2026-10-23', '09:12:00', '2800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 18, 1, '2026-10-26', '12:30:00', '1400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 6, 3, '2026-10-26', '14:55:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 1, 1, '2026-10-27', '09:05:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 10, 2, '2026-10-27', '10:42:00', '800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 3, 1, '2026-10-27', '12:15:00', '1400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 20, 1, '2026-10-27', '14:52:00', '3600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 17, 1, '2026-10-27', '16:22:00', '2800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (5, 6, 1, '2026-10-27', '07:30:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 2, '2026-10-28', '16:25:00', '1400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 14, 2, '2026-10-29', '10:38:00', '3800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 4, 1, '2026-10-29', '12:25:00', '3800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 4, 1, '2026-10-29', '07:15:00', '2600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 14, 2, '2026-10-30', '09:14:00', '2200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 10, 1, '2026-10-30', '10:40:00', '1800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 18, 1, '2026-11-02', '09:05:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (4, 18, 2, '2026-11-02', '14:53:00', '700.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 9, 1, '2026-11-03', '09:12:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 5, 3, '2026-11-03', '12:10:00', '2100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 6, 2, '2026-11-03', '14:55:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 11, 1, '2026-11-03', '16:22:00', '1800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 6, 1, '2026-11-04', '09:05:00', '700.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 1, 2, '2026-11-04', '10:38:00', '2400.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 16, 2, '2026-11-04', '12:20:00', '3300.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 16, 2, '2026-11-04', '14:54:00', '1200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-11-05', '10:40:00', '1100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 18, 1, '2026-11-06', '09:08:00', '8600.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (1, 20, 2, '2026-11-06', '12:15:00', '1800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 11, 2, '2026-11-06', '14:55:00', '4300.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 20, 1, '2026-11-09', '09:05:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 6, 1, '2026-11-09', '10:38:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 1, 2, '2026-11-09', '12:22:00', '3900.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (6, 3, 1, '2026-11-09', '16:25:00', '800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 3, 2, '2026-11-10', '09:10:00', '2100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (NULL, 17, 2, '2026-11-10', '10:40:00', '7800.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (3, 18, 2, '2026-11-10', '12:15:00', '3200.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 1, 1, '2026-11-10', '14:55:00', '4100.00');
+INSERT INTO Venta (EmpleadoID, UserID, Metodo_PagoID, Fecha, Hora, Monto_Total) VALUES (2, 2, 2, '2026-11-10', '16:22:00', '2800.00');
+
+-- ----------------------------------------------------------------------------
+-- Carrito (50 - renglones de las ventas: producto O menú del día)
+-- ----------------------------------------------------------------------------
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (1, 3, 1, '4200.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (2, 9, 2, '1200.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (3, 4, 2, '3800.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (4, 12, 2, '1300.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (5, 4, 1, '3800.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (6, 5, 2, '800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (7, 5, 1, '4300.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (8, 3, 2, '1800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (9, 2, 1, '3900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (10, 20, 1, '4100.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (11, 1, 2, '2800.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (12, 8, 1, '1100.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (13, 13, 2, '1400.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (14, 7, 2, '700.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (15, 2, 1, '1100.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (16, 2, 1, '3900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (17, 16, 1, '800.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (18, 7, 2, '700.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (19, 3, 2, '1800.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (20, 1, 1, '2800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (21, 2, 1, '3900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (22, 7, 2, '700.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (23, 4, 1, '3800.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (24, 4, 1, '3800.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (25, 12, 2, '1300.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (26, 2, 2, '1100.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (27, 14, 2, '900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (28, 1, 1, '3900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (29, 7, 1, '700.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (30, 2, 1, '3900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (31, 15, 3, '700.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (32, 8, 1, '1100.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (33, 11, 2, '900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (34, 7, 1, '700.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (35, 9, 2, '1200.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (36, 8, 3, '1100.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (37, 9, 1, '1200.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (38, 8, 1, '1100.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (39, 5, 2, '4300.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (40, 14, 2, '900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (41, 5, 1, '4300.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (42, 1, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (43, 1, 1, '3900.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (44, 1, 1, '3900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (45, 5, 1, '800.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (46, 7, 3, '700.00');
+INSERT INTO Carrito (VentaID, Menu_Del_DiaID, Cantidad, Precio_Unitario) VALUES (47, 2, 2, '3900.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (48, 4, 2, '1600.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (49, 20, 1, '4100.00');
+INSERT INTO Carrito (VentaID, ProductoID, Cantidad, Precio_Unitario) VALUES (50, 1, 1, '2800.00');
+
+-- ----------------------------------------------------------------------------
+-- Retiro (50 - uno por venta). Se retira en el recreo siguiente a la hora de compra
+-- ----------------------------------------------------------------------------
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (1, 3, 2, 'SJX48');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (2, 2, 4, '8XACQ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (3, 2, 3, 'HTWBP');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (4, 2, 5, '7TZFN');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (5, 2, 6, 'AGKXQ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (6, 2, 1, '7PLVF');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (7, 2, 2, '4JGBT');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (8, 2, 4, '4CMQ8');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (9, 2, 6, 'XXYW8');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (10, 2, 2, 'S9WSC');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (11, 2, 5, '9JB8Z');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (12, 3, 3, 'S7NZT');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (13, 2, 2, '3VPD4');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (14, 2, 4, 'EV8FW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (15, 2, 5, '9WXZM');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (16, 2, 2, 'EMS2G');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (17, 2, 3, 'PB7RP');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (18, 3, 4, '5JPT9');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (19, 2, 5, 'JWZ3N');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (20, 2, 6, 'KKKJD');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (21, 2, 1, 'CTVMJ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (22, 2, 6, 'TYJ7L');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (23, 2, 3, 'MDMK4');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (24, 2, 4, '9BVQZ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (25, 2, 1, 'F74KW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (26, 2, 2, 'KC8AD');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (27, 2, 3, 'GYSXB');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (28, 2, 2, 'LNF55');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (29, 2, 5, 'NLRQ9');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (30, 2, 2, 'PZL55');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (31, 2, 4, '7ZPV6');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (32, 2, 5, '8FPNH');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (33, 2, 6, 'FYLHM');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (34, 2, 2, 'P5N5B');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (35, 2, 3, 'KTUZ3');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (36, 3, 4, 'A87TY');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (37, 2, 5, '9JGKQ');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (38, 2, 3, 'Y72DW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (39, 2, 2, 'SF77Y');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (40, 2, 4, 'GTUCF');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (41, 2, 5, 'CE6G2');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (42, 2, 2, '78BKW');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (43, 2, 3, 'JBG3F');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (44, 2, 4, 'LSBCE');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (45, 2, 6, 'HXKV8');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (46, 1, 2, 'RW7R3');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (47, 1, 3, 'RW4C9');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (48, 1, 4, 'RM6NH');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (49, 1, 5, '3C6MB');
+INSERT INTO Retiro (VentaID, Estado_Retiro_ID, ID_Franja, Codigo_Retiro) VALUES (50, 1, 6, '8A2KP');
+
+SET FOREIGN_KEY_CHECKS = 1;

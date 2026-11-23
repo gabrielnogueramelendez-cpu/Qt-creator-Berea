@@ -1,0 +1,4492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1220</width>
+    <height>860</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1220</width>
+    <height>700</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>El Buffet de Alejandro - Catálogo</string>
+  </property>
+  <property name="styleSheet">
+   <string>QTabWidget::pane { border: none; }
+QTabWidget::tab-bar { alignment: center; }
+QTabBar::tab { background-color: #FBF6EC; color: #7A6A60; padding: 10px 18px; font-size: 12px; font-weight: bold; border: none; border-bottom: 2px solid #FBF6EC; }
+QTabBar::tab:selected { color: #6B1B2A; border-bottom: 2px solid #6B1B2A; }
+QTabBar::tab:hover { color: #6B1B2A; }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayoutMain">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="headerFrame">
+      <property name="styleSheet">
+       <string>#headerFrame { background-color: #FBF6EC; border-bottom: 1px solid #D9CBB5; }</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutHeader">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>12</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>12</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lblMonograma">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 20px;</string>
+         </property>
+         <property name="text">
+          <string>A</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="layoutMarca">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="lblHeaderTitle">
+           <property name="styleSheet">
+            <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #6B1B2A;</string>
+           </property>
+           <property name="text">
+            <string>El Buffet de Alejandro</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblHeaderSub">
+           <property name="styleSheet">
+            <string>font-size: 9px; color: #A88A5B; font-weight: bold;</string>
+           </property>
+           <property name="text">
+            <string>BUFFET ESCOLAR</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="espacioHeader">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblUserGreeting">
+         <property name="styleSheet">
+          <string>font-size: 12px; color: #7A6A60;</string>
+         </property>
+         <property name="text">
+          <string>Estudiante</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnPerfil">
+         <property name="minimumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="toolTip">
+          <string>Mi perfil</string>
+         </property>
+         <property name="styleSheet">
+          <string>QPushButton { background-color: #6B1B2A; color: #FFFFFF; border-radius: 20px; padding: 0px; font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 15px; }
+QPushButton:hover { background-color: #561421; }</string>
+         </property>
+         <property name="text">
+          <string>JD</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnLogout">
+         <property name="styleSheet">
+          <string>QPushButton { background-color: transparent; color: #7A6A60; border-left: 1px solid #D9CBB5; border-radius: 0px; }
+QPushButton:hover { color: #6B1B2A; }</string>
+         </property>
+         <property name="text">
+          <string>SALIR</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnCheckout">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>38</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>TU PEDIDO</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lblPortada">
+      <property name="minimumSize">
+       <size>
+        <width>1220</width>
+        <height>170</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>1220</width>
+        <height>170</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 38px; color: #FFFFFF; background-color: #6B1B2A; border-image: url(:/imagenes/imagenes/portada.jpg);</string>
+      </property>
+      <property name="text">
+       <string>Tu mejor recreo empieza acá.</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabMenuDia">
+       <attribute name="title">
+        <string>MENÚ DEL DÍA</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="layoutTabMenuDia">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="fondoMenuDia">
+          <property name="styleSheet">
+           <string>#fondoMenuDia { background-color: #EDE3D3; }</string>
+          </property>
+          <layout class="QGridLayout" name="grillaMenuDia">
+           <property name="leftMargin">
+            <number>40</number>
+           </property>
+           <property name="topMargin">
+            <number>22</number>
+           </property>
+           <property name="rightMargin">
+            <number>24</number>
+           </property>
+           <property name="bottomMargin">
+            <number>22</number>
+           </property>
+           <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop">
+            <widget class="QFrame" name="cardMenuDia">
+             <property name="minimumSize">
+              <size>
+               <width>352</width>
+               <height>370</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>352</width>
+               <height>370</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string>#cardMenuDia { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+             </property>
+             <layout class="QVBoxLayout" name="layoutCardMenuDia">
+              <property name="spacing">
+               <number>8</number>
+              </property>
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>14</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="lblFechaMenu">
+                <property name="minimumSize">
+                 <size>
+                  <width>350</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>350</width>
+                  <height>180</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string>background-color: #6B1B2A; color: #FBF6EC; font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px;</string>
+                </property>
+                <property name="text">
+                 <string>Menú del día</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="layoutTextoMenuDia">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <property name="leftMargin">
+                 <number>16</number>
+                </property>
+                <property name="topMargin">
+                 <number>4</number>
+                </property>
+                <property name="rightMargin">
+                 <number>16</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="lblPlatoMenu">
+                  <property name="styleSheet">
+                   <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                  </property>
+                  <property name="text">
+                   <string>Hoy no hay menú del día</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblIncluyeMenu">
+                  <property name="styleSheet">
+                   <string>font-size: 12px; color: #7A6A60;</string>
+                  </property>
+                  <property name="text">
+                   <string>El menú se sirve de lunes a viernes.</string>
+                  </property>
+                  <property name="wordWrap">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="espacioCardMenuDia">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Vertical</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>0</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QFrame" name="lineaMenuDia">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>1</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string>background-color: #D9CBB5;</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="layoutPieMenuDia">
+                  <item>
+                   <layout class="QVBoxLayout" name="layoutPrecioMenuDia">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <widget class="QLabel" name="lblPrecioMenu">
+                      <property name="styleSheet">
+                       <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lblStockMenu">
+                      <property name="styleSheet">
+                       <string>font-size: 10px; color: #7A6A60;</string>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </item>
+                  <item alignment="Qt::AlignmentFlag::AlignRight">
+                   <widget class="QPushButton" name="btnVerMenu">
+                    <property name="text">
+                     <string>AGREGAR</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabPlatos">
+       <attribute name="title">
+        <string>PLATOS Y COMBOS</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="layoutTabPlatos">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollPlatos">
+          <property name="styleSheet">
+           <string>QScrollArea { border: none; background-color: #EDE3D3; }</string>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="contenidoPlatos">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1220</width>
+             <height>537</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string>#contenidoPlatos { background-color: #EDE3D3; }</string>
+           </property>
+           <layout class="QGridLayout" name="grillaPlatos">
+            <property name="leftMargin">
+             <number>40</number>
+            </property>
+            <property name="topMargin">
+             <number>22</number>
+            </property>
+            <property name="rightMargin">
+             <number>24</number>
+            </property>
+            <property name="bottomMargin">
+             <number>22</number>
+            </property>
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QFrame" name="cardPolloPure">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardPolloPure { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardPolloPure">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoPolloPure">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoPolloPure">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombrePolloPure">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Milanesa de Pollo con Puré</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescPolloPure">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Milanesa al horno con puré de papas</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardPolloPure">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaPolloPure">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPiePolloPure">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioPolloPure">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioPolloPure">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$4200</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaPolloPure">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>PLATOS CALIENTES</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerPolloPure">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QFrame" name="cardCombo">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardCombo { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardCombo">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoCombo">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoCombo">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreCombo">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Combo Sándwich + Gaseosa</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescCombo">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Sándwich de milanesa + gaseosa 500 ml</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardCombo">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaCombo">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieCombo">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioCombo">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioCombo">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$4100</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaCombo">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>COMBOS ESCOLARES</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerCombo">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <spacer name="derechaPlatos">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="1" column="0">
+             <spacer name="abajoPlatos">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSalados">
+       <attribute name="title">
+        <string>SALADOS</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="layoutTabSalados">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollSalados">
+          <property name="styleSheet">
+           <string>QScrollArea { border: none; background-color: #EDE3D3; }</string>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="contenidoSalados">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1203</width>
+             <height>816</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string>#contenidoSalados { background-color: #EDE3D3; }</string>
+           </property>
+           <layout class="QGridLayout" name="grillaSalados">
+            <property name="leftMargin">
+             <number>40</number>
+            </property>
+            <property name="topMargin">
+             <number>22</number>
+            </property>
+            <property name="rightMargin">
+             <number>24</number>
+            </property>
+            <property name="bottomMargin">
+             <number>22</number>
+            </property>
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QFrame" name="cardMilanesa">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardMilanesa { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardMilanesa">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoMilanesa">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoMilanesa">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreMilanesa">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Sándwich de Milanesa</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescMilanesa">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Milanesa de carne en pan francés con lechuga y tomate</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardMilanesa">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaMilanesa">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieMilanesa">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioMilanesa">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioMilanesa">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$2800</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaMilanesa">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>SÁNDWICHES Y TOSTADOS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerMilanesa">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QFrame" name="cardEmpanada">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardEmpanada { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardEmpanada">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoEmpanada">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoEmpanada">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreEmpanada">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Empanada de Carne</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescEmpanada">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Empanada al horno rellena de carne cortada a cuchillo</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardEmpanada">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaEmpanada">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieEmpanada">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioEmpanada">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioEmpanada">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1100</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaEmpanada">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>EMPANADAS Y TARTAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerEmpanada">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QFrame" name="cardPizza">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardPizza { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardPizza">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoPizza">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoPizza">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombrePizza">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Porción de Pizza Muzzarella</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescPizza">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Porción de pizza de muzzarella</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardPizza">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaPizza">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPiePizza">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioPizza">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioPizza">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1800</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaPizza">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>PIZZAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerPizza">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QFrame" name="cardPebete">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardPebete { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardPebete">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoPebete">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoPebete">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombrePebete">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Pebete de Queso</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescPebete">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Pebete con queso cremoso</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardPebete">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaPebete">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPiePebete">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioPebete">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioPebete">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1600</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaPebete">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>PANIFICADOS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerPebete">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <spacer name="derechaSalados">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="0">
+             <spacer name="abajoSalados">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabSaludables">
+       <attribute name="title">
+        <string>SALUDABLES</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="layoutTabSaludables">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollSaludables">
+          <property name="styleSheet">
+           <string>QScrollArea { border: none; background-color: #EDE3D3; }</string>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="contenidoSaludables">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1203</width>
+             <height>816</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string>#contenidoSaludables { background-color: #EDE3D3; }</string>
+           </property>
+           <layout class="QGridLayout" name="grillaSaludables">
+            <property name="leftMargin">
+             <number>40</number>
+            </property>
+            <property name="topMargin">
+             <number>22</number>
+            </property>
+            <property name="rightMargin">
+             <number>24</number>
+            </property>
+            <property name="bottomMargin">
+             <number>22</number>
+            </property>
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QFrame" name="cardEnsalada">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardEnsalada { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardEnsalada">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoEnsalada">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoEnsalada">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreEnsalada">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Ensalada Mixta</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescEnsalada">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Lechuga, tomate y zanahoria</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardEnsalada">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaEnsalada">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieEnsalada">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioEnsalada">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioEnsalada">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$2200</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaEnsalada">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>ENSALADAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerEnsalada">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QFrame" name="cardManzana">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardManzana { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardManzana">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoManzana">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoManzana">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreManzana">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Manzana</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescManzana">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Manzana roja por unidad</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardManzana">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaManzana">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieManzana">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioManzana">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioManzana">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$700</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaManzana">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>FRUTAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerManzana">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QFrame" name="cardYogur">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardYogur { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardYogur">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoYogur">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoYogur">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreYogur">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Yogur Bebible de Frutilla</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescYogur">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Yogur bebible 200 ml</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardYogur">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaYogur">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieYogur">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioYogur">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioYogur">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1200</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaYogur">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>YOGURES Y POSTRES</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerYogur">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QFrame" name="cardBarra">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardBarra { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardBarra">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoBarra">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoBarra">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreBarra">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Barra de Cereal</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescBarra">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Barra de cereal con frutas</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardBarra">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaBarra">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieBarra">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioBarra">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioBarra">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$900</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaBarra">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>CEREALES Y BARRAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerBarra">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QFrame" name="cardFrutosSecos">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardFrutosSecos { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardFrutosSecos">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoFrutosSecos">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoFrutosSecos">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreFrutosSecos">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Mix de Frutos Secos</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescFrutosSecos">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Mix de almendras, pasas y maní sin sal</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardFrutosSecos">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaFrutosSecos">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieFrutosSecos">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioFrutosSecos">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioFrutosSecos">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1500</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaFrutosSecos">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>SNACKS SALUDABLES</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerFrutosSecos">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <spacer name="derechaSaludables">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="0">
+             <spacer name="abajoSaludables">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabDulces">
+       <attribute name="title">
+        <string>DULCES</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="layoutTabDulces">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollDulces">
+          <property name="styleSheet">
+           <string>QScrollArea { border: none; background-color: #EDE3D3; }</string>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="contenidoDulces">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1203</width>
+             <height>816</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string>#contenidoDulces { background-color: #EDE3D3; }</string>
+           </property>
+           <layout class="QGridLayout" name="grillaDulces">
+            <property name="leftMargin">
+             <number>40</number>
+            </property>
+            <property name="topMargin">
+             <number>22</number>
+            </property>
+            <property name="rightMargin">
+             <number>24</number>
+            </property>
+            <property name="bottomMargin">
+             <number>22</number>
+            </property>
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QFrame" name="cardMedialuna">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardMedialuna { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardMedialuna">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoMedialuna">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoMedialuna">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreMedialuna">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Medialuna de Manteca</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescMedialuna">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Medialuna dulce de manteca</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardMedialuna">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaMedialuna">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieMedialuna">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioMedialuna">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioMedialuna">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$800</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaMedialuna">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>MEDIALUNAS Y FACTURAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerMedialuna">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QFrame" name="cardGalletitas">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardGalletitas { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardGalletitas">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoGalletitas">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoGalletitas">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreGalletitas">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Galletitas de Agua</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescGalletitas">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Paquete individual de galletitas de agua</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardGalletitas">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaGalletitas">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieGalletitas">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioGalletitas">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioGalletitas">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$700</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaGalletitas">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>GALLETITAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerGalletitas">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QFrame" name="cardAlfajor">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardAlfajor { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardAlfajor">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoAlfajor">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoAlfajor">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreAlfajor">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Alfajor de Maicena</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescAlfajor">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Alfajor de maicena con dulce de leche y coco</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardAlfajor">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaAlfajor">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieAlfajor">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioAlfajor">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioAlfajor">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$800</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaAlfajor">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>ALFAJORES</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerAlfajor">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QFrame" name="cardTurron">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardTurron { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardTurron">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoTurron">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoTurron">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreTurron">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Turrón de Maní</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescTurron">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Turrón de maní individual</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardTurron">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaTurron">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieTurron">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioTurron">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioTurron">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$600</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaTurron">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>GOLOSINAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerTurron">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <spacer name="derechaDulces">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="0">
+             <spacer name="abajoDulces">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabBebidas">
+       <attribute name="title">
+        <string>BEBIDAS</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="layoutTabBebidas">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QScrollArea" name="scrollBebidas">
+          <property name="styleSheet">
+           <string>QScrollArea { border: none; background-color: #EDE3D3; }</string>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="contenidoBebidas">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1203</width>
+             <height>816</height>
+            </rect>
+           </property>
+           <property name="styleSheet">
+            <string>#contenidoBebidas { background-color: #EDE3D3; }</string>
+           </property>
+           <layout class="QGridLayout" name="grillaBebidas">
+            <property name="leftMargin">
+             <number>40</number>
+            </property>
+            <property name="topMargin">
+             <number>22</number>
+            </property>
+            <property name="rightMargin">
+             <number>24</number>
+            </property>
+            <property name="bottomMargin">
+             <number>22</number>
+            </property>
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QFrame" name="cardAgua">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardAgua { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardAgua">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoAgua">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoAgua">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreAgua">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Agua Mineral 500 ml</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescAgua">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Agua mineral sin gas</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardAgua">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaAgua">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieAgua">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioAgua">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioAgua">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1000</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaAgua">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>AGUAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerAgua">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QFrame" name="cardJugo">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardJugo { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardJugo">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoJugo">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoJugo">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreJugo">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Jugo en Caja 200 ml</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescJugo">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Jugo de frutas en envase individual</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardJugo">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaJugo">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieJugo">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioJugo">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioJugo">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$900</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaJugo">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>JUGOS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerJugo">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QFrame" name="cardGaseosa">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardGaseosa { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardGaseosa">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoGaseosa">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoGaseosa">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreGaseosa">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Gaseosa 500ml</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescGaseosa">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Gaseosa línea cola 500 ml</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardGaseosa">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaGaseosa">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieGaseosa">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioGaseosa">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioGaseosa">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1300</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaGaseosa">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>GASEOSAS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerGaseosa">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QFrame" name="cardCafe">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardCafe { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardCafe">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoCafe">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoCafe">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreCafe">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Café con Leche</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescCafe">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Vaso de café con leche</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardCafe">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaCafe">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieCafe">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioCafe">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioCafe">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1400</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaCafe">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>INFUSIONES CALIENTES</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerCafe">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QFrame" name="cardChocolatada">
+              <property name="minimumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>352</width>
+                <height>370</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string>#cardChocolatada { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+              </property>
+              <layout class="QVBoxLayout" name="layoutCardChocolatada">
+               <property name="spacing">
+                <number>8</number>
+               </property>
+               <property name="leftMargin">
+                <number>1</number>
+               </property>
+               <property name="topMargin">
+                <number>1</number>
+               </property>
+               <property name="rightMargin">
+                <number>1</number>
+               </property>
+               <property name="bottomMargin">
+                <number>14</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblFotoChocolatada">
+                 <property name="minimumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>350</width>
+                   <height>180</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string>background-color: #EDE3D3; color: #7A6A60;</string>
+                 </property>
+                 <property name="text">
+                  <string>Sin foto</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <layout class="QVBoxLayout" name="layoutTextoChocolatada">
+                 <property name="spacing">
+                  <number>6</number>
+                 </property>
+                 <property name="leftMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>4</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>16</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLabel" name="lblNombreChocolatada">
+                   <property name="styleSheet">
+                    <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+                   </property>
+                   <property name="text">
+                    <string>Chocolatada 250 ml</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="lblDescChocolatada">
+                   <property name="styleSheet">
+                    <string>font-size: 12px; color: #7A6A60;</string>
+                   </property>
+                   <property name="text">
+                    <string>Leche chocolatada en envase individual</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>true</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="espacioCardChocolatada">
+                   <property name="orientation">
+                    <enum>Qt::Orientation::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>0</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QFrame" name="lineaChocolatada">
+                   <property name="minimumSize">
+                    <size>
+                     <width>0</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>1</height>
+                    </size>
+                   </property>
+                   <property name="styleSheet">
+                    <string>background-color: #D9CBB5;</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="layoutPieChocolatada">
+                   <item>
+                    <layout class="QVBoxLayout" name="layoutPrecioChocolatada">
+                     <property name="spacing">
+                      <number>0</number>
+                     </property>
+                     <item>
+                      <widget class="QLabel" name="lblPrecioChocolatada">
+                       <property name="styleSheet">
+                        <string>font-size: 17px; font-weight: bold; color: #6B1B2A;</string>
+                       </property>
+                       <property name="text">
+                        <string>$1100</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item>
+                      <widget class="QLabel" name="lblCategoriaChocolatada">
+                       <property name="styleSheet">
+                        <string>font-size: 10px; color: #7A6A60;</string>
+                       </property>
+                       <property name="text">
+                        <string>LÁCTEOS</string>
+                       </property>
+                      </widget>
+                     </item>
+                    </layout>
+                   </item>
+                   <item alignment="Qt::AlignmentFlag::AlignRight">
+                    <widget class="QPushButton" name="btnVerChocolatada">
+                     <property name="text">
+                      <string>AGREGAR</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <spacer name="derechaBebidas">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="2" column="0">
+             <spacer name="abajoBebidas">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="footerFrame">
+      <property name="styleSheet">
+       <string>#footerFrame { background-color: #FBF6EC; border-top: 1px solid #D9CBB5; }</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutFooter">
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>12</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>12</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="lblMonogramaPie">
+         <property name="minimumSize">
+          <size>
+           <width>26</width>
+           <height>26</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>26</width>
+           <height>26</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 13px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 13px;</string>
+         </property>
+         <property name="text">
+          <string>A</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblPieMarca">
+         <property name="styleSheet">
+          <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 16px; color: #2B1A1A;</string>
+         </property>
+         <property name="text">
+          <string>El Buffet de Alejandro</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="espacioPie1">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblPieTexto">
+         <property name="styleSheet">
+          <string>font-size: 11px; color: #7A6A60;</string>
+         </property>
+         <property name="text">
+          <string>Proyecto 4° Año · Grupo Noguera - San Martín</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="espacioPie2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="lblPieHorario">
+         <property name="styleSheet">
+          <string>font-size: 11px; color: #7A6A60; font-weight: bold;</string>
+         </property>
+         <property name="text">
+          <string>LUN – VIE · PEDIDOS DESDE 06:00 · RETIROS 09:00 A 20:00</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

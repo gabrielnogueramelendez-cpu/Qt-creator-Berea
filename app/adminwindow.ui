@@ -1,0 +1,684 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ui version="4.0">
+ <class>AdminWindow</class>
+ <widget class="QWidget" name="AdminWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1220</width>
+    <height>760</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Administración - El Buffet de Alejandro</string>
+  </property>
+  <property name="styleSheet">
+   <string>QTabWidget::pane { border: none; }
+QTabWidget::tab-bar { alignment: center; }
+QTabBar::tab { background-color: #FBF6EC; color: #7A6A60; padding: 10px 18px; font-size: 12px; font-weight: bold; border: none; border-bottom: 2px solid #FBF6EC; }
+QTabBar::tab:selected { color: #6B1B2A; border-bottom: 2px solid #6B1B2A; }
+QTabBar::tab:hover { color: #6B1B2A; }</string>
+  </property>
+  <layout class="QVBoxLayout" name="layoutVentana">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="headerFrame">
+     <property name="styleSheet">
+      <string>#headerFrame { background-color: #FBF6EC; border-bottom: 1px solid #D9CBB5; }</string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutHeader">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblMonograma">
+        <property name="text">
+         <string>A</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 20px;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="layoutMarca">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="lblHeaderTitle">
+          <property name="text">
+           <string>El Buffet de Alejandro</string>
+          </property>
+          <property name="styleSheet">
+           <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #6B1B2A;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblHeaderSub">
+          <property name="text">
+           <string>ADMINISTRACIÓN</string>
+          </property>
+          <property name="styleSheet">
+           <string>font-size: 9px; color: #A88A5B; font-weight: bold;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="espacioHeader">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLogout">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>38</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>SALIR</string>
+        </property>
+        <property name="styleSheet">
+         <string>QPushButton { background-color: transparent; color: #7A6A60; border-left: 1px solid #D9CBB5; border-radius: 0px; }
+QPushButton:hover { color: #6B1B2A; }</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidgetAdmin">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabAbm">
+      <attribute name="title">
+       <string>INVENTARIO</string>
+      </attribute>
+      <property name="styleSheet">
+       <string>#tabAbm { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutAbm">
+       <property name="spacing">
+        <number>20</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <widget class="QTableWidget" name="tableProductosAdmin">
+         <property name="editTriggers">
+          <set>QAbstractItemView::DoubleClicked</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="cardFormAbm">
+         <property name="styleSheet">
+          <string>#cardFormAbm { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>320</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>320</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <layout class="QVBoxLayout" name="layoutForm">
+          <property name="spacing">
+           <number>10</number>
+          </property>
+          <property name="leftMargin">
+           <number>22</number>
+          </property>
+          <property name="topMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>22</number>
+          </property>
+          <property name="bottomMargin">
+           <number>20</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblFormEtiqueta">
+            <property name="text">
+             <string>INVENTARIO</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #A88A5B;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblFormTitulo">
+            <property name="text">
+             <string>Nuevo producto</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #2B1A1A;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="layout_lblNombreProd">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblNombreProd">
+              <property name="text">
+               <string>NOMBRE</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="txtNombreProd">
+              <property name="placeholderText">
+               <string>Tostado de Jamón y Queso</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="layout_lblCategoria">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblCategoria">
+              <property name="text">
+               <string>CATEGORÍA</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboCategoria">
+              <item>
+               <property name="text">
+                <string>Seleccioná una categoría...</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Sándwiches y Tostados</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Empanadas y Tartas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Pizzas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Panificados</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Medialunas y Facturas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Ensaladas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Frutas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Lácteos</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Yogures y Postres</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Aguas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Jugos</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Gaseosas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Infusiones Calientes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Cereales y Barras</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Galletitas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Alfajores</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Golosinas</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Snacks Saludables</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Platos Calientes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Combos Escolares</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="layout_lblDescripcionProd">
+            <property name="spacing">
+             <number>4</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblDescripcionProd">
+              <property name="text">
+               <string>DESCRIPCIÓN (OPCIONAL)</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="txtDescripcionProd">
+              <property name="placeholderText">
+               <string>Pan de miga, jamón cocido y queso</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="filaPrecio">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <item>
+             <layout class="QVBoxLayout" name="layout_lblPrecioProd">
+              <property name="spacing">
+               <number>4</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="lblPrecioProd">
+                <property name="text">
+                 <string>PRECIO</string>
+                </property>
+                <property name="styleSheet">
+                 <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="txtPrecioProd">
+                <property name="placeholderText">
+                 <string>2800</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="layout_lblStockProd">
+              <property name="spacing">
+               <number>4</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="lblStockProd">
+                <property name="text">
+                 <string>STOCK</string>
+                </property>
+                <property name="styleSheet">
+                 <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="txtStockProd">
+                <property name="placeholderText">
+                 <string>40</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnAgregarProd">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>AGREGAR PRODUCTO</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="lineaForm">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>1</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>1</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string>background-color: #D9CBB5;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblEditarTitulo">
+            <property name="text">
+             <string>PRODUCTO SELECCIONADO</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblEditarAyuda">
+            <property name="text">
+             <string>Hacé doble clic en el precio o el stock de la tabla, cambialo y guardá.</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 12px; color: #7A6A60;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnGuardarEdit">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>GUARDAR CAMBIOS</string>
+            </property>
+            <property name="styleSheet">
+             <string>QPushButton { background-color: transparent; color: #6B1B2A; border: 1px solid #6B1B2A; }
+QPushButton:hover { background-color: #F3EADB; }
+QPushButton:disabled { color: #B5A898; border: 1px solid #D9CBB5; background-color: transparent; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnEliminarProd">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>38</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>DAR DE BAJA</string>
+            </property>
+            <property name="styleSheet">
+             <string>QPushButton { background-color: transparent; color: #7A6A60; border: none; text-decoration: underline; }
+QPushButton:hover { color: #6B1B2A; }
+QPushButton:disabled { color: #B5A898; background-color: transparent; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="espacioForm">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabLogs">
+      <attribute name="title">
+       <string>AUDITORÍA</string>
+      </attribute>
+      <property name="styleSheet">
+       <string>#tabLogs { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QVBoxLayout" name="layoutLogs">
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <widget class="QTableWidget" name="tableLogsAdmin">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="footerFrame">
+     <property name="styleSheet">
+      <string>#footerFrame { background-color: #FBF6EC; border-top: 1px solid #D9CBB5; }</string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutFooter">
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblMonogramaPie">
+        <property name="text">
+         <string>A</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 13px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 13px;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieMarca">
+        <property name="text">
+         <string>El Buffet de Alejandro</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 16px; color: #2B1A1A;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioPie1">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieTexto">
+        <property name="text">
+         <string />
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 11px; color: #7A6A60;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioPie2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblEstadoAdmin">
+        <property name="text">
+         <string />
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 11px; color: #6B1B2A; font-weight: bold;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources />
+ <connections />
+</ui>

@@ -1,0 +1,727 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ui version="4.0">
+ <class>DevWindow</class>
+ <widget class="QWidget" name="DevWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1220</width>
+    <height>760</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Desarrollador - El Buffet de Alejandro</string>
+  </property>
+  <property name="styleSheet">
+   <string>QTabWidget::pane { border: none; }
+QTabWidget::tab-bar { alignment: center; }
+QTabBar::tab { background-color: #FBF6EC; color: #7A6A60; padding: 10px 18px; font-size: 12px; font-weight: bold; border: none; border-bottom: 2px solid #FBF6EC; }
+QTabBar::tab:selected { color: #6B1B2A; border-bottom: 2px solid #6B1B2A; }
+QTabBar::tab:hover { color: #6B1B2A; }</string>
+  </property>
+  <layout class="QVBoxLayout" name="layoutVentana">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="headerFrame">
+     <property name="styleSheet">
+      <string>#headerFrame { background-color: #FBF6EC; border-bottom: 1px solid #D9CBB5; }</string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutHeader">
+      <property name="spacing">
+       <number>12</number>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblMonograma">
+        <property name="text">
+         <string>A</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 20px;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="layoutMarca">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="lblHeaderTitle">
+          <property name="text">
+           <string>El Buffet de Alejandro</string>
+          </property>
+          <property name="styleSheet">
+           <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #6B1B2A;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="lblHeaderSub">
+          <property name="text">
+           <string>DESARROLLADOR</string>
+          </property>
+          <property name="styleSheet">
+           <string>font-size: 9px; color: #A88A5B; font-weight: bold;</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="espacioHeader">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLogoutDev">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>38</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>SALIR</string>
+        </property>
+        <property name="styleSheet">
+         <string>QPushButton { background-color: transparent; color: #7A6A60; border-left: 1px solid #D9CBB5; border-radius: 0px; }
+QPushButton:hover { color: #6B1B2A; }</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidgetDev">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabSPs">
+      <attribute name="title">
+       <string>STORED PROCEDURES</string>
+      </attribute>
+      <property name="styleSheet">
+       <string>#tabSPs { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutSPs">
+       <property name="spacing">
+        <number>20</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <widget class="QListWidget" name="listSP">
+         <property name="styleSheet">
+          <string>QListWidget { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-size: 12px; }
+QListWidget::item { padding: 8px 6px; border-bottom: 1px solid #EDE3D3; color: #2B1A1A; }
+QListWidget::item:selected { background-color: #6B1B2A; color: #FFFFFF; }</string>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="cardSP">
+         <property name="styleSheet">
+          <string>#cardSP { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutSPDer">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <property name="leftMargin">
+           <number>22</number>
+          </property>
+          <property name="topMargin">
+           <number>18</number>
+          </property>
+          <property name="rightMargin">
+           <number>22</number>
+          </property>
+          <property name="bottomMargin">
+           <number>18</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblSPEtiqueta">
+            <property name="text">
+             <string>STORED PROCEDURE</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #A88A5B;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblFirmaSP">
+            <property name="text">
+             <string>Elegí un SP de la lista</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="txtCodigoSP">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string>QTextEdit { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-family: Consolas, 'Courier New'; font-size: 12px; color: #2B1A1A; }</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblParametros">
+            <property name="text">
+             <string>VALORES DE LOS PARÁMETROS (SEPARADOS POR COMA, TEXTOS ENTRE COMILLAS)</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="filaParametros">
+            <property name="spacing">
+             <number>8</number>
+            </property>
+            <item>
+             <widget class="QLineEdit" name="txtParametros">
+              <property name="placeholderText">
+               <string>1, 5000</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnEjecutarSP">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>GENERAR CALL</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblSalidaSP">
+            <property name="text">
+             <string />
+            </property>
+            <property name="styleSheet">
+             <string>font-family: Consolas, 'Courier New'; font-size: 13px; color: #6B1B2A;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabPruebas">
+      <attribute name="title">
+       <string>PRUEBAS</string>
+      </attribute>
+      <property name="styleSheet">
+       <string>#tabPruebas { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QHBoxLayout" name="layoutPruebas">
+       <property name="spacing">
+        <number>20</number>
+       </property>
+       <property name="leftMargin">
+        <number>30</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>30</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <widget class="QListWidget" name="listPruebas">
+         <property name="styleSheet">
+          <string>QListWidget { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-size: 12px; }
+QListWidget::item { padding: 8px 6px; border-bottom: 1px solid #EDE3D3; color: #2B1A1A; }
+QListWidget::item:selected { background-color: #6B1B2A; color: #FFFFFF; }</string>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="cardPrueba">
+         <property name="styleSheet">
+          <string>#cardPrueba { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+         </property>
+         <layout class="QVBoxLayout" name="layoutPrDer">
+          <property name="spacing">
+           <number>8</number>
+          </property>
+          <property name="leftMargin">
+           <number>22</number>
+          </property>
+          <property name="topMargin">
+           <number>18</number>
+          </property>
+          <property name="rightMargin">
+           <number>22</number>
+          </property>
+          <property name="bottomMargin">
+           <number>18</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblPruebaEtiqueta">
+            <property name="text">
+             <string>PRUEBA (06_PRUEBASSQL)</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #A88A5B;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblTituloPrueba">
+            <property name="text">
+             <string>Elegí una prueba de la lista</string>
+            </property>
+            <property name="styleSheet">
+             <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTextEdit" name="txtPrueba">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="styleSheet">
+             <string>QTextEdit { background-color: #FFFDF8; border: 1px solid #D9CBB5; font-family: Consolas, 'Courier New'; font-size: 12px; color: #2B1A1A; }</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabVistas">
+      <attribute name="title">
+       <string>VISTAS</string>
+      </attribute>
+      <property name="styleSheet">
+       <string>#tabVistas { background-color: #EDE3D3; }</string>
+      </property>
+      <layout class="QVBoxLayout" name="layoutTabVistas">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="layoutVistas">
+         <property name="spacing">
+          <number>20</number>
+         </property>
+         <property name="leftMargin">
+          <number>30</number>
+         </property>
+         <property name="topMargin">
+          <number>20</number>
+         </property>
+         <property name="rightMargin">
+          <number>30</number>
+         </property>
+         <property name="bottomMargin">
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QFrame" name="cardVistaAlumno">
+           <property name="styleSheet">
+            <string>#cardVistaAlumno { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutVistaAlumno">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="leftMargin">
+             <number>22</number>
+            </property>
+            <property name="topMargin">
+             <number>20</number>
+            </property>
+            <property name="rightMargin">
+             <number>22</number>
+            </property>
+            <property name="bottomMargin">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblVistaTituloAlumno">
+              <property name="text">
+               <string>Estudiante</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #2B1A1A;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblVistaDescAlumno">
+              <property name="text">
+               <string>Catálogo, pedido, pago, comprobante y perfil con saldo.</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 12px; color: #7A6A60;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAbrirVistaAlumno">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>ABRIR VISTA</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardVistaCaja">
+           <property name="styleSheet">
+            <string>#cardVistaCaja { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutVistaCaja">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="leftMargin">
+             <number>22</number>
+            </property>
+            <property name="topMargin">
+             <number>20</number>
+            </property>
+            <property name="rightMargin">
+             <number>22</number>
+            </property>
+            <property name="bottomMargin">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblVistaTituloCaja">
+              <property name="text">
+               <string>Mostrador</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #2B1A1A;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblVistaDescCaja">
+              <property name="text">
+               <string>Búsqueda por código de retiro, entrega y cancelación de pedidos.</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 12px; color: #7A6A60;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAbrirVistaCaja">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>ABRIR VISTA</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QFrame" name="cardVistaAdmin">
+           <property name="styleSheet">
+            <string>#cardVistaAdmin { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+           </property>
+           <layout class="QVBoxLayout" name="layoutVistaAdmin">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="leftMargin">
+             <number>22</number>
+            </property>
+            <property name="topMargin">
+             <number>20</number>
+            </property>
+            <property name="rightMargin">
+             <number>22</number>
+            </property>
+            <property name="bottomMargin">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="lblVistaTituloAdmin">
+              <property name="text">
+               <string>Administración</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 24px; color: #2B1A1A;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblVistaDescAdmin">
+              <property name="text">
+               <string>Inventario de productos y registro de auditoría.</string>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 12px; color: #7A6A60;</string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btnAbrirVistaAdmin">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>38</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>ABRIR VISTA</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="espacioTabVistas">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="footerFrame">
+     <property name="styleSheet">
+      <string>#footerFrame { background-color: #FBF6EC; border-top: 1px solid #D9CBB5; }</string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutFooter">
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>12</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>12</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblMonogramaPie">
+        <property name="text">
+         <string>A</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 13px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 13px;</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>26</width>
+          <height>26</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieMarca">
+        <property name="text">
+         <string>El Buffet de Alejandro</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 16px; color: #2B1A1A;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioPie1">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieTexto">
+        <property name="text">
+         <string>SPs y pruebas leídos de 05_Backend y 06_PruebasSQL</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 11px; color: #7A6A60;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioPie2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPieProyecto">
+        <property name="text">
+         <string>Proyecto 4° Año · Grupo Noguera - San Martín</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 11px; color: #7A6A60; font-weight: bold;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources />
+ <connections />
+</ui>

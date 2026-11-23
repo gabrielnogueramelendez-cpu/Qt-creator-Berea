@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LoginWindow</class>
+ <widget class="QWidget" name="LoginWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1100</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1100</width>
+    <height>680</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>1100</width>
+    <height>680</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>El Buffet de Alejandro - Iniciar Sesión</string>
+  </property>
+  <layout class="QHBoxLayout" name="layoutLogin">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="panelForm">
+     <property name="minimumSize">
+      <size>
+       <width>480</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>480</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string>#panelForm { background-color: #FBF6EC; }</string>
+     </property>
+     <layout class="QVBoxLayout" name="layoutForm">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="leftMargin">
+       <number>60</number>
+      </property>
+      <property name="topMargin">
+       <number>30</number>
+      </property>
+      <property name="rightMargin">
+       <number>50</number>
+      </property>
+      <property name="bottomMargin">
+       <number>24</number>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="layoutMarca">
+        <property name="spacing">
+         <number>10</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="lblMonograma">
+          <property name="minimumSize">
+           <size>
+            <width>36</width>
+            <height>36</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>36</width>
+            <height>36</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 18px; color: #6B1B2A; border: 1px solid #6B1B2A; border-radius: 18px;</string>
+          </property>
+          <property name="text">
+           <string>A</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="layoutMarcaTexto">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="lblLogoTitle">
+            <property name="styleSheet">
+             <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #6B1B2A;</string>
+            </property>
+            <property name="text">
+             <string>El Buffet de Alejandro</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblSubtitle">
+            <property name="styleSheet">
+             <string>font-size: 9px; font-weight: bold; color: #A88A5B;</string>
+            </property>
+            <property name="text">
+             <string>BUFFET ESCOLAR</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="espacioMarca">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="espacioArriba">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblBienvenido">
+        <property name="styleSheet">
+         <string>font-size: 10px; font-weight: bold; color: #A88A5B;</string>
+        </property>
+        <property name="text">
+         <string>BIENVENIDO</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblTituloAcceso">
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 40px; color: #2B1A1A;</string>
+        </property>
+        <property name="text">
+         <string>Acceso al sistema</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblDescAcceso">
+        <property name="styleSheet">
+         <string>font-size: 12px; color: #7A6A60; margin-bottom: 10px;</string>
+        </property>
+        <property name="text">
+         <string>Ingresá tus datos para hacer tu pedido o gestionar el buffet.</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblRole">
+        <property name="styleSheet">
+         <string>font-size: 10px; font-weight: bold; color: #2B1A1A;</string>
+        </property>
+        <property name="text">
+         <string>TIPO DE USUARIO</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboRole">
+        <item>
+         <property name="text">
+          <string>Alumno o profesor</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Personal de buffet (caja)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Administrador</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Desarrollador</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblUser">
+        <property name="styleSheet">
+         <string>font-size: 10px; font-weight: bold; color: #2B1A1A; margin-top: 6px;</string>
+        </property>
+        <property name="text">
+         <string>DNI O CORREO</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtUser">
+        <property name="placeholderText">
+         <string>davidmel09</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="layoutPassTitulo">
+        <item>
+         <widget class="QLabel" name="lblPass">
+          <property name="styleSheet">
+           <string>font-size: 10px; font-weight: bold; color: #2B1A1A; margin-top: 6px;</string>
+          </property>
+          <property name="text">
+           <string>CONTRASEÑA</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="espacioPass">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnMostrar">
+          <property name="styleSheet">
+           <string>QPushButton { background-color: transparent; color: #6B1B2A; font-size: 10px; padding: 0px; margin-top: 6px; }
+QPushButton:hover { color: #42101A; }</string>
+          </property>
+          <property name="text">
+           <string>MOSTRAR</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPass">
+        <property name="echoMode">
+         <enum>QLineEdit::EchoMode::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>Ingresá tu contraseña</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblPinCajero">
+        <property name="styleSheet">
+         <string>font-size: 10px; font-weight: bold; color: #2B1A1A; margin-top: 6px;</string>
+        </property>
+        <property name="text">
+         <string>PIN DE TURNO (4 DÍGITOS)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtPinCajero">
+        <property name="echoMode">
+         <enum>QLineEdit::EchoMode::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>1234</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblTokenDev">
+        <property name="styleSheet">
+         <string>font-size: 10px; font-weight: bold; color: #2B1A1A; margin-top: 6px;</string>
+        </property>
+        <property name="text">
+         <string>TOKEN DE DESARROLLADOR</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="txtTokenDev">
+        <property name="placeholderText">
+         <string>DEV-BEREA-2026</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnLogin">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string>margin-top: 10px;</string>
+        </property>
+        <property name="text">
+         <string>INICIAR SESIÓN</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblNoticeRol">
+        <property name="styleSheet">
+         <string>background-color: #F3EADB; border: 1px solid #D9CBB5; padding: 10px; font-size: 11px; color: #5A4A40; margin-top: 8px;</string>
+        </property>
+        <property name="text">
+         <string>Acceso de prueba</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="layoutRegisterPrompt">
+        <item>
+         <widget class="QLabel" name="lblNoAccount">
+          <property name="styleSheet">
+           <string>font-size: 12px; color: #7A6A60;</string>
+          </property>
+          <property name="text">
+           <string>¿Sos alumno o profesor y no tenés cuenta?</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnGoRegister">
+          <property name="styleSheet">
+           <string>QPushButton { background-color: transparent; color: #6B1B2A; padding: 4px; text-decoration: underline; }
+QPushButton:hover { color: #42101A; }</string>
+          </property>
+          <property name="text">
+           <string>REGISTRARME</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="espacioRegistro">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="espacioAbajo">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="panelFoto">
+     <property name="minimumSize">
+      <size>
+       <width>620</width>
+       <height>680</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string>#panelFoto { background-color: #6B1B2A; }</string>
+     </property>
+     <widget class="QLabel" name="lblFotoLogin">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>620</width>
+        <height>680</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblFraseSub">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>440</y>
+        <width>520</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string>background-color: transparent; font-size: 10px; font-weight: bold; color: #E3C9A0;</string>
+      </property>
+      <property name="text">
+       <string>Proyecto Desarrolado por Gabriel Noguera y Tomás San Martin</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lblFrase">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>466</y>
+        <width>530</width>
+        <height>170</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string>background-color: transparent; font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 46px; color: #FFFFFF;</string>
+      </property>
+      <property name="text">
+       <string>Más que un buffet,
+la parada obligatoria.</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

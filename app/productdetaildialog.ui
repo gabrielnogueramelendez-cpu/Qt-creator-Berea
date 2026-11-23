@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ui version="4.0">
+ <class>ProductDetailDialog</class>
+ <widget class="QDialog" name="ProductDetailDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>440</width>
+    <height>640</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Detalle de Producto - El Buffet de Alejandro</string>
+  </property>
+  <layout class="QVBoxLayout" name="layoutVentana">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="headerFrame">
+     <property name="styleSheet">
+      <string>#headerFrame { background-color: #FBF6EC; border-bottom: 1px solid #D9CBB5; }</string>
+     </property>
+     <layout class="QVBoxLayout" name="layoutHeader">
+      <property name="spacing">
+       <number>2</number>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>20</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>16</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblEtiqueta">
+        <property name="text">
+         <string>DETALLE DEL PRODUCTO</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-size: 10px; font-weight: bold; color: #A88A5B;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="lblTitle">
+        <property name="text">
+         <string>Producto</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 28px; color: #2B1A1A;</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="bodyFrame">
+     <property name="styleSheet">
+      <string>#bodyFrame { background-color: #EDE3D3; }</string>
+     </property>
+     <layout class="QVBoxLayout" name="layoutBody">
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>20</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>20</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="cardDetail">
+        <property name="styleSheet">
+         <string>#cardDetail { background-color: #FFFDF8; border: 1px solid #D9CBB5; }</string>
+        </property>
+        <layout class="QVBoxLayout" name="layoutDetail">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="lblFotoProducto">
+           <property name="text">
+            <string>Sin foto</string>
+           </property>
+           <property name="styleSheet">
+            <string>background-color: #EDE3D3; color: #7A6A60;</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>378</width>
+             <height>200</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>378</width>
+             <height>200</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="layoutTextoDetalle">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>16</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>18</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="lblPriceTag">
+             <property name="text">
+              <string>$0</string>
+             </property>
+             <property name="styleSheet">
+              <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 26px; color: #6B1B2A;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="lblDescription">
+             <property name="text">
+              <string>Descripción</string>
+             </property>
+             <property name="styleSheet">
+              <string>font-size: 13px; color: #7A6A60;</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="lineaDetalle">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>1</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string>background-color: #D9CBB5;</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="layoutQuantity">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="lblCantLabel">
+               <property name="text">
+                <string>CANTIDAD</string>
+               </property>
+               <property name="styleSheet">
+                <string>font-size: 10px; font-weight: bold; color: #7A6A60;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="espacioCantidad">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnMinus">
+               <property name="minimumSize">
+                <size>
+                 <width>34</width>
+                 <height>34</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>-</string>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>34</width>
+                 <height>34</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string>QPushButton { background-color: transparent; color: #6B1B2A; border: 1px solid #6B1B2A; padding: 0px; font-size: 18px; }
+QPushButton:hover { background-color: #F3EADB; }
+QPushButton:disabled { color: #B5A898; border: 1px solid #D9CBB5; background-color: transparent; }</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblCantidad">
+               <property name="text">
+                <string>1</string>
+               </property>
+               <property name="styleSheet">
+                <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 22px; color: #2B1A1A;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>44</width>
+                 <height>34</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>44</width>
+                 <height>34</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnPlus">
+               <property name="minimumSize">
+                <size>
+                 <width>34</width>
+                 <height>34</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>+</string>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>34</width>
+                 <height>34</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string>QPushButton { background-color: transparent; color: #6B1B2A; border: 1px solid #6B1B2A; padding: 0px; font-size: 18px; }
+QPushButton:hover { background-color: #F3EADB; }
+QPushButton:disabled { color: #B5A898; border: 1px solid #D9CBB5; background-color: transparent; }</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioBody">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="footerFrame">
+     <property name="styleSheet">
+      <string>#footerFrame { background-color: #FBF6EC; border-top: 1px solid #D9CBB5; }</string>
+     </property>
+     <layout class="QHBoxLayout" name="layoutFooter">
+      <property name="spacing">
+       <number>10</number>
+      </property>
+      <property name="leftMargin">
+       <number>30</number>
+      </property>
+      <property name="topMargin">
+       <number>14</number>
+      </property>
+      <property name="rightMargin">
+       <number>30</number>
+      </property>
+      <property name="bottomMargin">
+       <number>14</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="lblCalculatedTotal">
+        <property name="text">
+         <string>Total: $0</string>
+        </property>
+        <property name="styleSheet">
+         <string>font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 22px; color: #6B1B2A;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="espacioFooter">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnAddToCart">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>38</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>AGREGAR AL PEDIDO</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources />
+ <connections />
+</ui>
