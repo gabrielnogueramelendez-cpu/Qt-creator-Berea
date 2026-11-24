@@ -28,6 +28,7 @@ extern QStringList productos_nombres;
 extern QStringList productos_descripciones;
 extern QList<double> productos_precios;
 extern QList<int> productos_stock;
+extern QList<bool> productos_activos; // false = dado de baja (no se muestra en el catálogo)
 
 // ===== BLOQUE 4: Menú del día de hoy (sp_menu_del_dia) =====
 // menu_hoy_id = 0 si hoy no hay menú (sábado y domingo).

@@ -20,6 +20,7 @@ QStringList productos_nombres;
 QStringList productos_descripciones;
 QList<double> productos_precios;
 QList<int> productos_stock;
+QList<bool> productos_activos;
 
 int menu_hoy_id = 0;
 QString menu_hoy_plato = "";
@@ -74,12 +75,14 @@ void cargar_productos()
     productos_descripciones.clear();
     productos_precios.clear();
     productos_stock.clear();
+    productos_activos.clear();
 
     // Posición 0 = menú del día
     productos_nombres.append("");
     productos_descripciones.append("");
     productos_precios.append(0);
     productos_stock.append(0);
+    productos_activos.append(false);
 
     MYSQL_RES *result = obtener_productos(conexion);
     if (result != NULL) {
@@ -91,13 +94,16 @@ void cargar_productos()
                 productos_descripciones.append("");
                 productos_precios.append(0);
                 productos_stock.append(0);
+                productos_activos.append(false);
             }
             productos_nombres[id] = valor_fila(fila, 1);
             productos_precios[id] = valor_fila(fila, 3).toDouble();
             productos_stock[id] = valor_fila(fila, 4).toInt();
             productos_descripciones[id] = valor_fila(fila, 6);
+            productos_activos[id] = true;
             if (valor_fila(fila, 5) == "Inactivo") {
                 productos_stock[id] = 0;
+                productos_activos[id] = false; // dado de baja por el administrador
             }
         }
         mysql_free_result(result);

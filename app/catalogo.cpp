@@ -7,6 +7,11 @@
 #include <QMessageBox>
 #include <QDate>
 #include <QPainter>
+#include <QScrollArea>
+#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QFrame>
 
 // ===== BLOQUE 1: VARIABLES DE LA PANTALLA =====
 
@@ -19,6 +24,11 @@ static QPushButton *botones[CANTIDAD_PRODUCTOS];
 static QLabel *etiquetas_precio[CANTIDAD_PRODUCTOS];
 static QLabel *etiquetas_foto[CANTIDAD_PRODUCTOS];
 
+// Pestaña NUEVOS: tiene los productos que el administrador agregó después de los 20 del diseño
+static QWidget *pestana_nuevos = NULL;
+
+static void ver_producto(int id);
+
 // ===== BLOQUE 2: FUNCIONES QUE MUESTRAN DATOS =====
 
 // Sirve para liberar el .ui cuando la ventana se cierra.
@@ -27,6 +37,7 @@ static void liberar()
     delete ui;
     ui = NULL;
     ventana = NULL;
+    pestana_nuevos = NULL; // se borró junto con la ventana
 }
 
 // Sirve para poner la foto de un producto en su etiqueta: entera, centrada y con fondo blanco alrededor.
@@ -48,15 +59,106 @@ static bool cargar_foto(QLabel *etiqueta, const QString &nombre)
     return true;
 }
 
-// Sirve para escribir el precio de la BDD debajo de cada producto.
+// Sirve para escribir el precio de la BDD debajo de cada producto
+// y esconder la tarjeta de los que el administrador dio de baja.
 static void mostrar_precios()
 {
     for (int i = 0; i < CANTIDAD_PRODUCTOS; i++) {
         int id = i + 1;
-        if (id < productos_precios.size()) {
+        bool activo = id < productos_activos.size() && productos_activos[id];
+        botones[i]->parentWidget()->setVisible(activo); // el padre del botón es la tarjeta
+        if (activo) {
             etiquetas_precio[i]->setText(pesos(productos_precios[id]));
         }
     }
+}
+
+// Sirve para armar una tarjeta igual a las del diseño para un producto agregado por el administrador.
+static QFrame *crear_tarjeta(int id)
+{
+    QFrame *tarjeta = new QFrame();
+    tarjeta->setObjectName("tarjetaNueva");
+    tarjeta->setFixedSize(352, 370);
+    tarjeta->setStyleSheet("#tarjetaNueva { background-color: #FFFDF8; border: 1px solid #D9CBB5; }");
+    QVBoxLayout *capa = new QVBoxLayout(tarjeta);
+    capa->setContentsMargins(1, 1, 1, 14);
+    capa->setSpacing(8);
+
+    QLabel *foto = new QLabel("Sin foto");
+    foto->setFixedSize(350, 180);
+    foto->setAlignment(Qt::AlignCenter);
+    foto->setStyleSheet("background-color: #EDE3D3; color: #7A6A60;");
+    cargar_foto(foto, productos_nombres[id]);
+    capa->addWidget(foto);
+
+    QVBoxLayout *texto = new QVBoxLayout();
+    texto->setContentsMargins(16, 4, 16, 0);
+    texto->setSpacing(6);
+    QLabel *nombre = new QLabel(productos_nombres[id]);
+    nombre->setWordWrap(true);
+    nombre->setStyleSheet("font-family: 'Sitka Banner', 'Palatino Linotype', Georgia; font-size: 20px; color: #2B1A1A;");
+    texto->addWidget(nombre);
+    QLabel *descripcion = new QLabel(productos_descripciones[id]);
+    descripcion->setWordWrap(true);
+    descripcion->setStyleSheet("font-size: 12px; color: #7A6A60;");
+    texto->addWidget(descripcion);
+    texto->addStretch();
+
+    QFrame *linea = new QFrame();
+    linea->setFixedHeight(1);
+    linea->setStyleSheet("background-color: #D9CBB5;");
+    texto->addWidget(linea);
+
+    QHBoxLayout *pie = new QHBoxLayout();
+    QLabel *precio = new QLabel(pesos(productos_precios[id]));
+    precio->setStyleSheet("font-size: 17px; font-weight: bold; color: #6B1B2A;");
+    pie->addWidget(precio);
+    QPushButton *boton = new QPushButton("AGREGAR");
+    QObject::connect(boton, &QPushButton::clicked, [id]() { ver_producto(id); });
+    pie->addWidget(boton, 0, Qt::AlignRight);
+    texto->addLayout(pie);
+
+    capa->addLayout(texto);
+    return tarjeta;
+}
+
+// Sirve para mostrar en la pestaña NUEVOS los productos con ID mayor a 20 (no tienen tarjeta en el diseño).
+// Si no hay ninguno, la pestaña no aparece.
+static void mostrar_productos_nuevos()
+{
+    if (pestana_nuevos != NULL) {
+        ui->tabWidget->removeTab(ui->tabWidget->indexOf(pestana_nuevos));
+        delete pestana_nuevos;
+        pestana_nuevos = NULL;
+    }
+
+    QWidget *contenido = new QWidget();
+    contenido->setObjectName("contenidoNuevos");
+    contenido->setStyleSheet("#contenidoNuevos { background-color: #EDE3D3; }");
+    QGridLayout *grilla = new QGridLayout(contenido);
+    grilla->setContentsMargins(40, 22, 24, 22);
+    grilla->setSpacing(16);
+    grilla->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+    int cantidad = 0;
+    for (int id = CANTIDAD_PRODUCTOS + 1; id < productos_nombres.size(); id++) {
+        if (!productos_activos[id]) {
+            continue; // no existe en la BDD o está dado de baja
+        }
+        grilla->addWidget(crear_tarjeta(id), cantidad / 3, cantidad % 3);
+        cantidad++;
+    }
+    if (cantidad == 0) {
+        delete contenido;
+        return;
+    }
+
+    QScrollArea *scroll = new QScrollArea();
+    scroll->setStyleSheet("QScrollArea { border: none; background-color: #EDE3D3; }");
+    scroll->setWidgetResizable(true);
+    scroll->setWidget(contenido);
+    pestana_nuevos = scroll;
+    ui->tabWidget->addTab(pestana_nuevos, "NUEVOS");
 }
 
 // Sirve para completar la tarjeta del menú del día (plato, qué incluye, precio y stock).
@@ -128,6 +230,7 @@ static void ir_a_pagar()
 
     cargar_productos();
     mostrar_precios();
+    mostrar_productos_nuevos();
     mostrar_menu_del_dia();
     mostrar_usuario_y_carrito();
 }
@@ -199,6 +302,7 @@ void abrir_catalogo()
     QObject::connect(ui->btnLogout, &QPushButton::clicked, cerrar_sesion_catalogo);
 
     mostrar_precios();
+    mostrar_productos_nuevos();
     mostrar_menu_del_dia();
     mostrar_usuario_y_carrito();
     ventana->show();
